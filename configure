@@ -1,7 +1,10 @@
 #!/bin/sh
 export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin/:/usr/local/bin:/usr/local/sbin
 
-BYVERSION=0.2.1
+# include byspam version
+. VERSION
+
+byversion=${BYVERSION}
 PWD=$(pwd)
 HUMAN=$(whoami)
 INSTALLDIR=${PWD}/installdir
@@ -28,7 +31,7 @@ done
 if [ -n "${helpmsg}" ]; then
   lc=$(echo ${LANG} | egrep 'ko')
   if [ -n "${lc}" ]; then
-    echo "By SAPM v${VERSION} 설치 옵션"
+    echo "By SAPM v${BYVERSION} 설치 옵션"
     echo
     echo "사용법: configure [옵션]=[경로]"
     echo "옵션  :"
@@ -51,7 +54,7 @@ if [ -n "${helpmsg}" ]; then
     echo "  --package=1      ./configure 시에 물어보지 않음"
     echo
   else
-    echo "By SAPM v${VERSION} Installation Option"
+    echo "By SAPM v${BYVERSION} Installation Option"
     echo
     echo "Usage  : configure [option]=[vlaue]"
     echo "Options:"
@@ -77,6 +80,10 @@ if [ -n "${helpmsg}" ]; then
   exit 0
 fi
 
+echo "By SAPM ${BYVERSION} Configure"
+echo "Script By JoungKyun Kim <http://www.oops.org>"
+echo "Copyright 2002 by BPL"
+echo
 
 echo "STEP 1. Ready Installation"
 echo "----------------------------------------------------------------------"
@@ -287,7 +294,7 @@ else
   exit 1
 fi
 
-for i in level bindir confdir filterdir includedir PERLPATH datadir
+for i in level bindir confdir filterdir includedir PERLPATH datadir byversion
 do
   eval tostr='$'${i}
   tostr=$(echo ${tostr} | sed -e 's/\//\\\//g')
@@ -348,7 +355,7 @@ do
 done
 
 
-conv="bindir confdir filterdir includedir procpath level"
+conv="bindir confdir filterdir includedir procpath level byversion"
 
 for i in ${conv}
 do
