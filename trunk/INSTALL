@@ -1,6 +1,6 @@
 By SPAM 설치 및 사용 설명서
 
-$Id: INSTALL,v 1.12 2004-12-06 08:24:38 oops Exp $
+$Id: INSTALL,v 1.13 2004-12-06 14:11:26 oops Exp $
 
 목차
 ----
@@ -375,6 +375,12 @@ RPM 설치자들은 smtp 를 재시작 한 후, 4번, 5번, 6번 항목만 보도록 한다.
   를 원하시면 "d 번호" 와 같이 명령을 실행하면 되며,  복구를 하고 싶으면, "r 번호"
   로 하실 수 있습니다. 다만, 동시에 여려개의 메일을 처리하지는 못합니다.
 
+  만약 원하는 메일을 다른 파일로 저장을 하고 싶다면 다음의 명령으로 가능합니다.
+
+  r 메일번호 저장할_파일_경로
+
+  유저 권한으로 실행을 할 경우에는 저장할 경로에 쓰기 권한이 있어야 합니다.
+
   만약 mutt 나 pine 등 쉘에서 사용하시는 메일 메니저가 있다면, byspamTrash 보다는
   전용 메일 메니저를 사용하시는 것을 권장 합니다.
 
@@ -386,8 +392,9 @@ RPM 설치자들은 smtp 를 재시작 한 후, 4번, 5번, 6번 항목만 보도록 한다.
   1 page / total 36 pages
 
   Mail No. 356
-  Date: Thu, 25 Nov 04 18:50:36 GMT
-  From: "tgtrgtrg" <74dmigfec@yahoo.com>
+  Date   : Thu, 25 Nov 04 18:50:36 GMT
+  From   : "tgtrgtrg" <74dmigfec@yahoo.com>
+  Filter : Body
   Subject. 직장인,공무원 전용 대 출입니다. 은행권 저금리로 신청하세요. 1 afuqad roy
 
   <TABLE cellSpacing=0 cellPadding=0 width=600 border=0>
@@ -433,4 +440,7 @@ RPM 설치자들은 smtp 를 재시작 한 후, 4번, 5번, 6번 항목만 보도록 한다.
   각의 계정 유저의 필터링 상태를 확인할 수 있습니다. 이는 수퍼유저만이 가능한 기능
   이며, byspamTrash USERNAME 의 형식으로 실행을 하시면 됩니다. 유저이름을 지정하지
   않았을 경우에는 자신의 ~/root/byspam 디렉토리를 서치하게 됩니다.
+
+  byspamTrash 에서 메일 본문을 볼 경우 상단의 Filter: 헤더는 byspam 의 어떤 필터에
+  의해서 필터링이 되었는지를 나타냅니다.
 
