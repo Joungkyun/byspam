@@ -103,7 +103,10 @@ if ($spam) {
     if ( $spam && $regex && $body =~ /$regex/i ) { $spam = ""; $fil = ""; }
   }
 
-  if($spam) { print $fil; }
+  if($spam) {
+    print $fil;
+    exit(0);
+  }
 }
 
-exit;
+exit(1);
