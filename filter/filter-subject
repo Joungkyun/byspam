@@ -2,22 +2,22 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-subject,v 1.17 2004-12-02 05:36:33 oops Exp $
+# $Id: filter-subject,v 1.18 2004-12-28 07:22:39 oops Exp $
 
-(&#44305|광|廣|관|괌)[^\xB1-\xFEa-z]*(고|go|告)
-홍[^\xB1-\xFEa-z]*보
-선[^\xB1-\xFEa-z]*전
-투[^\xB1-\xFEa-z]*자
-정[^\xB1-\xFEa-z]*보
-안[^\xB1-\xFEa-z]*내
-제[^\xB1-\xFEa-z]*안
-대[^\xB1-\xFEa-z]*출
-직[^\xB1-\xFEa-z]*장[^\xB1-\xFEa-z]*인
-수[^\xB1-\xFEa-z]*수[^\xB1-\xFEa-z]*료
-비[^\xB1-\xFEa-z]*아[^\xB1-\xFEa-z]*그[^\xB1-\xFEa-z]*라
-과[^\xB1-\xFEa-z]*(ㅇ|앙|아앙)[^\xB1-\xFEa-z]*고
-ㄱ[^\xB1-\xFEa-z]*ㅗ[^\xB1-\xFEa-z]*ㅏ[^\xB1-\xFEa-z]*ㅇ[^\xB1-\xFEa-z]*ㄱ[^\xB1-\xFEa-z]*ㅗ
-v[^\xB1-\xFEa-z]*i[^\xB1-\xFEa-z]*a[^\xB1-\xFEa-z]*g[^\xB1-\xFEa-z]*r[^\xB1-\xFEa-z]*a
+(&#44305|광|廣|관|괌)[^\xB0-\xFEa-z]*(고|go|告)
+홍[^\xB0-\xFEa-z]*보
+선[^\xB0-\xFEa-z]*전
+투[^\xB0-\xFEa-z]*자
+정[^\xB0-\xFEa-z]*보
+안[^\xB0-\xFEa-z]*내
+제[^\xB0-\xFEa-z]*안
+대[^\xB0-\xFEa-z]*출
+직[^\xB0-\xFEa-z]*장[^\xB0-\xFEa-z]*인
+수[^\xB0-\xFEa-z]*수[^\xB0-\xFEa-z]*료
+비[^\xB0-\xFEa-z]*아[^\xB0-\xFEa-z]*그[^\xB0-\xFEa-z]*라
+과[^\xB0-\xFEa-z]*(ㅇ|앙|아앙)[^\xB0-\xFEa-z]*고
+ㄱ[^\xB0-\xFEa-z]*ㅗ[^\xB0-\xFEa-z]*ㅏ[^\xB0-\xFEa-z]*ㅇ[^\xB0-\xFEa-z]*ㄱ[^\xB0-\xFEa-z]*ㅗ
+v[^\xB0-\xFEa-z]*i[^\xB0-\xFEa-z]*a[^\xB0-\xFEa-z]*g[^\xB0-\xFEa-z]*r[^\xB0-\xFEa-z]*a
 구입[\s]*(문의|방법|신청|동의)
 카드[\s]*대금|잔여한도|창업|포커|고스톱
 수신을[\s]*원하지
