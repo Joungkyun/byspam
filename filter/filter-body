@@ -2,7 +2,7 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-body,v 1.21 2004-12-01 09:06:34 oops Exp $
+# $Id: filter-body,v 1.22 2004-12-01 09:08:39 oops Exp $
 
 (광|廣|관)[^\xB1-\xFEa-z]*(고|go|告)
 홍[^\xB1-\xFEa-z]*보
@@ -51,7 +51,7 @@ for more info
 and lots more
 bodyting|rolex|well-being
 샘\.?플
-(클릭|click)[\s]*하(세요|십시오)
+(클릭|click)[\s]*(하|해[\s]*주)(세요|십시오)
 ---- system information ----
 
 # user define
