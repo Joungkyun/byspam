@@ -1,7 +1,7 @@
 #
 # Byspam Common functions
 #
-# $Id: Common.pm,v 1.4 2004-11-30 13:13:52 oops Exp $
+# $Id: Common.pm,v 1.5 2004-12-03 10:55:20 oops Exp $
 #
 
 package Byspam::Common;
@@ -134,6 +134,61 @@ sub printError {
 	my $_msg = $_[0];
 
 	print STDOUT $_msg;
+}
+
+sub formatConfig {
+	my $self = shift if ref ($_[0]);
+	my $file = $_[0];
+
+	if ( ! -f "$file" ) {
+		print STDERR "\n" .
+					 "    Configuration file missing.\n" .
+					 "    Check \"$file\" file\n" .
+					 "\n";
+		exit 1;
+	}
+
+	my @file = getContext_r ($file);
+	my $_me;
+
+	foreach my $_line ( @file ) {
+		$_line = trim ($_line);
+		$_line =~ s/(#|;).*//g;
+		$_line =~ s/[\s]*=[\s]*"?/=/g;
+		$_line =~ s/^\$|"$//g;
+
+		next if ( ! $_line );
+
+		$_me .= "$_line;";
+	}
+
+	return $_me;
+}
+
+sub parseConfig {
+	my $self = shift if ref ($_[0]);
+	my $_ref = $_[0];
+	my %_me;
+	my @_var;
+	my $conf;
+
+	if ( ref ( $_ref ) ) {
+		$conf = $_ref->fetch;
+	} else {
+		$conf = $_ref;
+	}
+	my @conf = split (/;/, $conf);
+
+	foreach my $_v ( @conf ) {
+		@_var = split (/=/, $_v);
+		if ( $_var[0] =~ m/([a-z]+)\[([0-9]+)\]/i ) {
+			$_me{$1}[$2] = $_var[1];
+		} else {
+			$_me{$_var[0]} = $_var[1];
+		}
+	}
+
+	return %_me;
 }
 
 1; # keep require happy
