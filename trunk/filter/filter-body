@@ -15,14 +15,14 @@
 If you\s*(do not|don't)*\s*wish to
 포.?르.?노|섹.?캠|몰카|뽀.?르.?노|성폭행|강간|섹스
 사이버[\s]*머니
-Discount|marketing|sex|animal|pussy|poker
-(reject|email)\.(cgi|php|jsp|pl)
+Discount|marketing|sex|animal|pussy|poker|buyer
+(reject|email|rm)\.(cgi|php|jsp|pl|asp)
 <HTML><HEAD><\/HEAD><BODY>
 mini10928@dreamwiz.com
 (운세|사주)[\s]*정보|신년[\s]*운세
 unregist|대출|인테리어|신규[\s]*창업
 회원님|kavmodel|연예인|H양|성현아|럭셔리
-viagra|비아그라|get start now
+get start now
 window\.open|<embed|codebase=|<object
 <map name=|refuse
 www\.lux-sa\.com|발송기|wow3go
@@ -30,6 +30,8 @@ src=http|hoop-bid|helpu-web
 Microsoft DHTML Editing
 <\/html>.+
 yescounter\.com
+v[^a-z0-9]*i[^a-z0-9]*a[^a-z0-9]*g[^a-z0-9]*r[^a-z0-9]*a
+비[^a-z0-9]?아[^a-z0-9]?그[^a-z0-9]?라
 
 # SOBIG.F configuration
 Subject: [\s]*(Thank you!|Your Details)[\s]*
