@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://www.oops.org>
 #
-# $Id: Trash.pm,v 1.1 2004-11-29 13:18:17 oops Exp $
+# $Id: Trash.pm,v 1.2 2004-11-30 11:38:03 oops Exp $
 #
 
 package Byspam::Trash;
@@ -295,7 +295,7 @@ sub printTrash {
 				system("clear");
 				$printBody = "=============================================================================\n" .
 							 "by SPAM Trash Viewer $main::version by JoungKyun Kim <http://www.oops.org>\n" .
-							 "Command [ q - quit | no - view no | d no - del no | enter - next | b - back ]\n" .
+							 "Command [ q - quit | space - next page | enter - next line | b - prev page ]\n" .
 							 "=============================================================================\n" .
 							 "$p_page page / total $lastpage pages\n\n".
 							 "Mail No. $cmd\n".
