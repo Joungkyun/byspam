@@ -35,7 +35,7 @@ my $filedates = "";
 do "@confdir@/byspam.conf";
 do "$includeDir/byspamFunction.pl";
 
-$copy = "By SAPM TRASH VIEWER v1.0.1 ".
+$copy = "By SAPM TRASH VIEWER v1.1.0 ".
         "by JoungKyun Kim <http://www.oops.org>\n";
 
 $homedir =~ s/\/$//g;
@@ -215,7 +215,7 @@ LINE: while (1) {
   my $filterlength;
   for($i=$start;$i>$until;$i--) {
     $j = $i+1;
-    $filterlength = ( $ENV{"SLENGTH"} eq "" ) ? 60 : $ENV{"SLENGTH"};
+    $filterlength = ( $ENV{"BYLEN"} eq "" ) ? 60 : $ENV{"BYLEN"};
     $filtersubject = substr($subject[$i], 0, $filterlength);
     $filtersubject =~ s/(([\x80-\xff].)*)[\x80-\xff]?$/$1/;
     printf "%6s. %s\n", $j, $filtersubject;
