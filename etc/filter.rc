@@ -1,0 +1,26 @@
+SHELL=/bin/sh
+VERBOSE=no
+
+# 사용자 로그파일 (계정 유저만 사용)
+#LOGFILE=${HOME}/byspam/filter.log
+
+# 필터링 체크
+CheckSave=`@bindir@/byspamFilter -p`
+FilterValue=`@bindir@/byspamFilter`
+
+SAVEDIR=`echo $CheckSave | sed -e 's/\(.\+\)\/spam-[0-9]\+$/\1/g'`
+SAVEDIRCHK=`echo ${SAVEDIR} | sed -e 's/\/dev\/null//g'`
+
+###################
+# start Filtering #
+###################
+:0 ic
+* ? test -n "${SAVEDIRCHK}"
+* ? test ! -d "${SAVEDIR}"
+| mkdir -p "${SAVEDIR}";
+
+:0:
+* < 5500000
+* ? test -n "${FilterValue}"
+${CheckSave}
+
