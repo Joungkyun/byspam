@@ -1,6 +1,6 @@
 Changelog document
 
-$Id: Changelog,v 1.35 2004-12-03 10:55:20 oops Exp $
+$Id: Changelog,v 1.36 2004-12-03 11:21:32 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.0
@@ -8,6 +8,7 @@ Warn: date format is Y.m.d
     by JoungKyun Kim :
        - support shared memory (shm) function
          Need IPC::ShareLite. If don't support IPC::SharedLite, no problem.
+       - changed configuration format (compatible old version format)
 
   - 2004.12.01
     by JoungKyun Kim :
