@@ -1,4 +1,11 @@
 #!@PERLPATH@
+#
+# By SPAM main code.
+# This package code follows BPL License
+# JoungKyun Kim <http://www.oops.org>
+#
+# $Id: byspamFilter,v 1.14 2004-11-27 19:06:48 oops Exp $
+#
 use lib '@includedir@';
 my $conf = "@confdir@/byspam.conf";
 

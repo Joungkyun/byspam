@@ -1,4 +1,6 @@
 #!/bin/sh
+#
+# $Id: byspam.cron,v 1.2 2004-11-27 19:06:48 oops Exp $
 
 CONFNAME="@confdir@/byspam.conf";
 

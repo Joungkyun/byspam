@@ -1,4 +1,6 @@
 #!/bin/sh
+# $Id: uninstall.in,v 1.7 2004-11-27 19:06:48 oops Exp $
+
 VERSION=@byversion@
 
 level="@level@"

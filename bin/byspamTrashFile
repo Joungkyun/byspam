@@ -1,4 +1,8 @@
 #!@PERLPATH@
+#
+# By SPAM Trash file viewer
+# $Id: byspamTrashFile,v 1.11 2004-11-27 19:06:48 oops Exp $
+#
 use Mail::Internet;
 use Mail::Header;
 use MIME::Base64;

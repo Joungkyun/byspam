@@ -1,6 +1,7 @@
 # include function of spam fileter
 #
 # get filtering file value
+# $Id: byspamFunction.pl,v 1.12 2004-11-27 19:06:48 oops Exp $
 #
 sub filterText {
   my $list;

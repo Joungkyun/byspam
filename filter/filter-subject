@@ -1,6 +1,9 @@
 # This file is used to filter Subject: of mail header.
 # and use regular expression with perl type.
 # See also regex of perl.
+#
+# $Id: filter-subject,v 1.14 2004-11-27 19:06:48 oops Exp $
+
 (\(|\[|<)[ \t]*([^a-z0-9]?±¤[^a-z0-9]?°í|[^a-z0-9]?ÎÆ[^a-z0-9]?go|[^a-z0-9]?ÎÆ[^a-z0-9]?Í±)[ \t]*(>|\]|\))
 (\(|\[|<)[ \t]*([^a-z0-9]?È«[^a-z0-9]?º¸|[^a-z0-9]?¼±[^a-z0-9]?Àü|[^a-z0-9]?Åõ[^a-z0-9]?ÀÚ)[ \t]*(>|\]|\))
 (\(|\[|<)[ \t]*([^a-z0-9]?Á¤[^a-z0-9]?º¸|[^a-z0-9]?¾È[^a-z0-9]?³»|[^a-z0-9]?Á¦[^a-z0-9]?¾È)[ \t]*(>|\]|\))

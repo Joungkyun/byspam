@@ -1,4 +1,7 @@
 #!/bin/sh
+#
+# $Id: configure,v 1.9 2004-11-27 19:06:48 oops Exp $
+#
 export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin/:/usr/local/bin:/usr/local/sbin
 
 # include byspam version

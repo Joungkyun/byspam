@@ -1,6 +1,9 @@
 # This file is used to filter Any words of mail header.
 # and use regular expression with perl type.
 # See also regex of perl.
+#
+# $Id: filter-extra,v 1.13 2004-11-27 19:06:48 oops Exp $
+
 AD_?2000
 RED[\s_]?SPIDER
 Produced By Microsoft MimeOLE V\(null\)
