@@ -1,0 +1,16 @@
+# This file is used to filter Any words of mail header.
+# and use regular expression with perl type.
+# See also regex of perl.
+AD_?2000
+RED[\s_]?SPIDER
+Produced By Microsoft MimeOLE V\(null\)
+littledisney\.co\.kr
+china\.com
+charset="?big5"?
+= Multipart Boundary
+Received: from localhost
+market|event
+helo=localhost
+from test
+CSmtpMsgPart
+Microsoft SMTPSVC

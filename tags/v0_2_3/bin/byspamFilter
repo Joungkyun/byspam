@@ -1,0 +1,122 @@
+#!@PERLPATH@
+use Mail::Internet;
+use Mail::Header;
+use MIME::Base64;
+use MIME::QuotedPrint;
+
+local $version;
+local $level;
+local $mail;
+local $allows;
+local $filterDir;
+local $includeDir;
+local @basics = ();
+
+my @ctype = ();
+my @files = ();
+my @gets = ();
+
+my @mailText;
+my $mailText;
+my $mailCopy;
+my $header;
+my $body;
+my $target;
+my $regex;
+my $spam;
+my $fil;
+my $regignore;
+my $ignoreallow = 0;
+my $newline = "";
+
+# get config file
+$conf = "@confdir@/byspam.conf";
+if ( -f "$conf" ) { do "$conf"; }
+
+# get sub function
+do "$includeDir/byspamFunction.pl";
+
+# print out help message
+printHelp($#ARGV,@ARGV);
+
+# get filtering data
+foreach (@basics) {
+  @gets = split(/:/,$_);
+  push @ctype, $gets[0];
+  push @files, $gets[1];
+}
+
+# parse mail
+if ($#ARGV > 0 && $ARGV[0] eq "-d") {
+  if( -f "$ARGV[1]" ) {
+    @mailText = fileContext($ARGV[1]);
+  } else {
+    print "Error: Can't search path of $ARGV[1]\n";
+    exit;
+  }
+} else {
+  if ( $ARGV[0] eq "-z" ) { $newline = "\n"; }
+  @mailText = <STDIN>;
+}
+
+$mail = Mail::Internet->new(\@mailText);
+$header = getHeader($mail);
+$body = getBody($mail);
+
+if ( $body ne "checking spam" ) {
+  # get size of array
+  my $filesSize = @basics;
+
+  # check filtering data
+  $regignore = filterText("$filterDir/$ignore");
+  Line: for($i=0;$i<$filesSize;$i++) {
+    if( ! -f "$filterDir/$files[$i]") { next Line; }
+    $regex = filterText("$filterDir/$files[$i]");
+
+    if ($ctype[$i] eq "Body") {
+      if($body) { chomp($target = $body); }
+      # iframe tag check
+      if($filterIframe == 1) { $regex = "$regex|<iframe"; }
+    } elsif ($ctype[$i] eq "Extra") {
+      if($header) { chomp($target = $header); }
+    } else {
+      chomp($target = parseHeader($mail->get("$ctype[$i]:")));
+      if($ctype[$i] eq "From") {
+        $getReply = parseHeader($mail->get("Reply-To:"));
+        if($target && $getReply ne "null") { chomp($target .= " $getReply"); }
+      }
+      if ($target) { $target =~ s/[\s]/ /g; }
+    }
+
+    if( $regex && $target && $target =~ /$regex/i ) {
+      $spam = 1; $fil = $ctype[$i];
+
+      if ( $regignore && $target =~ /$regignore/i ) { $ignoreallow = 1; }
+      last Line;
+    }
+
+    # no content check in body
+    if($ctype[$i] eq "Body" && $spam != 1 && $filterTag == 1) {
+      if (noContentCheck("$target") == 1) { $spam = 1; $fil = $ctype[$i]; last Line; }
+    }
+  }
+} else {
+  $spam = 1;
+  $fil = "Extra";
+}
+
+if ($spam) {
+  # check of exception of mail filter
+  if( ! $ignoreallow && -f "$filterDir/$allows" ) {
+    $regex = filterText("$filterDir/$allows");
+    if ( $regex && $header =~ /$regex/i ) { $spam = ""; $fil = ""; }
+    if ( $spam && $regex && $body =~ /$regex/i ) { $spam = ""; $fil = ""; }
+  }
+
+  if($spam) {
+    print "$fil$newline";
+    exit(0);
+  }
+}
+
+exit(1);
