@@ -41,7 +41,7 @@ $homedir =~ s/\/$//g;
 use Time::gmtime;
 my $byspamYear = gmtime->year() + 1900;
 my $byspamMon  = gmtime->mon() + 1;
-my $byspamDay  = gmtime->mday();
+my $byspamDay  = gmtime->mday() + 1;
 if($byspamMon < 10) { $byspamMon = "0$byspamMon"; }
 if($byspamDay < 10) { $byspamDay = "0$byspamDay"; }
 
