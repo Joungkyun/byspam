@@ -1,0 +1,133 @@
+#!/bin/sh
+VERSION=0.2.1
+
+pwd=$(pwd)
+level=@level@
+perlpath=@PERLPATH@
+installdir=@INSTALLDIR@
+prefix=@prefix@
+bindir=@bindir@
+confdir=@confdir@
+filterdir=@filterdir@
+includedir=@includedir@
+procpath=@procpath@
+uninstall=${installdir}/uninstall
+package=@package@
+
+CHK=0
+
+while [ "$1" != "" ]
+do
+  chk=$(echo $1 | egrep 'DESTDIR')
+  [ -n "$chk" ] && eval $1
+  shift
+done
+
+if [ ! -d "${installdir}" ]; then
+  echo "excute configure script in first"
+  exit 1
+fi
+
+[ ! -d "${DESTDIR}${bindir}" ] && mkdir -p ${DESTDIR}${bindir}
+[ ! -d "${DESTDIR}${confdir}" ] && mkdir -p ${DESTDIR}${confdir}
+[ ! -d "${DESTDIR}${filterdir}" ] && mkdir -p ${DESTDIR}${filterdir}
+[ ! -d "${DESTDIR}${includedir}" ] && mkdir -p ${DESTDIR}${includedir}
+
+
+for i in bindir confdir filterdir includedir
+do
+  eval target='$'${i}
+  [ ! -d "${DESTDIR}${target}" ] && mkdir -p ${DESTDIR}${target}
+
+  case "${i}" in
+    bindir)
+                list="byspamFilter plain.pl regexChk.pl byspamTrash"
+                inst=${installdir}
+                perm=755
+                ;;
+    confdir)
+                list="filter.rc byspam.conf"
+                inst=${installdir}
+                perm=644
+                ;;
+    filterdir)
+                list=$(ls filter)
+                inst=filter
+                perm=644
+                ;;
+    includedir)
+                list=$(ls include)
+                inst=include
+                perm=644
+                ;;
+    *)
+                list=
+  esac
+
+  for j in $list
+  do
+    install -m${perm} ${inst}/${j} ${DESTDIR}${target}
+    echo "install .... ${DESTDIR}${target}/${j}"
+  done
+done
+
+install -m755 ${uninstall} ${DESTDIR}${bindir}
+install -m644 ${installdir}/install.log ${DESTDIR}${confdir}/install.log
+
+if [ "${package}" = "" ]; then
+  echo
+  echo -n "Registration of procmailrc CHECK "
+  for i in 1 2 3 4 5 6 7 8 9
+  do
+    echo -n "."
+    sleep 1
+  done
+  echo "."
+
+  if [ "${level}" != "root" ]; then
+    if [ -f "${HOME}/.procmailrc" ]; then
+      chk=$(egrep "^INCLUDERC=.+\/filter\.rc" ${HOME}/.procmailrc)
+      if [ -z "${chk}" ]; then
+        echo "INCLUDERC=${confdir}/filter.rc" >> ${HOME}/.procmailrc
+        echo "Complete registration of procmailrc : OK"
+      else
+        echo "^[[1;31mWarnning^[[7;0m : filter.rc is already registed."
+        echo "After check that is \"INCLUDERC=${confdir}/filter.rc\""
+        echo "in ${procpath},"
+        echo "if this path is uncollected, modified ${procpath} with this path."
+        echo
+      fi
+    else
+      echo "VERBOSE=no" >> ${HOME}/.procmailrc
+      echo "INCLUDERC=${confdir}/filter.rc" >> ${HOME}/.procmailrc
+      echo "Complete registration of procmailrc : OK"
+    fi
+  else
+    chk=$(egrep "^INCLUDERC=.+\/filter\.rc" ${procpath})
+    if [ -z "${chk}" ]; then
+      echo "INCLUDERC=${confdir}/filter.rc" >> ${procpath}
+      echo "Complete registration of procmailrc : OK"
+    else
+      echo "[1;31mWarnning[7;0m : filter.rc is already registed."
+      echo "After check that is \"INCLUDERC=${confdir}/filter.rc\" in ${procpath},"
+      echo "if this path is uncollected, modified ${procpath} with this path."
+      echo
+      sleep 5
+    fi
+  fi
+fi
+
+echo
+rm -rf ${installdir}
+echo "removed installdir ${installdir}"
+rm -f ./install
+echo "removed install file ./install"
+
+echo
+echo "Complete install byspam $VERSION"
+echo "[1;31mFirst, configured ${confdir}/byspam.conf !!![7;0m"
+echo
+
+echo
+echo
+exit 0
