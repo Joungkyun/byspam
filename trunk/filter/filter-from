@@ -1,3 +1,5 @@
 # This file is used to filter From: of mail header.
 # and use regular expression with perl type.
 # See also regex of perl.
+test(er)*|테스(트|터)
+popmailer.org|<>
