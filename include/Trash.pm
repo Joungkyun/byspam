@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://www.oops.org>
 #
-# $Id: Trash.pm,v 1.3 2004-11-30 11:43:05 oops Exp $
+# $Id: Trash.pm,v 1.4 2004-11-30 16:49:03 oops Exp $
 #
 
 package Byspam::Trash;
@@ -12,6 +12,7 @@ use strict;
 use Byspam::Common;
 use Byspam::Mail;
 use Byspam::Parse;
+use File::Copy;
 
 my $cm = new Byspam::Common;
 
@@ -150,7 +151,7 @@ sub nextFunc {
 		# view trash file mode
 		( $_case =~ m/^[0-9]+$/ ) and do {
 			my $_dno = int ( $_case - 1 );
-			printTrash ($main::_path, $main::spamlist[$_dno], $main::_sublen, $main::_from);
+			printTrash ($main::_path, $main::spamlist[$_dno], $main::_user, $main::_sublen, $main::_from);
 
 			$main::_start = $main::_startl;
 			$main::_until= $main::_untill;
@@ -197,23 +198,64 @@ sub splitMail {
 	return @mailx;
 }
 
+sub recoveryMail {
+	my $self = shift if ref ($_[0]);
+	my ( $u, $m ) = @_;
+
+	my $_inbox = "$main::inbox/$u";
+
+	if ( ! -d $_inbox ) {
+		open (fileHandle, ">>$_inbox");
+		print fileHandle "\n$m";
+		close (fileHandle);
+
+		return 0;
+	}
+
+	return 1;
+}
+
+sub rewriteTrash {
+	my $self = shift if ref ($_[0]);
+	my ( $p, $n, @m ) = @_;
+
+	my $_tmps = $p ? "$p/$n.$$" : "$n.$$";
+	my $_new  = $p ? "$p/$n" : $n;
+
+	open (fileHandle, ">$_tmps");
+	foreach ( @m ) {
+		print fileHandle "$_\n";
+	}
+	close (fileHandle);
+
+	if ( -f "$_tmps" && ! -d $_new ) {
+		copy ($_tmps, $_new);
+		unlink "$_tmps";
+	}
+}
+
 sub printTrash {
 	my $self = shift if ref ($_[0]);
 	my $ps = new Byspam::Parse;
 	my $mx;
 
-	my ( $path, $name, $sublen, $fromis ) = @_;
-	my $tpath = ( $path ) ? "$path/$name" : $name;
-	my @mails = splitMail ($tpath);
-	chomp (@mails);
-	my $mailSize = @mails;
-	my @tmpMail = ();
+	my ( $path, $name, $user, $sublen, $fromis ) = @_;
+	my $tpath     = ( $path ) ? "$path/$name" : $name;
+	my @mails     = ();
+	my $mailSize  = 0;
+	my @tmpMail   = ();
 
-	my @subject = ();
-	my @from = ();
-	my @date = ();
-	my @body = ();
+	my @subject   = ();
+	my @from      = ();
+	my @date      = ();
+	my @body      = ();
 	my $filedates = "";
+
+	@mails = splitMail ($tpath);
+	chomp (@mails);
+
+INIT:
+	$mailSize = @mails;
 
 	foreach my $permail ( @mails ) {
 		my $tsub;
@@ -224,6 +266,7 @@ sub printTrash {
 
 		$mx = Byspam::Mail->new (\@tmpMail);
 
+		$main::_hdebug && print "### " . $mx->header("Subject") ."\n";
 		$tsub = $ps->parseHeader ($mx->header ("Subject"));
 		$tsub = $tsub ? $cm->trim ($tsub) : "No Subject";
 
@@ -233,7 +276,10 @@ sub printTrash {
 		push (@subject, $tsub);
 		push (@from, $tfrom);
 		push (@date, $mx->header ("Date"));
+
+		$main::_bdebug && print "### " . $mx->header("Subject") ."\n";
 		push (@body, $ps->getBody ($mx));
+		$permail =~ s/!byspamsplit!//g;
 	}
 
 	my $__limit = $main::_limit;
@@ -289,7 +335,7 @@ sub printTrash {
 		$cmd = $cm->trim ($cmd);
 
 		# view mail context
-		if ( $cmd =~ /^[0-9]+$/ ) {
+		if ( $cmd =~ m/^[0-9]+$/ ) {
 			if ($cmd <= $start + 1 && $cmd > $until + 1 ) {
 				my $mailno = $cmd - 1;
 				system("clear");
@@ -323,10 +369,38 @@ sub printTrash {
 			}
 		}
 
-		if ($until == -1 && $cmd !~ /^b/i) { last; }
-		elsif($cmd !~ /^(y|b|\s*$)/i) { last; }
-		elsif($cmd =~ /^b/i && $p_page eq 1) { }
-		elsif($cmd =~ /^b/i && $p_page > 1) { $p_page--;  }
+		# delete or recovery article mode
+		elsif ( $cmd =~ m/^(d|r)[\s]([0-9]+)/ ) {
+			my $_mode  = $1;
+			my $_actno = $2 - 1;
+			my $_s     = 0;
+
+			# if delete no < 0, redo current page;
+			redo if ( $_actno < 0 );
+			redo if ( $_actno >= $mailSize );
+
+			if ( $_mode eq "r" && $main::_direct && ! $main::_root ) {
+				$_s = 1;
+			} else {
+				# recovery mode
+				$_s = recoveryMail ($user, $mails[$_actno]) if ( $_mode eq "r" );
+				$_s && redo;
+			}
+			$_s && redo;
+
+			# article removed
+			splice (@mails, $_actno, 1);
+
+			# rewrite original file
+			rewriteTrash ($path, $name, @mails);
+
+			goto INIT;
+		}
+
+		elsif ($until == -1 && $cmd !~ m/^b/i) { last; }
+		elsif($cmd !~ m/^(y|b|\s*$)/i) { last; }
+		elsif($cmd =~ m/^b/i && $p_page eq 1) { }
+		elsif($cmd =~ m/^b/i && $p_page > 1) { $p_page--;  }
 		else { $p_page++; }
 
 	}
