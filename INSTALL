@@ -1,6 +1,6 @@
 By SPAM 설치 및 사용 설명서
 
-$Id: INSTALL,v 1.14 2004-12-30 08:34:46 oops Exp $
+$Id: INSTALL,v 1.15 2005-01-11 05:47:02 oops Exp $
 
 목차
 ----
@@ -28,6 +28,9 @@ BySPAM 은 smtp dameon 과 procmail 에 연동되어 작동을 합니다. 설치 후에 따로 구동
 
 
 RPM 설치자들은 smtp 를 재시작 한 후, 4번, 5번, 6번 항목만 보도록 한다.
+
+또한, byspam 을 사용하기 위한 perl module 들이 설치되어 있는지 확인해야 한다. 이는
+Environment 문서를 참고 하라.
 
 
 1. By SPAM 의 설치 옵션
