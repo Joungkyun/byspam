@@ -1,0 +1,22 @@
+# This file is used to filter Subject: of mail header.
+# and use regular expression with perl type.
+# See also regex of perl.
+(\(|\[)[\s]*(광.*고|홍.*보|廣.*go|廣.*告|선.*전)[\s]*(\]|\))
+구입[\s]*(문의|방법|신청)
+수신을[\s]*원하지
+바스트메일|수익|성인|SEX|PORN|YOUNG|STAR|STRIP
+NAMED|NUDE|CELEBRIT|casino|마케팅|mailtouch
+Important Message From
+C:\\CoolProgs\\Pretty Park\.exe
+영상으로 보내는 편지
+Trojaner-Info
+ILOVEYOU
+Look at the pretty
+Some advice on your shortcoming
+Free XXX Pictures
+A Free hot porn site
+Why don't you reply to me
+Never kiss a stranger
+How about have dinner with me together
+Snowhite and the Seven Dwarfs
+photos from my
