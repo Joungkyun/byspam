@@ -2,26 +2,28 @@
 #
 # Mail Parse Utility supported by BySPAM
 # JoungKyun Kim <http://www.oops.org>
-# $Id: plain.pl,v 1.5 2004-11-30 19:24:38 oops Exp $
+# $Id: plain.pl,v 1.6 2004-12-03 10:55:20 oops Exp $
 #
 use lib '@includedir@';
 my $conf = "@confdir@/byspam.conf";
 
 use strict;
 
+use Byspam::Init;
 use Byspam::Getopt;
 use Byspam::Common;
 use Byspam::Parse;
 use Byspam::Mail;
 
 # declaration global variable on configuration file
-use vars qw ($version  $allows $ignore $filterIframe $filterTag);
-use vars qw ($nobody $noheader $charset @basics $trashPeriod);
-use vars qw ($binDir  $confdir $filterDir $includeDir $perlpath);
+use vars qw ($charset);
 
 my $cm;
 my $o;
 my $ov;
+my $shm;
+
+$shm = Byspam::Init->new ();
 
 # options variable
 my $opt;
@@ -35,19 +37,7 @@ my @_argv    = @ARGV;
 # create reference Common
 $cm = new Byspam::Common;
 
-# get configuration file
-if ( ! -f "$conf" ) {
-	$cm->printError (
-			"\n" .
-			"    Configuration file missing.\n" .
-			"    Check \"$conf\" file\n" .
-			"\n"
-	);
-	exit 1;
-}
-
-require $conf;
-
+$charset = $shm->opts ('charset');
 if ( ! $charset ) {
 	$charset = $ENV{"LANG"};
 	CHARSET: {

@@ -1,9 +1,14 @@
 Changelog document
 
-$Id: Changelog,v 1.34 2004-11-30 19:24:37 oops Exp $
+$Id: Changelog,v 1.35 2004-12-03 10:55:20 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.0
+  - 2004.12.03
+    by JoungKyun Kim :
+       - support shared memory (shm) function
+         Need IPC::ShareLite. If don't support IPC::SharedLite, no problem.
+
   - 2004.12.01
     by JoungKyun Kim :
        - added delete article function on byspamTrash

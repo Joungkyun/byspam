@@ -4,37 +4,32 @@
 # This package code follows BPL License
 # JoungKyun Kim <http://www.oops.org>
 #
-# $Id: byspamFilter,v 1.19 2004-11-30 19:24:38 oops Exp $
+# $Id: byspamFilter,v 1.20 2004-12-03 10:55:20 oops Exp $
 #
 use lib '@includedir@';
-my $conf = "@confdir@/byspam.conf";
-
 use strict;
 
+use Byspam::Init;
 use Byspam::Getopt;
 use Byspam::Common;
 use Byspam::Parse;
 use Byspam::Mail;
 
 # declaration global variable on configuration file
-use vars qw ($version  $allows $ignore $filterIframe $filterTag $trashPeriod);
-use vars qw ($nobody $noheader $charset @basics $_filtered $debug $verbose);
-use vars qw ($binDir  $confdir $filterDir $includeDir $perlpath);
-
-# init global variables
-$version      = "";
-$filterIframe = 0;
-$filterTag    = 1;
-$nobody       = 1;
-$noheader     = 1;
-
-# declaration variables
+use vars qw ($version $charset $_filtered $debug $verbose);
 
 # common variables
 my $cm;
 my $ps;
 my $o;
 my $ov;
+my $shm;
+
+# init configuration and filter variables
+$shm = Byspam::Init->new ();
+
+# init global variables
+$version      = $shm->opts('version');
 
 # option variable;
 my $opt      = "";
@@ -43,7 +38,6 @@ my $_file    = "";
 # area variables
 my @gets     = ();
 my @ctype    = ();
-my @files    = ();
 my @mailText = ();
 
 my $newline  = "";
@@ -70,18 +64,8 @@ $debug    = 0;
 # create reference Common
 $cm = new Byspam::Common;
 
-# get configuration file
-if ( ! -f "$conf" ) {
-	$cm->printError (
-			"\n" .
-			"    Configuration file missing.\n" .
-			"    Check \"$conf\" file\n" .
-			"\n"
-	);
-	exit 1;
-}
-
-require $conf;
+# charactor init
+$charset = $shm->opts ("charset");
 
 if ( ! $charset ) {
 	$charset = $ENV{"LANG"};
@@ -137,10 +121,11 @@ while ( 1 ) {
 printHelp () if ( $ov->{getopt_err} or $ov->{optcno} );
 
 # get filtering data
-foreach ( @basics ) {
+my $checkNo = 0;
+foreach ( @{$shm->opts('basics')} ) {
 	@gets = split (/:/, $_);
 	push @ctype, $gets[0];
-	push @files, $gets[1];
+	$checkNo++;
 }
 
 # import original mail format
@@ -163,8 +148,8 @@ if ( $_file ) {
 $mail = Byspam::Mail->new (\@mailText);
 $ps = new Byspam::Parse;
 
-$spam = 1, $fil = "No Head", goto CHECKEND if ( $noheader && ! $mail->{_header} );
-$spam = 1, $fil = "No Body", goto CHECKEND if ( $nobody && ! $mail->{_body} );
+$spam = 1, $fil = "No Head", goto CHECKEND if ( $shm->opts('noheader') && ! $mail->{_header} );
+$spam = 1, $fil = "No Body", goto CHECKEND if ( $shm->opts('nobody') && ! $mail->{_body} );
 
 # header parsing
 $header = $ps->getHeader ($mail->{_header});
@@ -182,7 +167,7 @@ $body = $ps->getBody ($mail);
 #
 
 $_ftarget = $header . "\n\n" . $mail->{_body};
-if ( checkFilter ($_ftarget, "filter-extra") ) {
+if ( checkFilter ($_ftarget, "Extra") ) {
     $spam     = 1;
     $fil      = "Extra";
     
@@ -196,35 +181,34 @@ if ( checkFilter ($_ftarget, "filter-extra") ) {
 # check each part
 #
 
-my $checkNo = @basics;
 my $i       = 0;
 my $_regs   = "";
 
 for ( $i=0; $i<$checkNo; $i++ ) {
-	next if ( ! -f "$filterDir/$files[$i]" );
+	next if ( ! $shm->filter (lc ($ctype[$i])) );
 	$fil = $ctype[$i];
 	next if ( $fil eq "Extra" );
 
 	PART: {
 		( $fil eq "Body" ) and do {
-			if ( $filterTag && $cm->noContentCheck ($body) ) {
+			if ( $shm->opts('filterTag') && $cm->noContentCheck ($body) ) {
 				$spam = 1;
 				printMessage ($fil, $_filtered);
 				goto CHECKALLOW;
 			}
 
 			$_ftarget = $body;
-			$_regs = "|<ifrmae" if ( $filterIframe );
+			$_regs = "|<ifrmae" if ( $shm->opts('filterIframe') );
 			last PART;
 		};
 
 		$_ftarget = $ps->parseHeader ($mail->header ($fil));
-		$_ftarget .= $ps->parseHeader ($mail->header ("Reply-To")) if ($fil eq "From");
+		$_ftarget .= $ps->parseHeader ($mail->header ('Reply-To')) if ($fil eq 'From');
 		$_regs = "";
 	}
 
 	$_ftarget = $cm->trim ($_ftarget);
-	$spam = checkFilter ($_ftarget, $files[$i], $_regs);
+	$spam = checkFilter ($_ftarget, lc ($fil), $_regs);
 
 	if ( $spam ) {
 		printMessage ($fil, $_filtered);
@@ -236,10 +220,10 @@ goto CHECKEND if ( ! $spam );
 
 CHECKALLOW:
 if ( $spam && $fil ) {
-	$nospam = checkFilter ($_ftarget, $allows);
+	$nospam = checkFilter ($_ftarget, 'Allows');
 
 	if ( $nospam ) {
-		printMessage ($fil, $_filtered, "Allow");
+		printMessage ($fil, $_filtered, 'Allow');
 		goto CHECKIGNORE;
 	}
 
@@ -248,7 +232,7 @@ if ( $spam && $fil ) {
 
 CHECKIGNORE:
 if ( $spam && $nospam && $fil ) {
-	$ispam = checkFilter ($_ftarget, $ignore);
+	$ispam = checkFilter ($_ftarget, 'ignore');
 
 	if ( $ispam ) {
 		printMessage ($fil, $_filtered, "Ignore");
@@ -286,8 +270,7 @@ sub checkFilter {
 
 	$_filtered = "";
 
-	$_f = "$filterDir/$_filter";
-	$_reg = $cm->filterText ( $_f );
+	$_reg = $shm->filter (lc ($_filter));
 	$_reg .= $_addreg if ( $_addreg );
 		
 	if ( $_reg ) {

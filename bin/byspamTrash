@@ -1,30 +1,30 @@
 #!@PERLPATH@
 #
 # By SPAM trash viewer front end
-# $Id: byspamTrash,v 1.15 2004-11-30 19:24:38 oops Exp $
+# $Id: byspamTrash,v 1.16 2004-12-03 10:55:20 oops Exp $
 #
-
 use lib '@includedir@';
-my $conf = "@confdir@/byspam.conf";
-
 use strict;
 
-use vars qw ( $charset );
-
+use Byspam::Init;
 use Byspam::Getopt;
 use Byspam::Common;
 use Byspam::Trash;
 
 # declaration global variable on configuration file
-use vars qw ($version  $allows $ignore $filterIframe $filterTag $trashPeriod);
-use vars qw ($nobody $noheader $charset @basics $_filtered $debug $verbose);
-use vars qw ($binDir  $confdir $filterDir $includeDir $perlpath $inbox);
+use vars qw ( $charset $version $debug $verbose $inbox);
 
 # reference variable
 my $cm;
 my $o;
 my $ov;
 my $ts;
+my $shm;
+
+# init configuration and filter variables
+$shm = Byspam::Init->new ();
+
+$version = $shm->opts ('version');
 
 # options variable
 use vars qw ( $_hdebug $_bdebug $_path $_user $_root $_direct );
@@ -69,19 +69,6 @@ $_sublen  = 60;
 
 # create reference Common
 $cm = new Byspam::Common;
-
-# get configuration file
-if ( ! -f "$conf" ) {
-	$cm->printError (
-			"\n" .
-			"    Configuration file missing.\n" .
-			"    Check \"$conf\" file\n" .
-			"\n"
-	);
-	exit 1;
-}
-
-require $conf;
 
 $charset = $ENV{"LANG"};
 CHARSET: {
