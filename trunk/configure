@@ -274,7 +274,7 @@ PACKAGE_BUGREPORT='http://devel.oops.org'
 
 ac_unique_file="README"
 ac_default_prefix=/usr/local/byspam
-ac_subst_vars='filterdir perlpath SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S AWK RM SED LS MKDIR GREP PERL LIBOBJS LTLIBOBJS'
+ac_subst_vars='filterdir perlpath procpath SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN_S AWK RM SED LS MKDIR GREP PERL LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -788,6 +788,7 @@ Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-filter=PATH      byspam filter path (default @sysconfdir@/Filter)
+  --with-procrc=PATH      procmailrc path (default /etc/procmailrc)
   --with-perl=PATH        perl path (system default)
 
 Report bugs to <http://devel.oops.org>.
@@ -1213,6 +1214,13 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 # Check whether --with-filter or --without-filter was given.
 if test "${with_filter+set}" = set; then
   withval="$with_filter"
+
+fi;
+
+
+# Check whether --with-procrc or --without-procrc was given.
+if test "${with_procrc+set}" = set; then
+  withval="$with_procrc"
 
 fi;
 
@@ -1705,6 +1713,18 @@ fi
 echo "$as_me: error: Can't not found perl" >&2;}
    { (exit 1); exit 1; }; }
   fi
+fi
+
+if test "x$with_procrc" != "x"; then
+  if test -f "$with_procrc" ; then
+    procpath=$with_procrc
+  else
+    { { echo "$as_me:$LINENO: error: Can't not found procmailrc" >&5
+echo "$as_me: error: Can't not found procmailrc" >&2;}
+   { (exit 1); exit 1; }; }
+  fi
+else
+  procpath="/etc/procmailrc"
 fi
 
 if test "x$with_filter" != "x"; then
@@ -2297,6 +2317,7 @@ if test -n "\$CONFIG_FILES"; then
    s/@@/,@/; s/@@/@,/; s/@;t t\$/,;t t/' >\$tmp/subs.sed <<\\CEOF
 s,@filterdir@,$filterdir,;t t
 s,@perlpath@,$perlpath,;t t
+s,@procpath@,$procpath,;t t
 s,@SHELL@,$SHELL,;t t
 s,@PATH_SEPARATOR@,$PATH_SEPARATOR,;t t
 s,@PACKAGE_NAME@,$PACKAGE_NAME,;t t

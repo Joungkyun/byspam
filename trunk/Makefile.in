@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.1 2004-12-06 07:48:40 oops Exp $
+# $Id: Makefile.in,v 1.2 2004-12-06 08:48:17 oops Exp $
 
 PROG            = @PACKAGE_NAME@
 VERSION         = @PACKAGE_VERSION@
@@ -12,19 +12,93 @@ bindir          = @bindir@
 sbindir         = @sbindir@
 sysconfdir      = @sysconfdir@
 filterdir       = @filterdir@
+perl            = @perlpath@
+procpath        = @procpath@
 
-MAKE            = @MAKE@
 INSTALL         = @INSTALL@
 GREP            = @GREP@
-RPM             = @RPM@
 SED             = @SED@
-PHP             = @PHP@
 RM              = @RM@ -f
 LS              = @LS@
-PS              = @PS@
 MKDIR           = @MKDIR@ -p
-GPG             = @GPG@
 AWK             = @AWK@
-MSGFMT          = @MSGFMT@
 
 WORKDIR         = workdir
+installlog	= $(WORKDIR)/install.log
+
+binlist         = `$(LS) bin/byspam*`
+includelist     = `$(LS) include/*.pm`
+conflist        = `$(LS) etc/*.*`
+
+binplist        = `$(LS) bin/byspam* | $(SED) 's!bin/!!g'`
+includeplist    = `$(LS) include/*.pm | $(SED) 's!include/!!g'`
+confplist       = `$(LS) etc/*.* | $(SED) 's!etc/!!g'`
+
+
+all:
+	$(MKDIR) -p $(WORKDIR)/{bin,etc,include}
+
+	echo "# Never touch or remove this file!!!" > $(installlog)
+	echo "" >> $(installlog)
+	echo "VERSION=$(VERSION)" >> $(installlog)
+	echo "" >> $(installlog)
+	echo "perlpath=$(perl)" >> $(installlog)
+	echo "procpath=$(procpath)" >> $(installlog)
+	echo "prefix=$(prefix)" >> $(installlog)
+	echo "bindir=$(bindir)" >> $(installlog)
+	echo "confdir=$(sysconfdir)" >> $(installlog)
+	echo "filterdir=$(filterdir)" >> $(installlog)
+	echo "includedir=$(includedir)" >> $(installlog)
+	echo "" >> $(installlog)
+
+	for i in $(binlist) $(includelist) $(conflist) ; do \
+	  $(SED) -e "s!@1\?byversion@!$(VERSION)!g" \
+	         -e "s!@1\?bindir@!$(bindir)!g" \
+	         -e "s!@1\?confdir@!$(sysconfdir)!g" \
+	         -e "s!@1\?filterdir@!$(filterdir)!g" \
+	         -e "s!@1\?includedir@!$(includedir)!g" \
+	         -e "s!@1\?PERLPATH@!$(perl)!g" $$i > $(WORKDIR)/$$i ; \
+	done
+
+install:
+	$(MKDIR) $(DESTDIR)$(bindir)
+	$(MKDIR) $(DESTDIR)$(sysconfdir)
+	$(MKDIR) $(DESTDIR)$(filterdir)
+	$(MKDIR) $(DESTDIR)$(includedir)/Byspam
+
+	echo "# Don't touch follow lines. This is uninstall information!!" >> $(installlog)
+
+	for i in $(binplist) ; do \
+	  echo "#=$(bindir)/$$i" >> $(installlog) ; \
+	  $(INSTALL) -m 755 $(WORKDIR)/bin/$$i $(DESTDIR)$(bindir) ; \
+	done
+
+	for i in $(includeplist) ; do \
+	  echo "#=$(installdir)/Byspam/$$i" >> $(installlog) ; \
+	  $(INSTALL) -m 644 $(WORKDIR)/include/$$i $(DESTDIR)$(includedir)/Byspam ; \
+	done
+
+	for i in $(confplist) ; do \
+	  if test $$i != "byspam.cron" ; then \
+	    echo "#=$(sysconfdir)/$$i" >> $(installlog) ; \
+	    $(INSTALL) -m 644 $(WORKDIR)/etc/$$i $(DESTDIR)$(sysconfdir) ; \
+	  else \
+	    if test -d /etc/cron.d ; then \
+	      echo "#=/etc/cron.d/byspam" >> $(installlog) ; \
+	      $(INSTALL) -m 644 $(WORKDIR)/etc/$$i $(DESTDIR)/etc/cron.d/byspam ; \
+	    fi \
+	  fi \
+	done
+
+	for i in $(filterplist) ; do \
+	  echo "#=$(filterdir)/$$i" >> $(installlog) ; \
+	  $(INSTALL) -m 644 filter/$$i $(DESTDIR)$(filterdir) ; \
+	done
+
+	$(INSTALL) -m 644 $(installlog) $(DESTDIR)$(sysconfdir)
+
+clean:
+	$(RM) -r $(WORKDIR) config.log config.status
+
+distclean: clean
+	$(RM) -r Makefile config.h
