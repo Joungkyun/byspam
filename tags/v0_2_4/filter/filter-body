@@ -1,0 +1,37 @@
+# This file is used to filter mail body.
+# and use regular expression with perl type.
+# See also regex of perl.
+수신거부|수신[\s]+거부|수.신.거.부|mailtouch
+속보|소호|홍보|1회성|투자|증권|청약|무작위|광고
+허락[\s]*없이|만[\s]*19[\s]*세
+미성년|성인|오빠천사|보지|자지|좆물|포커|고스톱
+\[\s*광[^\]]*고\s*\]
+정보[\s]*통신망[\s]*이용[\s]*촉진법
+정보통신망[\s]*이용촉진
+50조에[\s]*의거
+발신[\s]*전용|최신[\s]*프로그램
+정보통신부[\s]권고[\s]*사항
+개인[\s]*정보도[\s]*가지고[\s]*
+If you\s*(do not|don't)*\s*wish to
+포.?르.?노|섹.?캠|몰카|뽀.?르.?노|성폭행|강간|섹스
+사이버[\s]*머니
+Discount|marketing|sex|animal|pussy|poker
+(reject|email)\.(cgi|php|jsp|pl)
+<HTML><HEAD><\/HEAD><BODY>
+mini10928@dreamwiz.com
+(운세|사주)[\s]*정보|신년[\s]*운세
+unregist|대출|인테리어|신규[\s]*창업
+회원님|kavmodel|연예인|H양|성현아|럭셔리
+viagra|비아그라|get start now
+window\.open|<embed|codebase=|<object
+<map name=|refuse
+www\.lux-sa\.com|발송기|wow3go
+src=http|hoop-bid|helpu-web
+Microsoft DHTML Editing
+<\/html>.+
+yescounter\.com
+
+# SOBIG.F configuration
+Subject: [\s]*(Thank you!|Your Details)[\s]*
+Subject: (Re: )?Re:[\s]*(Thank you!|Details|Approved|Your application|Wicked screensaver|Taht movie)
+sobig\.f
