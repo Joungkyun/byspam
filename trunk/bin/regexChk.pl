@@ -1,8 +1,8 @@
-#!/usr/bin/perl -W
+#!@PERLPATH@ -W
 #
 # Perl regualr expression check utility in BySPAM
 # JoungKyun Kim <http://www.oops.org>
-# $Id: regexChk.pl,v 1.3 2004-11-28 11:50:11 oops Exp $
+# $Id: regexChk.pl,v 1.4 2004-11-30 17:06:14 oops Exp $
 #
 
 use strict;
