@@ -83,6 +83,11 @@ else
   echo "removed ${includedir} : NOT DELETE"
 fi
 
+# remove cron file
+if [ -f "/etc/cron.daily/byspam" ]; then
+  rm -f /etc/cron.daily/byspam
+fi
+
 # unregisted procmailrc
 procchk=$(egrep "^INCLUDERC=.+\/filter\.rc" ${procpath})
 if [ -n "${procchk}" ]; then
