@@ -1,0 +1,27 @@
+#!/bin/sh
+
+CONFNAME="@confdir@/byspam.conf";
+
+CONF=$(cat ${CONFNAME} | grep "^[ 	]*\$trashPeriod[ 	]*=[ 	]*[\"']*[0-9]\+[\"']*" | grep -v grep)
+if [ -z "${CONF}" ]; then
+  echo $CONF
+  CONF=30
+else
+  CONF=$(echo ${CONF} | awk -F "=" '{print $2}' | sed 's/[^0-9]//g')
+fi
+
+
+CHK_DATE=$(date -d "${CONF} days ago" +%Y%m%d)
+
+
+DELLIST=$(cat /etc/passwd | awk -F : '{print $6}')
+
+for i in ${DELLIST}
+do
+  i=$(echo ${i} | sed 's/\/$//g')
+  if [ -d "${i}/byspam" ] && [ -f "${i}/byspam/spam-${CHK_DATE}" ]; then
+    rm -f ${i}/byspam/spam-${CHK_DATE} > /dev/null 2>&1
+  fi
+done
+
+exit 0
