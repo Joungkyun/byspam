@@ -17,10 +17,11 @@ Microsoft SMTPSVC
 The[\s]?Bat
 lsan03.pacbell.net
 truehongbo
-Recieved: from [a-z0-9] \(\[[0-9.]+\]\)
+Received: from [a-z0-9]+ \(([a-z0-9.]+ )?\[[0-9.]+\]\)
 X-EM-Registration
 adsl|vdsl|hdsl
+JBHsender|SNOOP Bpsh
 
 # virus attach file  filter
-name[\s]*=[\s]*"?[^.]+\.(pif|vbs|exe|scr)
+name[\s]*=[\s]*"?[^.]+(\.[^.]+)*\.(pif|vbs|exe|scr|com)
 See the attached file for details
