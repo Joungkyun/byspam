@@ -61,6 +61,8 @@ if ( $#ARGV < 0 ) {
         print "Error: Only root user excute wiht -u option\n";
         exit;
       }
+    } elsif ($ARGV[$i] eq "-f") {
+      $filepath = $ARGV[$i+1];
     } elsif ($ARGV[$i] eq "-d") {
       $filedates = $ARGV[$i+1];
     } elsif ($ARGV[$i] eq "-x") {
@@ -73,6 +75,15 @@ if ( $#ARGV < 0 ) {
   if ($filedates eq "") { $filedates = "$byspamYear$byspamMon$byspamDay"; }
 
   $trash = "$users/byspam/spam-$filedates";
+  if ( $filepath eq "" ) {
+    if ($users eq "") { $users = $homedir; }
+    if ($filedates eq "") { $filedates = "$byspamYear$byspamMon$byspamDay"; }
+
+    $trash = "$users/byspam/spam-$filedates";
+  } else {
+    $trash = $filepath;
+    $dfile = "";
+  }
 }
 
 # delete mode
@@ -91,7 +102,9 @@ if( ! -f "$trash" ) {
   print "Usage: byspamTrashFile [ -u/-d/-x ]\n\n";
   print "       -u USERNAME (only root)\n";
   print "       -d DATE_FORMAT (Ymd, default value is today)\n";
-  print "       -x DATE_FORMAT (delete DATE_FORMAT trash file)\n\n";
+  print "       -x DATE_FORMAT (delete DATE_FORMAT trash file)\n";
+  print "       -f File Path\n\n";
+  print "       View Mode   : byspamTrashFile /some/path/filename\n";
   if($myuser eq "root") {
     print "       View Mode   : byspamTrashFile -u oops -d 20020627\n";
     print "       Delete Mode : byspamTrashFile -u oops -x 20020627\n";

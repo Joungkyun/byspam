@@ -1,6 +1,10 @@
 Changelog document
 
 Warn: date format is Y.m.d
+* v0.2.5
+  - 2004.05.28
+    by JoungKyun Kim : enable view with direct file path on byspamTrash
+
 * v0.2.4
   - 2004.04.04
     by JoungKyun Kim : changed print format on trash file list
