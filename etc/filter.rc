@@ -1,10 +1,10 @@
-# $Id: filter.rc,v 1.4 2004-11-27 19:06:48 oops Exp $
+# $Id: filter.rc,v 1.5 2004-12-06 13:39:10 oops Exp $
 
 SHELL=/bin/sh
 VERBOSE=no
 
 # check evn
-HOMES=`echo $HOME | sed -e 's/\/$//g'`
+HOMES=`echo $HOME | sed 's!/$!!g'`
 DATES=`date +%Y%m%d`
 
 # 사용자 로그파일 (계정 유저만 사용)
@@ -29,6 +29,10 @@ FilterValue=`@bindir@/byspamFilter`
       * ? test ! -f "${HOMES}/byspam/spam-${DATES}"
       | touch ${HOMES}/byspam/spam-${DATES}; \
         chown $LOGNAME ${HOMES}/byspam/spam-${DATES};
+
+    # spam filtering part header 추가
+    :0 fhw
+    | formail -A "X-BySpam-Filter: ${FilterValue}"
 
     :0 fbw
     ${HOMES}/byspam/spam-${DATES}
