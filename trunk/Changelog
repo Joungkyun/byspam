@@ -2,6 +2,9 @@ Changelog document
 
 Warn: date format is Y.m.d
 * v0.2.4
+  - 2004.04.04
+    by JoungKyun Kim : changed print format on trash file list
+
   - 2004.02.09
     by JoungKyun Kim : update noContentChk function
 

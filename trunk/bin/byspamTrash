@@ -140,17 +140,8 @@ do
     do
       eval "FILENAME=\$TRASHFILE${start}"
 
-      if [ ${start} -lt 10 ]; then
-        stno="   ${start}"
-      elif [ ${start} -lt 100 ]; then
-        stno="  ${start}"
-      elif [ ${start} -lt 1000 ]; then
-        stno=" ${start}"
-      else
-        stno=${start}
-      fi
       if [ ${start} -lt ${until} ] && [ -n "${FILENAME}" ]; then
-        echo "${stno}. ${FILENAME}"
+        printf "%4s. %s", "${start}" "${FILENAME}"
         start=$[${start}+1]
       else
         if [ -z "${FILENAME}" ]; then
