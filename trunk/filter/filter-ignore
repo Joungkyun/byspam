@@ -2,9 +2,9 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-ignore,v 1.10 2004-12-01 08:57:42 oops Exp $
+# $Id: filter-ignore,v 1.11 2004-12-02 05:36:33 oops Exp $
 
-(±¤|ÎÆ|°ü|±¡)[^\xB1-\xFEa-z]*(°í|go|Í±)
+(&#44305|±¤|ÎÆ|°ü|±¡)[^\xB1-\xFEa-z]*(°í|go|Í±)
 È«[^\xB1-\xFEa-z]*º¸
 ¼±[^\xB1-\xFEa-z]*Àü
 Åõ[^\xB1-\xFEa-z]*ÀÚ
