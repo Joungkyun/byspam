@@ -270,6 +270,62 @@ else
   exit 1
 fi
 
+mkdir -p ${includedir}/Byspam
+install -m644 ./include/Common.pm ${includedir}/Byspam > /dev/null 2>&1
+CHK=$?
+if [ "${CHK}" = 0 ]; then
+  echo "#=${includedir}/Byspam/Common.pm" >> ./installdir/install.log
+  echo "  update Common.pm : OK"
+else
+  echo "  update Common.pm : Failed"
+  rm -rf ./installdir ./install
+  exit 1
+fi
+
+install -m644 ./include/Encode.pm ${includedir}/Byspam > /dev/null 2>&1
+CHK=$?
+if [ "${CHK}" = 0 ]; then
+  echo "#=${includedir}/Byspam/Encode.pm" >> ./installdir/install.log
+  echo "  update Encode.pm : OK"
+else
+  echo "  update Encode.pm : Failed"
+  rm -rf ./installdir ./install
+  exit 1
+fi
+
+install -m644 ./include/Getopt.pm ${includedir}/Byspam > /dev/null 2>&1
+CHK=$?
+if [ "${CHK}" = 0 ]; then
+  echo "#=${includedir}/Byspam/Getopt.pm" >> ./installdir/install.log
+  echo "  update Getopt.pm : OK"
+else
+  echo "  update Getopt.pm : Failed"
+  rm -rf ./installdir ./install
+  exit 1
+fi
+
+install -m644 ./include/Mail.pm ${includedir}/Byspam > /dev/null 2>&1
+CHK=$?
+if [ "${CHK}" = 0 ]; then
+  echo "#=${includedir}/Byspam/Mail.pm" >> ./installdir/install.log
+  echo "  update Mail.pm : OK"
+else
+  echo "  update Mail.pm : Failed"
+  rm -rf ./installdir ./install
+  exit 1
+fi
+
+install -m644 ./include/Parse.pm ${includedir}/Byspam > /dev/null 2>&1
+CHK=$?
+if [ "${CHK}" = 0 ]; then
+  echo "#=${includedir}/Byspam/Parse.pm" >> ./installdir/install.log
+  echo "  update Parse.pm : OK"
+else
+  echo "  update Parse.pm : Failed"
+  rm -rf ./installdir ./install
+  exit 1
+fi
+
 install -m755 ./installdir/byspamUninstall ${bindir} > /dev/null 2>&1
 CHK=$?
 if [ "${CHK}" = 0 ]; then

@@ -267,6 +267,7 @@ do
     CHK=$?
   else
     ${PERLPATH} -p -i -e "s!\@confdir\@!${confdir}!g" ${INSTALLDIR}/${i}
+    ${PERLPATH} -p -i -e "s!\@includedir\@!${includedir}!g" ${INSTALLDIR}/${i}
     CHK=$?
     [ "${CHK}" = "0" ] && CHK=$?
   fi
