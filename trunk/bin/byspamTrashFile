@@ -22,6 +22,8 @@ my @subject = ();
 my @bodyis = ();
 my @devide = ();
 my @tmpMail = ();
+my @fromis = ();
+my @dateis = ();
 my $homedir = $ENV{"HOME"};
 my $myuser = $ENV{"USER"};
 
@@ -168,7 +170,14 @@ for($i=0;$i<$mailSize;$i++) {
   }
 
   $subject[$i] = $resSubj ? $resSubj : $subject[$i];
-  $bodyis[$i] = getBody($getMail);
+
+  $fromis[$i] = parseHeader($getMail->get("From:"));
+  $fromis[$i] =~ s/![^!]*!//g;
+
+  $dateis[$i] = parseHeader($getMail->get("Date:"));
+  $dateis[$i] =~ s/![^!]*!//g;
+
+  $bodyis[$i] = getBodyTrash($getMail);
 }
 
 my $lastpage = $mailSize/10;
@@ -212,6 +221,8 @@ LINE: while (1) {
       $printBody = "$copy".
                    "$page page / total $lastpage pages\n\n".
                    "Mail No. $cmd\n".
+                   "Date: $dateis[$mailno]\n".
+                   "From: $fromis[$mailno]\n".
                    "Subject. $subject[$mailno]\n\n".
                    "$bodyis[$mailno]\n";
 
