@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://www.oops.org>
 #
-# $Id: Trash.pm,v 1.7 2004-12-01 11:03:00 oops Exp $
+# $Id: Trash.pm,v 1.8 2004-12-01 11:08:49 oops Exp $
 #
 
 package Byspam::Trash;
@@ -295,8 +295,8 @@ INIT:
 		system ("clear");
 		print "=============================================================================\n" .
 			  "[1;37mby SPAM Trash Viewer[7;0m $main::version by JoungKyun Kim <http://www.oops.org>\n" .
-			  "Command [ [1;37mq[7;0muit | [1;37mn[7;0mumber | [1;37md[7;0melete | " .
-			  "[1;37mr[7;0mecovery | enter - next | b - back ]\n" .
+			  "Command [ [1;37mq[7;0muit | [1;37mn[7;0mum | [1;37md[7;0mel | " .
+			  "[1;37mr[7;0mecovery | enter - next | b - back | p - jump ]\n" .
 			  "=============================================================================\n";
 		if ( $main::_direct ) {
 			print "Current File: $filedates\n";
@@ -339,7 +339,7 @@ INIT:
 				system("clear");
 				$printBody = "=============================================================================\n" .
 							 "by SPAM Trash Viewer $main::version by JoungKyun Kim <http://www.oops.org>\n" .
-							 "Command [ q - quit | space - next page | p - jump page | b - prev page ]\n" .
+							 "Command [ q - quit | space - next page | enter - next line | b - prev page ]\n" .
 							 "=============================================================================\n" .
 							 "$p_page page / total $lastpage pages\n\n".
 							 "Mail No. $cmd\n".
