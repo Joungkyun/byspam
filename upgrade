@@ -103,11 +103,21 @@ fi
 [ -n "${CONF}" ] && eval $CONF
 
 # version check
-lversion=$(cat ${bindir}/uninstall | sed -n '/^VERSION/p' | sed -e 's/VERSION=//g')
+if [ -f "${bindir}/uninstall" ]; then
+  lversion=$(cat ${bindir}/uninstall | sed -n '/^VERSION/p' | sed -e 's/VERSION=//g')
+else
+  echo "  Error: install log of previous version includes wrong install path"
+  exit 1
+fi
 
 [ "${lversion}" = "" ] && {
-  lversion=$(cat ${confdir}/byspam.conf | sed -n '/^$version/p' | \
-             sed -e "s/\$version[ ]*=[ ]*\"\([0-9.]\+\)\"/\1/g")
+  if [ -f "${confdir}/byspam.conf" ]; then
+    lversion=$(cat ${confdir}/byspam.conf | sed -n '/^$version/p' | \
+               sed -e "s/\$version[ ]*=[ ]*\"\([0-9.]\+\)\"/\1/g")
+  else
+    echo "  Error: install log of previous version includes wrong install path"
+    exit 1
+  fi
 }
 
 [ "${lversion}" = "" ] && lversion="Unknown"
