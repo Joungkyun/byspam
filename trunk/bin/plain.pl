@@ -2,11 +2,9 @@
 #
 # Mail Parse Utility supported by BySPAM
 # JoungKyun Kim <http://www.oops.org>
-# $Id: plain.pl,v 1.6 2004-12-03 10:55:20 oops Exp $
+# $Id: plain.pl,v 1.7 2004-12-06 05:43:32 oops Exp $
 #
 use lib '@includedir@';
-my $conf = "@confdir@/byspam.conf";
-
 use strict;
 
 use Byspam::Init;
