@@ -3,6 +3,9 @@ Changelog document
 Warn: date format is Y.m.d
 
 * v0.2.3
+  - 2002.11.01
+    by JoungKyun Kim : fixed multipart content type check
+
   - 2002.10.14
     by JoungKyun Kim : fixed byspamTrash if exists similar account name
 

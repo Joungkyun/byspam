@@ -182,8 +182,8 @@ sub actAlternative {
   my $ishtml = "null";
   LINE: for ($i=0;$i<$bodySize;$i++) {
     #if ($Body[$i] =~ /$bounds/i) { $Body[$i] =~ s/--$bounds//g; }
-    if ($Body[$i] =~ /Content-Type: text\/plain/i) { $isplain = $i; }
-    elsif ($Body[$i] =~ /Content-Type: text\/html/i) { $ishtml = $i; }
+    if ($Body[$i] =~ /Content-Type:[\s]*text\/plain/i) { $isplain = $i; }
+    elsif ($Body[$i] =~ /Content-Type:[\s]*text\/html/i) { $ishtml = $i; }
     elsif ($Body[$i] !~ /Content-Type/i) { next LINE; }
     else { last LINE; }
   }
