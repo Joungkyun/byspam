@@ -17,10 +17,12 @@ Microsoft SMTPSVC
 The[\s]?Bat
 lsan03.pacbell.net
 truehongbo
-Received: from [a-z0-9]+ \(([a-z0-9.]+ )?\[[0-9.]+\]\)
+#Received: from [a-z0-9]+ \(([a-z0-9.]+ )?\[[0-9.]+\]\)
 X-EM-Registration
 adsl|vdsl|hdsl
 JBHsender|SNOOP Bpsh
+=_NextPart_[^=]+=_NextPart_
+X-Keywords: Junk
 
 # virus attach file  filter
 name[\s]*=[\s]*"?[^.]+(\.[^.]+)*\.(pif|vbs|exe|scr|com)
@@ -35,4 +37,3 @@ name[\s]*=[\s]*"?www\..*\.com"?
 # Win32/Netsky.worm.22016.D
 name[\s]*=[\s]*"?(Important|Details|Notice|Bill|Textfile|Data|Document)\.zip"?
 
-=_NextPart_[^=]+=_NextPart_
