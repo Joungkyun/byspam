@@ -2,7 +2,7 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-ignore,v 1.9 2004-12-01 08:35:50 oops Exp $
+# $Id: filter-ignore,v 1.10 2004-12-01 08:57:42 oops Exp $
 
 (광|廣|관|괌)[^\xB1-\xFEa-z]*(고|go|告)
 홍[^\xB1-\xFEa-z]*보
@@ -13,7 +13,12 @@
 제[^\xB1-\xFEa-z]*안
 대[^\xB1-\xFEa-z]*출
 직[^\xB1-\xFEa-z]*장[^\xB1-\xFEa-z]*인
+수[^\xB1-\xFEa-z]*수[^\xB1-\xFEa-z]*료
+비[^\xB1-\xFEa-z]*아[^\xB1-\xFEa-z]*그[^\xB1-\xFEa-z]*라
+v[^\xB1-\xFEa-z]*i[^\xB1-\xFEa-z]*a[^\xB1-\xFEa-z]*g[^\xB1-\xFEa-z]*r[^\xB1-\xFEa-z]*a
 과앙고오|ㄱㅗㅏㅇㄱㅗ
 yescounter\.com
 성인|포르노|캠동|섹스|빠구리|누나방
 금융|연체|대납|유통|직거래
+
+# user define

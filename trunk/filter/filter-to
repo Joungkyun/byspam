@@ -2,9 +2,9 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-to,v 1.6 2004-11-27 19:06:48 oops Exp $
+# $Id: filter-to,v 1.7 2004-12-01 08:57:42 oops Exp $
 
-anonymous
-subscrib
-test
-Undisclosed
+anonymous|subscrib|test|Undisclosed
+
+# user define
+
