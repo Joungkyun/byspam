@@ -50,6 +50,7 @@ foreach (@basics) {
 if ($#ARGV > 0 && $ARGV[0] eq "-d") {
   if( -f "$ARGV[1]" ) {
     @mailText = getContext($ARGV[1]);
+    $newline = "\n";
   } else {
     print "Error: Can't search path of $ARGV[1]\n";
     exit;
