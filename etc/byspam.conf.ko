@@ -1,7 +1,7 @@
 # Byspam - PROCMAIL 을 이용한 메일 필터 설정 파일
 # 필터파일: @confdir@/Filter
 # 김정균 <http://www.oops.org>
-# $Id: byspam.conf.ko,v 1.5 2004-12-06 13:39:22 oops Exp $
+# $Id: byspam.conf.ko,v 1.6 2004-12-06 18:09:42 oops Exp $
 #
 version         = @byversion@
 
@@ -61,24 +61,24 @@ noheader       = 1
 # 일 헤더에 존재하는 헤더 이름을 사용하며 필터 이름은 filter- 로 시작하
 # 며 소문자로 지정해야 합니다. 또한, 경로는 적지 않습니다.
 #
-basics[0]       = Extra:filter-extra
-basics[1]       = Subject:filter-subject
-basics[2]       = Date:filter-date
-basics[3]       = From:filter-from
-basics[4]       = To:filter-to
-basics[5]       = Body:filter-body
+basics[0]       = Extra:filter-extra:0x11001001:65536
+basics[1]       = Subject:filter-subject:0x11001002:65536
+basics[2]       = Date:filter-date:0x11001003:65536
+basics[3]       = From:filter-from:0x11001004:65536
+basics[4]       = To:filter-to:0x11001005:65536
+basics[5]       = Body:filter-body:0x11001006:65536
 
 # 스팸에 걸린 메일 중, 통과를 시키기 위한 룰을 지정하는 파일 입니다. 이
 # 설정 파일의 규칙에 매치되는 메일은 스팸으로 판단이 되었더라도, 무시가
 # 되어 집니다.
 #
-allows          = filter-allow
+allows          = filter-allow:0x11001020:65536
 
 # 스팸에 걸린 후, 위의 $allows 설정에 의해 스팸 분류가 취소된 메일에 대
 # 하여 이를 다시 스팸으로 처리할 수 있는 룰을 설정하는 파일을 위한 이름
 # 입니다. 
 #
-ignore		= filter-ignore
+ignore          = filter-ignore:0x11001021:65536
 
 # 스팸 파일 보존 기간
 #
