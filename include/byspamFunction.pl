@@ -293,7 +293,7 @@ sub noContentCheck {
 
   my $content;
   $content = $_[0];
-  $content =~ s/[\s]//ig;
+  $content =~ s/[\s]|&nbsp;//ig;
   $content =~ s/<html>.*<\/head>//ig;
   $content =~ s/<[^>]*>//ig;
 
