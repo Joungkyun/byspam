@@ -31,12 +31,12 @@ By SPAM 은 smtp 데몬과 procmail 과 연동하여 스팸메일을 필터링 하기위한 도구
 ./configure --prefix=/usr \
 	--bindir=/usr/bin \
 	--confdir=/etc/byspam \
-	--filterdir=/etc/byspam/Filter \
 	--includedir=/usr/include/byspam \
-	--perlpath=/usr/bin/perl \
-	--procpath=/etc/procmailrc \
-	--package=1
+	--with-filter=/etc/byspam/Filter \
+	--with-perl=/usr/bin/perl \
+	--with-procpc=/etc/procmailrc
 
+make
 
 %install
 if [ -d $RPM_BUILD_ROOT ]; then
@@ -44,7 +44,7 @@ if [ -d $RPM_BUILD_ROOT ]; then
 fi
 mkdir -p $RPM_BUILD_ROOT
 
-DESTDIR=$RPM_BUILD_ROOT ./install
+make DESTDIR=$RPM_BUILD_ROOT install
 
 %post
 if [ $1 = 0 ]; then
@@ -78,20 +78,22 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %dir /etc/byspam
-#/etc/byspam/Filter
 %config(noreplace) /etc/byspam/Filter/filter-allow
 %config(noreplace) /etc/byspam/Filter/filter-body
-%config(noreplace) /etc/byspam/Filter/filter-date            
-%config(noreplace) /etc/byspam/Filter/filter-extra           
+%config(noreplace) /etc/byspam/Filter/filter-date
+%config(noreplace) /etc/byspam/Filter/filter-extra
 %config(noreplace) /etc/byspam/Filter/filter-from
-%config(noreplace) /etc/byspam/Filter/filter-ignore          
-%config(noreplace) /etc/byspam/Filter/filter-subject        
-%config(noreplace) /etc/byspam/Filter/filter-to              
-%config(noreplace) /etc/byspam/byspam.conf 
-%config(noreplace) /etc/byspam/filter.rc   
-%attr(755,root,root) /etc/cron.daily/byspam  
-%attr(755,root,root) /usr/bin/byspamFilter   
-%attr(755,root,root) /usr/bin/byspamTrash    
+%config(noreplace) /etc/byspam/Filter/filter-ignore
+%config(noreplace) /etc/byspam/Filter/filter-subject
+%config(noreplace) /etc/byspam/Filter/filter-to
+%config(noreplace) /etc/byspam/byspam.conf
+%config(noreplace) /etc/byspam/filter.rc
+%attr(644,root,root) /etc/cron.d/byspam
+%attr(755,root,root) /usr/bin/byspamFilter
+%attr(755,root,root) /usr/bin/byspamClear
+%attr(755,root,root) /usr/bin/byspamReload
+%attr(755,root,root) /usr/bin/byspamTrash
+%attr(755,root,root) /usr/bin/byspamTrashMgr
 %attr(755,root,root) /usr/bin/byspamPlain
 %attr(755,root,root) /usr/bin/byspamRegexChk
 %dir /usr/include/byspam
