@@ -7,7 +7,7 @@ sub filterText {
   if ( -f "$_[0]" ) {
     open(fileHandle,$_[0]);
     foreach(<fileHandle>) {
-      if(! /^#/ig) {
+      if(! /^#/ig && ! /^[ \t]*$/g ) {
         chomp($aLine = $_);
         chomp($list = !$list ? "$aLine" : $list."|$aLine");
       }

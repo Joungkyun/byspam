@@ -12,6 +12,7 @@ local $filterDir;
 local $includeDir;
 local @basics = ();
 local $body_spam = 0;
+local $verbose = 0;
 
 my @ctype = ();
 my @files = ();
@@ -52,12 +53,16 @@ if ($#ARGV > 0 && $ARGV[0] eq "-d") {
   if( -f "$ARGV[1]" ) {
     @mailText = getContext($ARGV[1]);
     $newline = "\n";
+    $verbose = 1;
   } else {
     print "Error: Can't search path of $ARGV[1]\n";
     exit;
   }
 } else {
-  if ( $ARGV[0] eq "-z" ) { $newline = "\n"; }
+  if ( $ARGV[0] eq "-z" ) {
+    $newline = "\n";
+    $verbose = 1;
+  }
   @mailText = <STDIN>;
 }
 
@@ -65,12 +70,13 @@ $mail = Mail::Internet->new(\@mailText);
 $header = getHeader($mail);
 $body = getBody($mail, 0);
 
+$regignore = filterText("$filterDir/$ignore");
+
 if ( $body_spam != 1) {
   # get size of array
   my $filesSize = @basics;
 
   # check filtering data
-  $regignore = filterText("$filterDir/$ignore");
   Line: for($i=0;$i<$filesSize;$i++) {
     if( ! -f "$filterDir/$files[$i]") { next Line; }
     $regex = filterText("$filterDir/$files[$i]");
@@ -92,17 +98,32 @@ if ( $body_spam != 1) {
 
     if( $regex && $target && $target =~ /$regex/i ) {
       $spam = 1; $fil = $ctype[$i];
+      if ( $verbose ) { print "Check By $fil\n"; }
 
-      if ( $regignore && $target =~ /$regignore/i ) { $ignoreallow = 1; }
+      if ( $regignore && $target =~ /$regignore/i ) {
+        $ignoreallow = 1;
+        if ( $vewbose ) { print "$fil set No Ignore case\n"; }
+      }
       last Line;
     }
 
     # no content check in body
     if($ctype[$i] eq "Body" && $spam != 1 && $filterTag == 1) {
-      if (noContentCheck("$target") == 1) { $spam = 1; $fil = $ctype[$i]; last Line; }
+      if (noContentCheck("$target") == 1) {
+        $spam = 1;
+        $fil = $ctype[$i];
+
+        if ( $verbose ) { print "Check By $fil\n"; }
+        last Line;
+      }
     }
   }
 } else {
+  if ( $regignore && $body =~ /$regignore/i ) {
+    $ignoreallow = 1;
+    if ( $verbose ) { printf "Extra set No Ignore case\n"; }
+  }
+
   $spam = 1;
   $fil = "Extra";
 }
@@ -111,11 +132,18 @@ if ($spam) {
   # check of exception of mail filter
   if( ! $ignoreallow && -f "$filterDir/$allows" ) {
     $regex = filterText("$filterDir/$allows");
-    if ( $regex && $header =~ /$regex/i ) { $spam = ""; $fil = ""; }
-    if ( $spam && $regex && $body =~ /$regex/i ) { $spam = ""; $fil = ""; }
+    if ( $regex && $header =~ /$regex/i ) {
+      if ( $verbose ) { print "Ignore $fil on Header by Allows\n"; }
+      $spam = ""; $fil = "";
+    }
+    if ( $spam && $regex && $body =~ /$regex/i ) {
+      if ( $verbose ) { print "Ignore $fil on Body by Allows\n"; }
+      $spam = ""; $fil = "";
+    }
   }
 
   if($spam) {
+    if ( $verbose ) { printf "RESULT: "; }
     print "$fil$newline";
     exit(0);
   }
