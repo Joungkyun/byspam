@@ -1,12 +1,13 @@
 Changelog document
 
-$Id: Changelog,v 1.30 2004-11-29 06:26:04 oops Exp $
+$Id: Changelog,v 1.31 2004-11-29 09:29:00 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.0
   - 2004.11.29
     by JoungKyun Kim :
        - redirect stderr error messages
+       - fixed subject prase bug when not include charset
 
   - 2004.11.28
     by JoungKyun Kim :
