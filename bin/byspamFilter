@@ -4,7 +4,7 @@
 # This package code follows BPL License
 # JoungKyun Kim <http://www.oops.org>
 #
-# $Id: byspamFilter,v 1.20 2004-12-03 10:55:20 oops Exp $
+# $Id: byspamFilter,v 1.21 2004-12-30 08:10:55 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -198,7 +198,7 @@ for ( $i=0; $i<$checkNo; $i++ ) {
 			}
 
 			$_ftarget = $body;
-			$_regs = "|<ifrmae" if ( $shm->opts('filterIframe') );
+			$_regs = "|<iframe" if ( $shm->opts('filterIframe') );
 			last PART;
 		};
 
