@@ -1,13 +1,14 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for pkgserv
 #
-# $Id: configure.ac,v 1.1 2004-12-06 07:47:12 oops Exp $
+# $Id: configure.ac,v 1.2 2004-12-06 08:48:17 oops Exp $
 
 #
 AC_PREREQ(2.53)
 
 AC_SUBST(filterdir)
 AC_SUBST(perlpath)
+AC_SUBST(procpath)
 
 AC_INIT([byspam], [1.0.0], [http://devel.oops.org])
 AC_CONFIG_SRCDIR([README])
