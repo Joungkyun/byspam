@@ -1,4 +1,5 @@
 #!/bin/sh
+CURVERSION="0.1.5"
 
 printDot() {
   if [ -z "${1}" ];then
@@ -49,7 +50,7 @@ printError() {
 
 clear
 echo "####################################################################"
-echo "By SAPM 0.1.4 UPGRADE UTILITY"
+echo "By SAPM ${CURVERSION} UPGRADE UTILITY"
 echo "####################################################################"
 echo
 
@@ -183,7 +184,7 @@ printDot
 echo " ${perlPath}"
 
 echo
-echo "Now start update By SPAM to 0.1.4 from ${lversion}"
+echo "Now start update By SPAM to ${CURVERSION} from ${lversion}"
 echo -n "  please wait for prepared update"
 printDot 5
 echo
@@ -210,7 +211,7 @@ CHK=0
 
 echo
 echo
-echo "Now update 0.1.4 file"
+echo "Now update ${CURVERSION} file"
 echo
 for i in byspamFilter byspamTrash plain.pl regexChk.pl
 do
