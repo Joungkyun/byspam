@@ -99,7 +99,7 @@ TRASHBOX=$(ls "${TRASHPATH}" | grep "spam-" | grep -v grep | sort -r 2> /dev/nul
 j=1
 no=1
 start=1
-limit=4
+limit=10
 page=1
 
 for i in ${TRASHBOX}
