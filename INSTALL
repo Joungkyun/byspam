@@ -335,4 +335,23 @@ removed install file ./install
 설치가 완료 되었습니다. Filter 디렉토리의 설정파일 filter-xxx 에서 적당한 설정을
 하도록 합니다.
 
+설치를 마친 후 @confidr@/byspam.conf 에서 몇가지 옵션을 변경할 수 있다. byspam.conf
+의 설정중 건드릴 수 있는 것은 
 
+# if include iframe tag in mail body, disopsed spam
+$filterIframe   = 1;
+
+# if only exists <>, disposed spam
+# 메일 내용에 아무런 내용없이 태그들로만 이루어져 있을 경우
+# 스팸처리
+$filterTag      = 0;
+
+# After filtering, whether save or remove filterd mail
+# 1 -> save to $MAIL/spam
+# 0 -> removed
+$filterSave      = 1;
+
+이다. $filterIframe 은 html 형식으로 온 메일중 iframe tag 가 존재할 경우 스팸으로
+간주하겠다는 설정이다. $filterTag 의 경우에는 메일 본문에서 html tag 를 삭제하고
+난 후 아무 내용이 없을 경우 스팸으로 간주하겠다는 의미이다. 요즘 같은 경우 필터링
+을 하니 이미지로 만들어서 보내는 경우가 있는데 이럴 때 사용하면 좋다.

@@ -74,6 +74,8 @@ Line: for($i=0;$i<$filesSize;$i++) {
 
   if ($ctype[$i] eq "Body") {
     if($body) { chomp($target = $body); }
+    # iframe tag check
+    if($filterIframe == 1) { $regex = "$regex|<iframe"; }
   } elsif ($ctype[$i] eq "Extra") {
     if($header) { chomp($target = $header); }
   } else {
@@ -86,6 +88,11 @@ Line: for($i=0;$i<$filesSize;$i++) {
   }
 
   if( $regex && $target && $target =~ /$regex/i ) { $spam = 1; $fil = $ctype[$i]; last Line; }
+
+  # no content check in body
+  if($ctype[$i] eq "Body" && $spam != 1 && $filterTag == 1) {
+    if (noContentCheck("$target") == 1) { $spam = 1; $fil = $ctype[$i]; last Line; }
+  }
 }
 
 if ($spam) {
