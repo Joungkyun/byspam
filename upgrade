@@ -215,7 +215,7 @@ echo
 echo
 echo "Now update ${BYVERSION} file"
 echo
-for i in byspamFilter byspamTrash plain.pl regexChk.pl
+for i in byspamFilter byspamTrash byspamTrashFile plain.pl regexChk.pl
 do
   install -m755 ./installdir/${i} ${bindir} > /dev/null 2>&1
   CHK=$?

@@ -224,7 +224,7 @@ else
 fi
 
 PERLPATHS=$(echo ${PERLPATH} | sed -e 's/\//\\\//g')
-for i in byspamFilter plain.pl regexChk.pl byspamTrash
+for i in byspamFilter plain.pl regexChk.pl byspamTrashFile
 do
   cat bin/${i} | sed -e "s/@PERLPATH@/${PERLPATHS}/g" > ${INSTALLDIR}/${i}
   chmod 755 ${INSTALLDIR}/${i}
@@ -261,7 +261,7 @@ echo
 echo "STEP 4. Configure Script of By SPAM"
 echo "----------------------------------------------------------------------"
 
-for i in byspamFilter byspamTrash plain.pl
+for i in byspamFilter byspamTrashFile plain.pl
 do
   regex="@confdir@";
   tostr=$(echo ${confdir} | sed -e 's/\//\\\//g')
@@ -282,6 +282,19 @@ done
 
 regex="@bindir@"
 tostr=$(echo ${bindir} | sed -e 's/\//\\\//g')
+
+cat ./bin/byspamTrash | sed -e "s/${regex}/${tostr}/g" > ${INSTALLDIR}/byspamTrash
+CHK=$?
+
+if [ "${CHK}" = 0 ]; then
+  chmod 755 ${INSTALLDIR}/byspamTrash
+  echo "  configred .. byspamTrash"
+else
+  rm -rf ${INSTALLDIR}
+  echo "  Error: removed install directory"
+  exit 1
+fi
+
 cat ./etc/filter.rc | sed -e "s/${regex}/${tostr}/g" > ${INSTALLDIR}/filter.rc
 CHK=$?
 

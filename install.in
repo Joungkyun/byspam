@@ -43,7 +43,7 @@ do
 
   case "${i}" in
     bindir)
-                list="byspamFilter plain.pl regexChk.pl byspamTrash"
+                list="byspamFilter plain.pl regexChk.pl byspamTrash byspamTrashFile"
                 inst=${installdir}
                 perm=755
                 ;;
