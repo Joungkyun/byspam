@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://www.oops.org>
 #
-# $Id: Trash.pm,v 1.8 2004-12-01 11:08:49 oops Exp $
+# $Id: Trash.pm,v 1.9 2004-12-06 13:45:42 oops Exp $
 #
 
 package Byspam::Trash;
@@ -265,7 +265,8 @@ sub printTrash {
 
 		push (@subject, $tsub);
 		push (@from, $tfrom);
-		push (@date, $mx->header ("Date"));
+		push (@date, $mx->header ('Date'));
+		push (@_byspam, $mx->header ('X-BySpam-Filter'));
 
 		$main::_bdebug && print "### " . $mx->header("Subject") ."\n";
 		push (@body, $ps->getBody ($mx));
@@ -343,8 +344,9 @@ INIT:
 							 "=============================================================================\n" .
 							 "$p_page page / total $lastpage pages\n\n".
 							 "Mail No. $cmd\n".
-							 "Date: $date[$mailno]\n".
-							 "From: $from[$mailno]\n".
+							 "Date   : $date[$mailno]\n".
+							 "From   : $from[$mailno]\n".
+							 "Filter : $_byspam[$mailno]\n".
 							 "Subject. $subject[$mailno]\n\n".
 							 "$body[$mailno]\n";
   
