@@ -1,19 +1,24 @@
 #!/bin/sh
-VERSION="1.0.1"
+VERSION="1.1.0"
 
-USERPRIV=$(whoami)
+if [ -f "$1" -a ! -d "$1" ]; then
+  TRASHFILE=$1
+  TRASHPATH=
+else
+  USERPRIV=$(whoami)
 
-if [ "${USERPRIV}" = "root" ]; then
-  if [ -z "${1}" ]; then
-    USERPRIV=root
-  else
-    USERPRIV=$1
+  if [ "${USERPRIV}" = "root" ]; then
+    if [ -z "${1}" ]; then
+      USERPRIV=root
+    else
+      USERPRIV=$1
+    fi
+    USEROPT="-u $1"
   fi
-  USEROPT="-u $1"
+  USERPATH=$(cat /etc/passwd | grep "^${USERPRIV}:" | awk -F ":" '{print $6}')
+  USERPATH=$(echo ${USERPATH} | sed 's/\/$//g')
+  TRASHPATH="${USERPATH}/byspam"
 fi
-USERPATH=$(cat /etc/passwd | grep "^${USERPRIV}:" | awk -F ":" '{print $6}')
-USERPATH=$(echo ${USERPATH} | sed 's/\/$//g')
-TRASHPATH="${USERPATH}/byspam"
 
 nextfunc() {
   case "${next}" in
@@ -83,10 +88,14 @@ nextfunc() {
        fi
        ;;
     *)
-       eval "checkfile=\$TRASHFILE${next}"
-       checkfile=$(echo $checkfile | sed 's/^[^\-]*-//g')
-       if [ -f "${USERPATH}/byspam/spam-${checkfile}" ]; then
-         @bindir@/byspamTrashFile ${USEROPT} -d ${checkfile}
+       if [ -z "${TRASHPATH}" -a -f "${TRASHFILE}" -a ! -d "${TRASHFILE}" ]; then
+         @bindir@/byspamTrashFile -f ${TRASHFILE}
+       else
+         eval "checkfile=\$TRASHFILE${next}"
+         checkfile=$(echo $checkfile | sed 's/^[^\-]*-//g')
+         if [ -f "${USERPATH}/byspam/spam-${checkfile}" ]; then
+           @bindir@/byspamTrashFile ${USEROPT} -d ${checkfile}
+         fi
        fi
 
        start=${startl}
@@ -94,7 +103,11 @@ nextfunc() {
   esac
 }
 
-TRASHBOX=$(ls "${TRASHPATH}" | grep "spam-" | grep -v grep | sort -r 2> /dev/null)
+if [ -z "$TRASHPATH" ]; then
+  TRASHBOX=$TRASHFILE
+else
+  TRASHBOX=$(ls "${TRASHPATH}" | grep "spam-" | grep -v grep | sort -r 2> /dev/null)
+fi
 
 j=1
 no=1
@@ -136,6 +149,12 @@ do
   if [ ${totalart} = 0 ]; then
     echo "WORN : No exist trash file"
   else
+    if [ -z "${TRASHPATH}" -a -f "${TRASHFILE}" -a ! -d "${TRASHFILE}" ]; then
+      @bindir@/byspamTrashFile -f ${TRASHFILE}
+      echo
+      exit 0
+    fi
+
     while [ true ]
     do
       eval "FILENAME=\$TRASHFILE${start}"
