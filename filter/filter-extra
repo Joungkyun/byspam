@@ -12,3 +12,5 @@ Received: from localhost
 market|event
 helo=localhost
 from test
+CSmtpMsgPart
+Microsoft SMTPSVC
