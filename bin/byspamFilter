@@ -4,7 +4,7 @@
 # This package code follows BPL License
 # JoungKyun Kim <http://www.oops.org>
 #
-# $Id: byspamFilter,v 1.21 2004-12-30 08:10:55 oops Exp $
+# $Id: byspamFilter,v 1.22 2004-12-30 08:36:18 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -212,6 +212,7 @@ for ( $i=0; $i<$checkNo; $i++ ) {
 
 	if ( $spam ) {
 		printMessage ($fil, $_filtered);
+		$_ftarget = $header . "\n\n" . $body;
 		goto CHECKALLOW;
 	}
 }
