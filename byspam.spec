@@ -30,11 +30,11 @@ By SPAM 은 smtp 데몬과 procmail 과 연동하여 스팸메일을 필터링 하기위한 도구
 
 ./configure --prefix=/usr \
 	--bindir=/usr/bin \
-	--confdir=/etc/byspam \
+	--sysconfdir=/etc/byspam \
 	--includedir=/usr/include/byspam \
 	--with-filter=/etc/byspam/Filter \
 	--with-perl=/usr/bin/perl \
-	--with-procpc=/etc/procmailrc
+	--with-procrc=/etc/procmailrc
 
 make
 
