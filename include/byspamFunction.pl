@@ -245,17 +245,6 @@ sub actMixed {
 sub printHelp {
   if ( $_[0] > -1 ) {
     foreach($_[1]) {
-      if( $_ eq "-p" ) {
-        if ($_[2] > 0) {
-          my $adddir = ($_[4] eq "root") ? "$_[3]" : "spam";
-          my $mon = `date +%Y%m`;
-          print "$adddir/spam-$mon";
-        } else { print "/dev/null"; }
-        exit;
-      }
-    }
-
-    foreach($_[1]) {
       if( $_ eq "-h" || $_ eq "--help" ) {
 
         my $lc;
@@ -271,7 +260,6 @@ sub printHelp {
                     "현재 메세지를 출력",
                     "인자로 넘긴 메일형식의 절대경로 파일을 체크 [ 디버그 모드 ]",
                     "메일 형식을 파이프로 넘기는 형식",
-                    "필터링에 걸린 메일을 저장할 지 여부 설정 출력"
                    );
         } else {
           $USAGES = "USAGE";
@@ -290,8 +278,6 @@ sub printHelp {
         print "          => $helps[1]\n";
         print "    cat mail_form_file | byspamFilter \n";
         print "          => $helps[2]\n";
-        print "    byspamFilter -p \n";
-        print "          => $helps[3]\n";
         exit;
       }
     }
