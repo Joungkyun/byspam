@@ -1,7 +1,7 @@
 #
 # Byspam Mail parsing library
 #
-# $Id: Parse.pm,v 1.1 2004-11-27 18:51:02 oops Exp $
+# $Id: Parse.pm,v 1.2 2004-11-29 09:28:44 oops Exp $
 #
 
 package Byspam::Parse;
@@ -62,15 +62,15 @@ sub getHeader {
 	# get whole header
 	if ( $head ) {
 		$head =~ s/\r?\n/\n/g;
-		$head =~ s/(=\?[^?]+\?[BQ]\?[^?]+\?=)/\n$1\n/g;
+		$head =~ s/(=\?[^?]*\?[BQ]\?[^?]+\?=)/\n$1\n/g;
 		@heads = split (/\r?\n/, $head);
 	}
 
 	foreach $line ( @heads ) {
 		my @lines = ();
 
-		if ( $line =~ m/=\?[^?]+\?[BQ]\?[^?]+\?=/i ) {
-			$line =~ s/[\s]*=\?([^?]+)\?([BQ])\?([^?]+)\?=[\s]*/$1:$2:$3/ig;
+		if ( $line =~ m/=\?[^?]*\?[BQ]\?[^?]+\?=/i ) {
+			$line =~ s/[\s]*=\?([^?]*)\?([BQ])\?([^?]+)\?=[\s]*/$1:$2:$3/ig;
 			@lines = split (/:/, $line);
 
 			# utf-8 problem
@@ -102,24 +102,28 @@ sub parseHeader {
 	my $head = $_[0];
 	my $headReturn;
 
-	if ( $head && $head =~ m/=\?[^?]+\?[BQ]\?[^?]+\?=/i ) {
+	if ( $head && $head =~ m/=\?[^?]*\?[BQ]\?[^?]+\?=/i ) {
 		my @heads = ();
 		my @lines =();
 		my $line;
 		my $encode;
+		my %charset;
 
-		$head =~ s/(=\?[^?]+\?[BQ]\?[^?]+\?=)/\n$1\n/ig;
+		$head =~ s/(=\?[^?]*\?[BQ]\?[^?]+\?=)/\n$1\n/ig;
 		@heads = split (/\r?\n/, $head);
 
 		LINE: foreach $line ( @heads ) {
-			if ( $line !~ /=\?[^?]+\?([BQ])\?/i ) {
+			if ( $line !~ /=\?[^?]*\?([BQ])\?/i ) {
 				next LINE if ( $line =~ m/^[\s]*$/i );
 			} else {
-				$line =~ s/[\s]*=\?[^?]+\?([BQ])\?([^?]+)\?=[\s]*/$1:$2/ig;
+				$line =~ s/[\s]*=\?[^?]*\?([BQ])\?([^?]+)\?=[\s]*/$1:$2:$3/ig;
 				@lines = split (/:/, $line);
 
-				$encode = ( $lines[0] =~ m/^b$/i ) ? "base64" : "qprint";
-				$line   = ( $encode eq "base64" ) ? decode_base64 ($lines[1]) : decode_qp ($lines[1]);
+				# utf-8 problem
+				%charset = setCharset ($lines[0]);
+				$encode = ( $lines[1] =~ m/^b$/i ) ? "base64" : "qprint";
+				$line   = ( $encode eq "base64" ) ? decode_base64 ($lines[2]) : decode_qp ($lines[2]);
+				$line   = $cv->byconv ($line, $charset{"from"}, $charset{"to"}) if ( $charset{"from"} );
 			}
 
 			$headReturn .= " ".$line;
