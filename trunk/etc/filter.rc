@@ -1,4 +1,4 @@
-# $Id: filter.rc,v 1.5 2004-12-06 13:39:10 oops Exp $
+# $Id: filter.rc,v 1.6 2004-12-28 07:25:12 oops Exp $
 
 SHELL=/bin/sh
 VERBOSE=no
@@ -10,9 +10,6 @@ DATES=`date +%Y%m%d`
 # 사용자 로그파일 (계정 유저만 사용)
 #LOGFILE=${HOMES}/byspam/filter.log
 
-# 필터링 체크
-FilterValue=`@bindir@/byspamFilter`
-
 ###################
 # start Filtering #
 ###################
@@ -21,20 +18,26 @@ FilterValue=`@bindir@/byspamFilter`
   | mkdir -p ${HOMES}/byspam; \
     chown $LOGNAME ${HOMES}/byspam;
 
-:0:
+# size 가 5500000 byte 미만일 경우만 체크
+:0
   * < 5500000
-  * ? test -n "${FilterValue}"
   {
-    :0 ic
-      * ? test ! -f "${HOMES}/byspam/spam-${DATES}"
-      | touch ${HOMES}/byspam/spam-${DATES}; \
-        chown $LOGNAME ${HOMES}/byspam/spam-${DATES};
+    # 필터링 체크
+    FilterValue=`@bindir@/byspamFilter`
 
-    # spam filtering part header 추가
-    :0 fhw
-    | formail -A "X-BySpam-Filter: ${FilterValue}"
+    :0
+      * ? test -n "${FilterValue}"
+      {
+        :0 ic
+          * ? test ! -f "${HOMES}/byspam/spam-${DATES}"
+          | touch ${HOMES}/byspam/spam-${DATES}; \
+            chown $LOGNAME ${HOMES}/byspam/spam-${DATES};
 
-    :0 fbw
-    ${HOMES}/byspam/spam-${DATES}
+          # spam filtering part header 추가
+          :0 fhw
+          | formail -A "X-BySpam-Filter: ${FilterValue}"
+
+          :0: fbw
+            ${HOMES}/byspam/spam-${DATES}
+      }
   }
-
