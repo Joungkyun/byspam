@@ -1,5 +1,7 @@
 #!/bin/sh
-VERSION=0.2.1
+
+# include byspam version
+. VERSION
 
 pwd=$(pwd)
 level=@level@
@@ -66,8 +68,10 @@ do
 
   for j in $list
   do
-    install -m${perm} ${inst}/${j} ${DESTDIR}${target}
-    echo "install .... ${DESTDIR}${target}/${j}"
+    if [ ${j} != "CVS" ]; then
+      install -m${perm} ${inst}/${j} ${DESTDIR}${target}
+      echo "install .... ${DESTDIR}${target}/${j}"
+    fi
   done
 done
 
@@ -124,7 +128,7 @@ rm -f ./install
 echo "removed install file ./install"
 
 echo
-echo "Complete install byspam $VERSION"
+echo "Complete install byspam ${BYVERSION}"
 echo "[1;31mFirst, configured ${confdir}/byspam.conf !!![7;0m"
 echo
 
