@@ -3,113 +3,142 @@ Changelog document
 Warn: date format is Y.m.d
 * v0.2.5
   - 2004.05.28
-    by JoungKyun Kim : enable view with direct file path on byspamTrash
-                       enable user define subject length with BYLEN=80
-                       environment variable on byspamTrash
-                       enable view From address with BYFROM environment
-                       variable on byspamTrash
+    by JoungKyun Kim :
+      - enable view with direct file path on byspamTrash
+      - enable user define subject length with BYLEN=80
+        environment variable on byspamTrash
+      - enable view From address with BYFROM environment
+        variable on byspamTrash
 
 * v0.2.4
   - 2004.04.04
-    by JoungKyun Kim : changed print format on trash file list
+    by JoungKyun Kim :
+      - changed print format on trash file list
 
   - 2004.02.09
-    by JoungKyun Kim : update noContentChk function
+    by JoungKyun Kim :
+      - update noContentChk function
 
   - 2004.02.06
-    by JoungKyun Kim : update filter
+    by JoungKyun Kim :
+      - update filter
 
   - 2004.02.03
-    by JoungKyun Kim : rewrite code to ignore filter-allow filter
+    by JoungKyun Kim :
+      - rewrite code to ignore filter-allow filter
 
   - 2003.11.20
-    by JoungKyun Kim : fixed can't excute ignore mode on extra mode
-                       added verbose messages
+    by JoungKyun Kim :
+      - fixed can't excute ignore mode on extra mode
+        added verbose messages
 
   - 2003.09.21
-    by JoungKyun Kim : fixed miss operation on allow filter
-                       removed getBodyTrash function
-                       update getBody function
+    by JoungKyun Kim :
+      - fixed miss operation on allow filter
+      - removed getBodyTrash function
+      - update getBody function
 
   - 2003.09.09
-    by JoungKyun Kim : fixed typo
-                       if given -d option, print newline
+    by JoungKyun Kim :
+      - fixed typo
+      - if given -d option, print newline
 
   - 2003.09.08
-    by JoungKyun Kim : update byspamTrash which print date and from
+    by JoungKyun Kim :
+      - update byspamTrash which print date and from
 
 * v0.2.3
   - 2003.06.11
-    by JoungKyun Kim : changed sed to perl on install script
-                       add ignore filter-allow mode to filter-ignore
+    by JoungKyun Kim :
+      - changed sed to perl on install script
+      - add ignore filter-allow mode to filter-ignore
 
   - 2002.11.01
-    by JoungKyun Kim : fixed multipart content type check
+    by JoungKyun Kim :
+      - fixed multipart content type check
 
   - 2002.10.14
-    by JoungKyun Kim : fixed byspamTrash if exists similar account name
+    by JoungKyun Kim :
+      - fixed byspamTrash if exists similar account name
 
   - 2002.07.27
-    by JoungKyun Kim : updated document
-                       registed regex document
+    by JoungKyun Kim :
+      - updated document
+      - registed regex document
 
 * v0.2.2
   - 2002.06.29
-    by JoungKyun Kim : fixed print date on byspamTrash
-                       fixed continue install bug when install.log include wrong path
+    by JoungKyun Kim :
+      - fixed print date on byspamTrash
+      - fixed continue install bug when install.log include wrong path
+
   - 2002.07.16
-    by JoungKyun Kim : update byspamTrash to 1.0.0
-                       byspamTrash v1.0.0 support date and delete format
-                       added exit code on byspamFilter script
-                       added save period of trash file function
+    by JoungKyun Kim :
+      - update byspamTrash to 1.0.0
+      - byspamTrash v1.0.0 support date and delete format
+      - added exit code on byspamFilter script
+      - added save period of trash file function
 
 * v0.2.1
   - 2002.06.27
-    by JoungKyun Kim : fixed install bug of filter.rc
+    by JoungKyun Kim :
+      - fixed install bug of filter.rc
 
 * v0.2.0
   - 2002.06.27
-    by JoungKyun Kim : changed save method to daily from monthly
-                       devieded save file per each user account
-                       added delete mode on byspamTrash
+    by JoungKyun Kim :
+      - changed save method to daily from monthly
+      - devieded save file per each user account
+      - added delete mode on byspamTrash
 
   - 2002.06.26
-    by JoungKyun Kim : added check of body header with filter-extra
+    by JoungKyun Kim :
+      - added check of body header with filter-extra
 
   - 2002.06.08
-    by JoungKyun Kim : added iframe tag check function
-                       added check function of no content except html tags
+    by JoungKyun Kim :
+      - added iframe tag check function
+      - added check function of no content except html tags
 
 * v0.1.4
   - 2002.04.10
-    by JoungKyun Kim : update byspamTrash to v0.3
-                         - sort by the latest day
-                         - if no argument, applied current month.
-                       update default value of filter-body
+    by JoungKyun Kim :
+      - update byspamTrash to v0.3
+      - sort by the latest day
+      - if no argument, applied current month.
+        update default value of filter-body
+
   - 2002.04.8
-    by JoungKyun Kim : changed shell command to perl command
-                       added getContent function
+    by JoungKyun Kim :
+      - changed shell command to perl command
+      - added getContent function
 
 * v0.1.3
   - 2002.04.4
-    by JoungKyun Kim : fixed ugly subjec that compose multi encodings.
-                       moved data directory to ${prefix}/data from ${HOME}/mail/spam
-                       on account
-                       fixed upgrade file
-                       added --perlpath, --procpath option at configure script
+    by JoungKyun Kim :
+      - fixed ugly subjec that compose multi encodings.
+      - moved data directory to ${prefix}/data from ${HOME}/mail/spam
+        on account
+      - fixed upgrade file
+      - added --perlpath, --procpath option at configure script
 
 * v0.1.2
   - 2002.04.2
-    by JoungKyun Kim : managed ugly mail format
+    by JoungKyun Kim :
+      - managed ugly mail format
+
   - 2002.04.1
-    by JoungKyun Kim : added install.log
-                       modified path various
-                       add upgrade script
-                       modified configure script
+    by JoungKyun Kim :
+      - added install.log
+      - modified path various
+      - add upgrade script
+      - modified configure script
+
   - 2002.03.29
-    by JoungKyun Kim : added bySpamTrash
-                       supported packaging in configure file
-                       added Changelog
+    by JoungKyun Kim :
+      - added bySpamTrash
+      - supported packaging in configure file
+      - added Changelog
 
 * v0.1.1
   - announced BySPAM
