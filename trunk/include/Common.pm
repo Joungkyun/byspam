@@ -1,7 +1,7 @@
 #
 # Byspam Common functions
 #
-# $Id: Common.pm,v 1.2 2004-11-29 06:02:30 oops Exp $
+# $Id: Common.pm,v 1.3 2004-11-29 06:25:27 oops Exp $
 #
 
 package Byspam::Common;
@@ -127,6 +127,15 @@ sub noContentCheck {
 	return 1 if ( ! $content );
 
 	return 0;
+}
+
+sub printError {
+	my $self = shift if ref ($_[0]);
+	my $_msg = $_[0];
+
+	open STDOUT, ">> /dev/stderr";
+	print $_msg;
+	open STDOUT, ">> /dev/stdout";
 }
 
 1; # keep require happy

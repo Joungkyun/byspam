@@ -2,7 +2,7 @@
 #
 # Mail Parse Utility supported by BySPAM
 # JoungKyun Kim <http://www.oops.org>
-# $Id: plain.pl,v 1.3 2004-11-28 09:48:49 oops Exp $
+# $Id: plain.pl,v 1.4 2004-11-29 06:25:27 oops Exp $
 #
 use lib '@includedir@';
 my $conf = "@confdir@/byspam.conf";
@@ -32,12 +32,17 @@ my $_file;
 my $_argc    = $#ARGV; 
 my @_argv    = @ARGV;
 
+# create reference Common
+$cm = new Byspam::Common;
+
 # get configuration file
 if ( ! -f "$conf" ) {
-	print "\n";
-	print "    Configuration file missing.\n";
-	print "    Check \"$conf\" file\n";
-	print "\n";
+	$cm->printError (
+			"\n" .
+			"    Configuration file missing.\n" .
+			"    Check \"$conf\" file\n" .
+			"\n"
+	);
 	exit 1;
 }
 
@@ -51,9 +56,6 @@ if ( ! $charset ) {
 		$charset = "";
 	}
 }
-
-# create reference Common
-$cm = new Byspam::Common;
 
 # create reference Getopt
 $o = new Byspam::Getopt;
@@ -141,10 +143,12 @@ sub Help {
 		);
 	}
 
-	print "$USAGES : $0 -[hHB] filename\n";
-	print "  -h --help   => $helps[0]\n";
-	print "  -B --body   => $helps[1]\n";
-	print "  -H --header => $helps[2]\n";
+	$cm->printError (
+			"$USAGES : $0 -[hHB] filename\n" .
+			"          -h --help   => $helps[0]\n" .
+			"          -B --body   => $helps[1]\n" .
+			"          -H --header => $helps[2]\n"
+	);
 	exit 1;
 }
 

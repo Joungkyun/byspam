@@ -1,9 +1,13 @@
 Changelog document
 
-$Id: Changelog,v 1.29 2004-11-27 19:06:47 oops Exp $
+$Id: Changelog,v 1.30 2004-11-29 06:26:04 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.0
+  - 2004.11.29
+    by JoungKyun Kim :
+       - redirect stderr error messages
+
   - 2004.11.28
     by JoungKyun Kim :
        - start 1.0.0 development

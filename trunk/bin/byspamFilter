@@ -4,7 +4,7 @@
 # This package code follows BPL License
 # JoungKyun Kim <http://www.oops.org>
 #
-# $Id: byspamFilter,v 1.17 2004-11-29 06:02:30 oops Exp $
+# $Id: byspamFilter,v 1.18 2004-11-29 06:25:27 oops Exp $
 #
 use lib '@includedir@';
 my $conf = "@confdir@/byspam.conf";
@@ -68,12 +68,17 @@ my @_argv    = @ARGV;
 $verbose  = 0;
 $debug    = 0;
 
+# create reference Common
+$cm = new Byspam::Common;
+
 # get configuration file
 if ( ! -f "$conf" ) {
-	print "\n";
-	print "    Configuration file missing.\n";
-	print "    Check \"$conf\" file\n";
-	print "\n";
+	$cm->printError (
+			"\n" .
+			"    Configuration file missing.\n" .
+			"    Check \"$conf\" file\n" .
+			"\n"
+	);
 	exit 1;
 }
 
@@ -87,9 +92,6 @@ if ( ! $charset ) {
 	    $charset = "";
 	}
 }
-
-# create reference Common
-$cm = new Byspam::Common;
 
 # create reference Getopt
 $o = new Byspam::Getopt;
@@ -145,7 +147,7 @@ foreach ( @basics ) {
 # import original mail format
 if ( $_file ) {
 	if ( ! -f $_file ) {
-		printf "Error: Can't found %s\n", $_file;
+		$cm->printError ("Error: Can't found $_file\n");
 		exit 1;
 	}
 
@@ -316,38 +318,40 @@ sub printMessage {
 # print help message and save directory
 #
 sub printHelp {
-    my $lc;
-    my $USAGES;
+	my $lc;
+	my $USAGES;
 
-    $lc = $main::charset;
-    my @helps = ();
-    if( $lc eq "EUC-KR" ) {
-        $USAGES = "사용법";
-        @helps = (
-                  "현재 메세지를 출력",
-                  "인자로 넘긴 메일형식의 절대경로 파일을 체크 [ 디버그 모드 ]",
-                  "메일 형식을 파이프로 넘기는 형식",
-                  "메일 형식을 파이프로 넘기는 형식 [ 디버그 모드 ]"
-        );
-    } else {
-        $USAGES = "USAGE";
-        @helps = (
-                  "print this message",
-                  "debug mode with file(absolte path) of mail form",
-                  "put mail form with pipe",
-                  "debug mode with put mail form with pipe",
-        );
-    }
+	$lc = $main::charset;
+	my @helps = ();
+	if( $lc eq "EUC-KR" ) {
+		$USAGES = "사용법";
+		@helps = (
+				  "현재 메세지를 출력",
+				  "인자로 넘긴 메일형식의 절대경로 파일을 체크 [ 디버그 모드 ]",
+				  "메일 형식을 파이프로 넘기는 형식",
+				  "메일 형식을 파이프로 넘기는 형식 [ 디버그 모드 ]"
+		);
+	} else {
+		$USAGES = "USAGE";
+		@helps = (
+				  "print this message",
+				  "debug mode with file(absolte path) of mail form",
+				  "put mail form with pipe",
+				  "debug mode with put mail form with pipe",
+		);
+	}
 
-    print "\n$USAGES : \n";
-    print "    byspamFilter [ -h --help ]\n";
-    print "          => ${helps[0]}\n\n";
-    print "    byspamFilter -d mail_form_file_pull_path \n";
-    print "          => ${helps[1]}\n\n";
-    print "    cat mail_form_file | byspamFilter \n";
-    print "          => ${helps[2]}\n\n";
-    print "    cat mail_form_file | byspamFilter -p \n";
-    print "          => ${helps[3]}\n\n";
+	$cm->printError (
+			"\n$USAGES : \n" .
+			"    byspamFilter [ -h --help ]\n" .
+			"          => ${helps[0]}\n\n" .
+			"    byspamFilter -d mail_form_file_pull_path \n" .
+			"          => ${helps[1]}\n\n" .
+			"    cat mail_form_file | byspamFilter \n" .
+			"          => ${helps[2]}\n\n" .
+			"    cat mail_form_file | byspamFilter -p \n" .
+			"          => ${helps[3]}\n\n"
+	);
 
     exit 1;
 }
