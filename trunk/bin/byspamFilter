@@ -11,6 +11,7 @@ local $allows;
 local $filterDir;
 local $includeDir;
 local @basics = ();
+local $body_spam = 0;
 
 my @ctype = ();
 my @files = ();
@@ -64,7 +65,7 @@ $mail = Mail::Internet->new(\@mailText);
 $header = getHeader($mail);
 $body = getBody($mail);
 
-if ( $body ne "checking spam" ) {
+if ( $body_spam != 1) {
   # get size of array
   my $filesSize = @basics;
 
