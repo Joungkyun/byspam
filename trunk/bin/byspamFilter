@@ -25,6 +25,9 @@ my $target;
 my $regex;
 my $spam;
 my $fil;
+my $regignore;
+my $ignoreallow = 0;
+my $newline = "";
 
 # get config file
 $conf = "@confdir@/byspam.conf";
@@ -52,6 +55,7 @@ if ($#ARGV > 0 && $ARGV[0] eq "-d") {
     exit;
   }
 } else {
+  if ( $ARGV[0] eq "-z" ) { $newline = "\n"; }
   @mailText = <STDIN>;
 }
 
@@ -64,6 +68,7 @@ if ( $body ne "checking spam" ) {
   my $filesSize = @basics;
 
   # check filtering data
+  $regignore = filterText("$filterDir/$ignore");
   Line: for($i=0;$i<$filesSize;$i++) {
     if( ! -f "$filterDir/$files[$i]") { next Line; }
     $regex = filterText("$filterDir/$files[$i]");
@@ -83,7 +88,12 @@ if ( $body ne "checking spam" ) {
       if ($target) { $target =~ s/[\s]/ /g; }
     }
 
-    if( $regex && $target && $target =~ /$regex/i ) { $spam = 1; $fil = $ctype[$i]; last Line; }
+    if( $regex && $target && $target =~ /$regex/i ) {
+      $spam = 1; $fil = $ctype[$i];
+
+      if ( $regignore && $target =~ /$regignore/i ) { $ignoreallow = 1; }
+      last Line;
+    }
 
     # no content check in body
     if($ctype[$i] eq "Body" && $spam != 1 && $filterTag == 1) {
@@ -97,14 +107,14 @@ if ( $body ne "checking spam" ) {
 
 if ($spam) {
   # check of exception of mail filter
-  if( -f "$filterDir/$allows" ) {
+  if( ! $ignoreallow && -f "$filterDir/$allows" ) {
     $regex = filterText("$filterDir/$allows");
     if ( $regex && $header =~ /$regex/i ) { $spam = ""; $fil = ""; }
     if ( $spam && $regex && $body =~ /$regex/i ) { $spam = ""; $fil = ""; }
   }
 
   if($spam) {
-    print $fil;
+    print "$fil$newline";
     exit(0);
   }
 }
