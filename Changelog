@@ -1,6 +1,6 @@
 Changelog document
 
-$Id: Changelog,v 1.31 2004-11-29 09:29:00 oops Exp $
+$Id: Changelog,v 1.32 2004-11-29 12:49:41 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.0
@@ -8,6 +8,7 @@ Warn: date format is Y.m.d
     by JoungKyun Kim :
        - redirect stderr error messages
        - fixed subject prase bug when not include charset
+       - fixed body parse when body content-type has not semicolon
 
   - 2004.11.28
     by JoungKyun Kim :

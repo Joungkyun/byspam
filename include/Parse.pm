@@ -1,7 +1,7 @@
 #
 # Byspam Mail parsing library
 #
-# $Id: Parse.pm,v 1.2 2004-11-29 09:28:44 oops Exp $
+# $Id: Parse.pm,v 1.3 2004-11-29 12:49:24 oops Exp $
 #
 
 package Byspam::Parse;
@@ -247,13 +247,13 @@ sub actAlternative {
 	for ( $i=0; $i<$bodySize; $i++ ) {
 		next if ( $Body[$i] !~ m/Content-Type/i );
 
-		if ( $Body[$i] =~ m!Content-Type:\s*text/plain;(\s*charset\s*=\s*"?([^\s";]+)"?)?!i ) {
+		if ( $Body[$i] =~ m!Content-Type:\s*text/plain(;\s*charset\s*=\s*"?([^\s";]+)"?)?!i ) {
 			$isplain = $i;
 			$cset_r[$i] = $2;
 			next;
 		}
 
-		if ( $Body[$i] =~ m!Content-Type:\s*text/html;(\s*charset\s*=\s*"?([^\s";]+)"?)?!i ) {
+		if ( $Body[$i] =~ m!Content-Type:\s*text/html(;\s*charset\s*=\s*"?([^\s";]+)"?)?!i ) {
 			$ishtml = $i;
 			$cset_r[$i] = $2;
 			next;
