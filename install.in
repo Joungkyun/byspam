@@ -33,10 +33,13 @@ fi
 [ ! -d "${DESTDIR}${bindir}" ] && mkdir -p ${DESTDIR}${bindir}
 [ ! -d "${DESTDIR}${confdir}" ] && mkdir -p ${DESTDIR}${confdir}
 [ ! -d "${DESTDIR}${filterdir}" ] && mkdir -p ${DESTDIR}${filterdir}
-[ ! -d "${DESTDIR}${includedir}" ] && mkdir -p ${DESTDIR}${includedir}
+[ ! -d "${DESTDIR}${includedir}/Byspam" ] && mkdir -p ${DESTDIR}${includedir}/Byspam
 
+echo "" >> ${installdir}/install.log
+echo "# Don't touch follow lines. This is uninstall information!!" >> ${installdir}/install.log
+echo "" >> ${installdir}/install.log
 
-for i in bindir confdir filterdir includedir
+for i in bindir confdir filterdir
 do
   eval target='$'${i}
   [ ! -d "${DESTDIR}${target}" ] && mkdir -p ${DESTDIR}${target}
@@ -57,18 +60,9 @@ do
                 inst=filter
                 perm=644
                 ;;
-    includedir)
-                list=$(ls include)
-                inst=include
-                perm=644
-                ;;
     *)
                 list=
   esac
-
-  echo "" >> ${installdir}/install.log
-  echo "# Don't touch follow lines. This is uninstall information!!" >> ${installdir}/install.log
-  echo "" >> ${installdir}/install.log
 
   for j in $list
   do
@@ -79,6 +73,27 @@ do
     fi
   done
 done
+
+install -m 644 include/byspamFunction.pl ${DESTDIR}${includedir}/byspamFunction.pl
+echo "#=${includedir}/byspamFunction.pl" >> ${installdir}/install.log
+echo "install .... ${DESTDIR}${includedir}/byspamFunction.pl"
+install -m 644 include/Common.pm ${DESTDIR}${includedir}/Byspam/Common.pm
+echo "#=${includedir}/Byspam/Common.pm" >> ${installdir}/install.log
+echo "install .... ${DESTDIR}${includedir}/Byspam/Common.pm"
+install -m 644 include/Encode.pm ${DESTDIR}${includedir}/Byspam/Encode.pm
+echo "#=${includedir}/Byspam/Encode.pm" >> ${installdir}/install.log
+echo "install .... ${DESTDIR}${includedir}/Byspam/Encode.pm"
+install -m 644 include/Getopt.pm ${DESTDIR}${includedir}/Byspam/Getopt.pm
+echo "#=${includedir}/Byspam/Getopt.pm" >> ${installdir}/install.log
+echo "install .... ${DESTDIR}${includedir}/Byspam/Getopt.pm"
+install -m 644 include/Mail.pm ${DESTDIR}${includedir}/Byspam/Mail.pm
+echo "#=${includedir}/Byspam/Mail.pm" >> ${installdir}/install.log
+echo "install .... ${DESTDIR}${includedir}/Byspam/Mail.pm"
+install -m 644 include/Parse.pm ${DESTDIR}${includedir}/Byspam/Parse.pm
+echo "#=${includedir}/Byspam/Parse.pm" >> ${installdir}/install.log
+echo "install .... ${DESTDIR}${includedir}/Byspam/Parse.pm"
+
+
 
 if [ -d "/etc/cron.daily" ]; then
   [ ! -d "${DESTDIR}/etc/cron.daily" ] && mkdir ${DESTDIR}/etc/cron.daily
