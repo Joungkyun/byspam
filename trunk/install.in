@@ -75,8 +75,15 @@ do
   done
 done
 
+if [ -d "/etc/cron.daily" ]; then
+  [ ! -d "${DESTDIR}/etc/cron.daily" ] && mkdir ${DESTDIR}/etc/cron.daily
+  install -m755 ${installdir}/byspam.cron ${DESTDIR}/etc/cron.daily/byspam
+  echo "install .... ${DESTDIR}/etc/cron.daily/byspam"
+fi
 install -m755 ${uninstall} ${DESTDIR}${bindir}
+echo "install .... ${DESTDIR}${bindir}/uninstall"
 install -m644 ${installdir}/install.log ${DESTDIR}${confdir}/install.log
+echo "install .... ${DESTDIR}${confdir}/install.log"
 
 if [ "${package}" = "" ]; then
   echo

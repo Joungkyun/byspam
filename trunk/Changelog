@@ -10,6 +10,7 @@ Warn: date format is Y.m.d
     by JoungKyun Kim : update byspamTrash to 1.0.0
                        byspamTrash v1.0.0 support date and delete format
                        added exit code on byspamFilter script
+                       added save period of trash file function
 
 * v0.2.1
   - 2002.06.27
