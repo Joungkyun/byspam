@@ -123,7 +123,7 @@ sub getBody {
     $bodyRegex = filterText("$filterDir/filter-extra");
   }
 
-  if ( $bodyRegex && $bodyText =~ /$bodyRegex/i ) {
+  if ( ! $_[1] && $bodyRegex && $bodyText =~ /$bodyRegex/i ) {
     $body_spam = 1;
     return $bodyText;
   } else {

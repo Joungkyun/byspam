@@ -63,7 +63,7 @@ if ($#ARGV > 0 && $ARGV[0] eq "-d") {
 
 $mail = Mail::Internet->new(\@mailText);
 $header = getHeader($mail);
-$body = getBody($mail);
+$body = getBody($mail, 0);
 
 if ( $body_spam != 1) {
   # get size of array
