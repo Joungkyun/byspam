@@ -2,7 +2,7 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-body,v 1.19 2004-12-01 08:35:50 oops Exp $
+# $Id: filter-body,v 1.20 2004-12-01 08:57:42 oops Exp $
 
 (광|廣|관)[^\xB1-\xFEa-z]*(고|go|告)
 홍[^\xB1-\xFEa-z]*보
@@ -12,12 +12,15 @@
 안[^\xB1-\xFEa-z]*내
 제[^\xB1-\xFEa-z]*안
 대[^\xB1-\xFEa-z]*출
+택[^\xB1-\xFEa-z]*배
 직[^\xB1-\xFEa-z]*장[^\xB1-\xFEa-z]*인
+수[^\xB1-\xFEa-z]*수[^\xB1-\xFEa-z]*료
+비[^\xB1-\xFEa-z]*아[^\xB1-\xFEa-z]*그[^\xB1-\xFEa-z]*라
+v[^\xB1-\xFEa-z]*i[^\xB1-\xFEa-z]*a[^\xB1-\xFEa-z]*g[^\xB1-\xFEa-z]*r[^\xB1-\xFEa-z]*a
 수.?신.?거.?부|수신[ ]*거부|mailtouch|발신[ ]*전용
-속보|소호|1회성|증권|청약|무작위|광고
+속보|소호|1회성|증권|청약|무작위
 허락[\s]*없이|만[\s]*19[\s]*세
 미성년|성인|오빠천사|보지|자지|좆물|포커|고스톱
-\[[\s]*광[^\]]*고[\s]*\]
 정보[\s]*통신망[\s]*이용[\s]*촉진
 50조에[\s]*의거
 발신[\s]*전용|최신[\s]*프로그램|누나|nunaba
@@ -41,13 +44,14 @@ src=http|hoop-bid|helpu-web
 Microsoft DHTML Editing
 <\/html>\n?.+
 (yescounter|ezherbalbuy)\.com
-v[^a-z0-9]*i[^a-z0-9]*a[^a-z0-9]*g[^a-z0-9]*r[^a-z0-9]*a
-비[^a-z0-9]?아[^a-z0-9]?그[^a-z0-9]?라
 you can remove
 remove here
 19[ ]*세[ ]*미만
 for more info
 and lots more
-bodyting
+bodyting|rolex|well-being
+샘\.?플
 ---- system information ----
+
+# user define
 
