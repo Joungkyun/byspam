@@ -35,7 +35,7 @@ my $filedates = "";
 do "@confdir@/byspam.conf";
 do "$includeDir/byspamFunction.pl";
 
-$copy = "By SAPM TRASH VIEW v1.0.0".
+$copy = "By SAPM TRASH VIEWER v1.0.1 ".
         "by JoungKyun Kim <http://www.oops.org>\n";
 
 $homedir =~ s/\/$//g;
