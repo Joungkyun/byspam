@@ -2,6 +2,11 @@ Changelog document
 
 Warn: date format is Y.m.d
 
+* v0.2.3
+  - 2002.07.27
+    by JoungKyun Kim : updated document
+                       registed regex document
+
 * v0.2.2
   - 2002.06.29
     by JoungKyun Kim : fixed print date on byspamTrash
