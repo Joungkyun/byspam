@@ -1,241 +1,180 @@
-#!@PERLPATH@
-use Mail::Internet;
-use Mail::Header;
-use MIME::Base64;
-use MIME::QuotedPrint;
+#!/bin/sh
+VERSION="1.0.0"
 
-local $includeDir;
+USERPRIV=$(whoami)
 
-my $i = 0;
-my $enc;
-my $exm;
-my $text;
-my $less;
-my $copy;
-my $trash;
-my $start;
-my $until;
-my $mailno;
-my $getMail;
-my $subjectTmp;
-my @subject = ();
-my @bodyis = ();
-my @devide = ();
-my @tmpMail = ();
-my $homedir = $ENV{"HOME"};
-my $myuser = $ENV{"USER"};
+if [ "${USERPRIV}" = "root" ]; then
+  if [ -z "${1}" ]; then
+    USERPRIV=root
+  else
+    USERPRIV=$1
+  fi
+  USEROPT="-u $1"
+fi
+USERPATH=$(cat /etc/passwd | grep "^${USERPRIV}" | awk -F ":" '{print $6}')
+USERPATH=$(echo ${USERPATH} | sed 's/\/$//g')
+TRASHPATH="${USERPATH}/byspam"
 
-# Local ENV
-my $users = "";
-my $dfile = "";
-my $filedates = "";
+nextfunc() {
+  case "${next}" in
+    x)
+       exit 0
+       ;;
+    b)
+       if [ -z "${nullchk}" ]; then
+         start=$[${start}-${limit}*2] 
+         until=$[${until}-${limit}*2]
+         page=$[${page}-1]
+       else
+         start=$[${startl}-${limit}*2] 
+         until=$[${untill}-${limit}*2]
+         page=$[${page}-1]
+       fi
 
-do "@confdir@/byspam.conf";
-do "$includeDir/byspamFunction.pl";
+       # 시작이 1 보다 작을 경우
+       if [ ${start} -lt 1 ]; then
+         start=1
+         until=1
+         page=1
+       fi
+       ;;
+    d* )
+       for i in ${next}
+       do
+         if [ "${i}" != "d" ]; then
+           eval "checkfile=\$TRASHFILE${i}"
+           checkfile=$(echo $checkfile | sed 's/^[^\-]*-//g')
+           if [ -f "${USERPATH}/byspam/spam-${checkfile}" ]; then
+             @bindir@/byspamTrashFile ${USEROPT} -x ${checkfile}
+           fi
+           checkfile=
+         fi
+       done
 
-$copy = "By SAPM TRASH VIEW v0.4\n".
-        "Script by JoungKyun <http://www.oops.org> in BPL License\n\n";
+       # 리스트 재정렬
+       TRASHBOX=$(ls "${TRASHPATH}" | grep "spam-" | grep -v grep | sort -r 2> /dev/null)
+       j=1
+       no=1
+       for i in ${TRASHBOX}
+       do
+         eval "TRASHFILE${j}=${i}"
+         j=$[${j}+1]
+       done
+       eval "TRASHFILE${j}="
 
-$homedir =~ s/\/$//g;
+       totalart=$[${j}-1]
+       n=$[${totalart}/${limit}]
+       p=$[${totalart}%${limit}]
 
-use Time::gmtime;
-my $byspamYear = gmtime->year() + 1900;
-my $byspamMon  = gmtime->mon() + 1;
-my $byspamDay  = gmtime->mday() + 1;
-if($byspamMon < 10) { $byspamMon = "0$byspamMon"; }
-if($byspamDay < 10) { $byspamDay = "0$byspamDay"; }
+       if [ ${p} -gt 0 ]; then
+         totalpage=$[${n}+1]
+       else
+         totalpage=${n}
+       fi
 
-if ( $#ARGV < 0 ) {
-  $trash = "$homedir/byspam/spam-$byspamYear$byspamMon$byspamDay";
-} else {
-  for ($i=0; $i <= $#ARGV; $i++) {
-    if ($ARGV[$i] eq "-u") {
-      if ($myuser eq "root") {
-        $users = $ARGV[$i+1];
-        $users = `cat /etc/passwd | grep \"^$users:\" | awk -F : '{print \$6}'`;
-        $users =~ s/\n|\/$//g;
-      } else {
-        print $copy;
-        print "Error: Only root user excute wiht -u option\n";
-        exit;
-      }
-    } elsif ($ARGV[$i] eq "-d") {
-      $filedates = $ARGV[$i+1];
-    } elsif ($ARGV[$i] eq "-x") {
-      $dfile = $ARGV[$i+1];
-    }
-    $i++;
-  }
+       start=${startl}
+       until=${untill}
+       ;;
+    *[!0-9]* | "")
+       page=$[${page}+1]
 
-  if ($users eq "") { $users = $homedir; }
-  if ($filedates eq "") { $filedates = "$byspamYear$byspamMon$byspamDay"; }
+       if [ ${page} -gt ${totalpage} ]; then
+         page=${totalpage}
+       fi
+       ;;
+    *)
+       eval "checkfile=\$TRASHFILE${next}"
+       checkfile=$(echo $checkfile | sed 's/^[^\-]*-//g')
+       if [ -f "${USERPATH}/byspam/spam-${checkfile}" ]; then
+         @bindir@/byspamTrashFile ${USEROPT} -d ${checkfile}
+       fi
 
-  $trash = "$users/byspam/spam-$filedates";
+       start=${startl}
+       until=${untill}
+  esac
 }
 
-# delete mode
-if ($dfile ne "") {
-  $dfile = "$users/byspam/spam-$dfile";
+TRASHBOX=$(ls "${TRASHPATH}" | grep "spam-" | grep -v grep | sort -r 2> /dev/null)
 
-  if ( -f "$dfile" ) {
-    unlink $dfile;
-  }
-  exit 0;
-}
+j=1
+no=1
+start=1
+limit=4
+page=1
 
-if( ! -f "$trash" ) {
-  print $copy;
-  print "Error: Trash file not found\n";
-  print "Usage: byspamTrash [ -u/-d/-x ]\n\n";
-  print "       -u USERNAME (only root)\n";
-  print "       -d DATE_FORMAT (Ymd, default value is today)\n";
-  print "       -x DATE_FORMAT (delete DATE_FORMAT trash file)\n\n";
-  if($myuser eq "root") {
-    print "       View Mode   : byspamTrash -u oops -d 20020627\n";
-    print "       Delete Mode : byspamTrash -u oops -x 20020627\n";
-  } else {
-    print "       View Mode   : byspamTrash -d 20020627\n";
-    print "       Delete Mode : byspamTrash -x 20020627\n";
-  }
-  exit 0;
-}
+for i in ${TRASHBOX}
+do
+  eval "TRASHFILE${j}=${i}"
+  j=$[${j}+1] 
+done
 
-$less = `less --help`;
+totalart=$[${j}-1]
+n=$[${totalart}/${limit}]
+p=$[${totalart}%${limit}]
 
-sub splitMail {
-  my $st = 0;
-  my $i = 0;
-  my $mailTmp;
-  my @mailx = ();
+if [ ${p} -gt 0 ]; then
+  totalpage=$[${n}+1]
+else
+  totalpage=${n}
+fi
 
-  if( -f $_[0] ) {
-    open(fileHandle,$_[0]);
-    foreach(<fileHandle>) {
-      if(/^From[ ]+[^@]+@[^ ]+[ ]+[A-Z][a-z]{2}[ ]+[A-Z][a-z]{2}[ ]+/) {
-        if($st ne 0) {
-          $mailx[$i] = $mailTmp;
-          $i++;
-        } else { $st = 1; }
-        $mailTmp=$_;
-      } else {
-        $mailTmp .= $_;
-      }
-    }
-    $mailx[$i] = $mailTmp;
-    close(fileHandle);
-  } else {
-    print "Error: Can't not find $trash\n";
+until=1
+while [ true ]
+do
+  clear
+  echo "============================================================================="
+  echo "by SPAM Trash VIEWER $VERSION by JoungKyun Kim <http://www.oops.org>"
+  echo "Command [ x - exit | no - mail no | d no - del no | enter - next | b - back ]"
+  echo "============================================================================="
+  echo "Total ${totalpage} page / Current ${page} page"
+  echo
+
+  startl=${start}
+  untill=${until}
+  until=$[${until}+${limit}]
+
+  if [ ${totalart} = 0 ]; then
+    echo "WORN : No exist trash file"
+  else
+    while [ true ]
+    do
+      eval "FILENAME=\$TRASHFILE${start}"
+
+      if [ ${start} -lt 10 ]; then
+        stno="   ${start}"
+      elif [ ${start} -lt 100 ]; then
+        stno="  ${start}"
+      elif [ ${start} -lt 1000 ]; then
+        stno=" ${start}"
+      else
+        stno=${start}
+      fi
+      if [ ${start} -lt ${until} ] && [ -n "${FILENAME}" ]; then
+        echo "${stno}. ${FILENAME}"
+        start=$[${start}+1]
+      else
+        if [ -z "${FILENAME}" ]; then
+          start=${startl}
+          until=${untill}
+          nullchk=1
+        else
+          nullchk=
+        fi
+        break
+      fi
+    done
+  fi
+
+  echo
+  echo "-----------------------------------------------------------------------------"
+  echo -n "Command: "
+
+  if [ ${totalart} = 0 ]; then
     exit 0
-  }
+  else
+    read next
+  fi
+  nextfunc
+done
 
-  return @mailx;
-}
-
-my @mails = splitMail("$trash");
-chomp(@mails);
-$mailSize = @mails;
-
-for($i=0;$i<$mailSize;$i++) {
-  $mails[$i] =~ s/\n/!byspamEnter!\n/g;
-  @tmpMail = split(/\n/,$mails[$i]);
-  $getMail = Mail::Internet->new(\@tmpMail);
-  $subject[$i] = $getMail->get("Subject:");
-  $subject[$i] =~ s/\s*Subject: .+|!byspamEnter!//g;
-  $subject[$i] =~ s/\s+/ /ig;
-  chomp($subject[$i]);
-
-  if($subject[$i] =~ /^\s*$/i) { $subject[$i] = "No Subject"; }
-
-  my $resSubj;
-  if($subject[$i] =~ /=\?[^?]+\?([BQ])\?/i) {
-    my @chkSubj = ();
-    my $chkSubjSize;
-    @chkSubj = split(/\s+/,$subject[$i]);
-    $chkSubjSize = @chkSubj;
-    for($ci=0;$ci<$chkSubjSize;$ci++) {
-      if($chkSubj[$ci] =~ /=\?[^?]+\?([BQ])\?/i) {
-        $enc = $chkSubj[$ci];
-        $enc =~ s/(=\?[^?]+\?([BQ])\?[^?]+\?=)+/$2/ig;
-        $chkSubj[$ci] =~ s/=\?[^?]+\?[BQ]\?([^?]+)\?=/$1/ig;
-
-        if ($enc =~ /^q/i) { $chkSubj[$ci] = decode_qp($chkSubj[$ci]); }
-        else { $chkSubj[$ci] = decode_base64($chkSubj[$ci]); }
-      }
-
-      $resSubj = $resSubj ? "$resSubj $chkSubj[$ci]" : $chkSubj[$ci];
-      chomp($resSubj);
-    }
-  }
-
-  $subject[$i] = $resSubj ? $resSubj : $subject[$i];
-  $bodyis[$i] = getBody($getMail);
-}
-
-my $lastpage = $mailSize/10;
-my $lastchk  = int $lastpage;
-if($lastchk < $lastpage) { $lastpage = $lastchk+1; }
-
-my $page = 1;
-LINE: while (1) {
-  system("clear");
-  print "$copy";
-  print "$page page / total $lastpage pages\n\n";
-
-  $start = ($page > 1) ? $mailSize - ($page * 10 - 10) - 1 : $mailSize - 1;
-  $until = ($start - 10 < -1) ? -1 : $start - 10;
-
-  my $j;
-  for($i=$start;$i>$until;$i--) {
-    $j = $i+1;
-    if($j < 10) { $sp = "    "; }
-    elsif($j < 100) { $sp = "   "; }
-    elsif($j < 1000) { $sp = "  "; }
-    elsif($j < 10000) { $sp = " "; }
-    $j = "$sp$j";
-    print "$j. $subject[$i]\n";
-  }
-
-  $exm = ($page > 1) ? "[ y / n / b=back / No. ]" : "[ y / n / No. ]";
-  print "\nDo you want to continue? $exm : ";
-  my $cmd = <STDIN>;
-  chomp $cmd;
-
-
-  # view mail context
-  if ($cmd =~ /^[0-9]+$/) {
-    if ($cmd <= $start+1 && $cmd > $until+1) {
-      $mailno = $cmd - 1;      
-      system("clear");
-      $printBody = "$copy".
-                   "$page page / total $lastpage pages\n\n".
-                   "Mail No. $cmd\n".
-                   "Subject. $subject[$mailno]\n\n".
-                   "$bodyis[$mailno]\n";
-
-      if ($less) {
-        $printBody =~ s/'/`/g;
-        system("echo '$printBody' | less -e");
-        redo;
-      } else {
-        print "$printBody"; 
-        print "\nDo you want to continue? [y/n] : ";
-        $cmd = <STDIN>;
-        chomp $cmd;
-
-        if($cmd !~ /^(y|$)/i) { last LINE; }
-        else { redo; }
-      }
-    } else {
-      print "Out of a scope of mail list\n";
-      redo;
-    }
-  }
-
-  if ($until == -1 && $cmd !~ /^b/i) { last LINE; }
-  elsif($cmd !~ /^(y|b|\s*$)/i) { last LINE; }
-  elsif($cmd =~ /^b/i && $page eq 1) {}
-  elsif($cmd =~ /^b/i && $page > 1) { $page--;  }
-  else { $page++; }
-}
-
-exit 1;
+exit 0

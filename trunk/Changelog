@@ -6,6 +6,9 @@ Warn: date format is Y.m.d
   - 2002.06.29
     by JoungKyun Kim : fixed print date on byspamTrash
                        fixed continue install bug when install.log include wrong path
+  - 2002.07.16
+    by JoungKyun Kim : update byspamTrash to 1.0.0
+                       byspamTrash v1.0.0 support date and delete format
 
 * v0.2.1
   - 2002.06.27
