@@ -1,7 +1,7 @@
 #
 # Byspam Common functions
 #
-# $Id: Common.pm,v 1.1 2004-11-27 18:50:32 oops Exp $
+# $Id: Common.pm,v 1.2 2004-11-29 06:02:30 oops Exp $
 #
 
 package Byspam::Common;
@@ -12,45 +12,6 @@ sub new {
   my $self = {};
 
   return bless $self;
-}
-
-# print help message and save directory
-#
-sub printHelp {
-	my $lc;
-	my $USAGES;
-
-	$lc = $main::charset;
-	my @helps = ();
-	if( $lc eq "EUC-KR" ) {
-		$USAGES = "사용법";
-		@helps = (
-				  "현재 메세지를 출력",
-				  "인자로 넘긴 메일형식의 절대경로 파일을 체크 [ 디버그 모드 ]",
-				  "메일 형식을 파이프로 넘기는 형식",
-				  "메일 형식을 파이프로 넘기는 형식 [ 디버그 모드 ]"
-		);
-	} else {
-		$USAGES = "USAGE";
-		@helps = (
-				  "print this message",
-				  "debug mode with file(absolte path) of mail form",
-				  "put mail form with pipe",
-				  "debug mode with put mail form with pipe",
-		);
-	}
-
-	print "\n$USAGES : \n";
-	print "    byspamFilter [ -h --help ]\n";
-	print "          => ${helps[0]}\n\n";
-	print "    byspamFilter -d mail_form_file_pull_path \n";
-	print "          => ${helps[1]}\n\n";
-	print "    cat mail_form_file | byspamFilter \n";
-	print "          => ${helps[2]}\n\n";
-	print "    cat mail_form_file | byspamFilter -p \n";
-	print "          => ${helps[3]}\n\n";
-
-	exit 1;
 }
 
 # removed first and last blank charactors in variable
