@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://www.oops.org>
 #
-# $Id: Trash.pm,v 1.9 2004-12-06 13:45:42 oops Exp $
+# $Id: Trash.pm,v 1.10 2004-12-06 14:05:39 oops Exp $
 #
 
 package Byspam::Trash;
@@ -192,13 +192,14 @@ sub splitMail {
 
 sub recoveryMail {
 	my $self = shift if ref ($_[0]);
-	my ( $u, $m ) = @_;
+	my ( $u, $m, $_s ) = @_;
 
 	my $_inbox = "$main::inbox/$u";
+	$_inbox = $_s if ( $_s );
 
 	if ( ! -d $_inbox ) {
 		open (fileHandle, ">>$_inbox");
-		print fileHandle "\n$m";
+		print fileHandle "$m\n";
 		close (fileHandle);
 
 		return 0;
@@ -370,10 +371,12 @@ INIT:
 		}
 
 		# delete or recovery article mode
-		elsif ( $cmd =~ m/^(d|r)[\s]+([0-9]+)/ ) {
+		elsif ( $cmd =~ m/^(d|r)[\s]+([0-9]+)([\s]+.*)*/ ) {
 			my $_mode  = $1;
 			my $_actno = $2 - 1;
 			my $_s     = 0;
+
+			$_savefile = $cm->trim ($3) if ( $3 );
 
 			# if delete no < 0, redo current page;
 			redo if ( $_actno < 0 );
@@ -383,7 +386,7 @@ INIT:
 				$_s = 1;
 			} else {
 				# recovery mode
-				$_s = recoveryMail ($user, $mails[$_actno]) if ( $_mode eq "r" );
+				$_s = recoveryMail ($user, $mails[$_actno], $_savefile) if ( $_mode eq "r" );
 				$_s && redo;
 			}
 			$_s && redo;
