@@ -211,9 +211,14 @@ LINE: while (1) {
   $until = ($start - 10 < -1) ? -1 : $start - 10;
 
   my $j;
+  my $filtersubject;
+  my $filterlength;
   for($i=$start;$i>$until;$i--) {
     $j = $i+1;
-    printf "%6s. %s\n", $j, $subject[$i];
+    $filterlength = ( $ENV{"SLENGTH"} eq "" ) ? 60 : $ENV{"SLENGTH"};
+    $filtersubject = substr($subject[$i], 0, $filterlength);
+    $filtersubject =~ s/(([\x80-\xff].)*)[\x80-\xff]?$/$1/;
+    printf "%6s. %s\n", $j, $filtersubject;
   }
 
   print "-----------------------------------------------------------------------------\n";
