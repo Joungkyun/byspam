@@ -1,0 +1,30 @@
+# $Id: Makefile.in,v 1.1 2004-12-06 07:48:40 oops Exp $
+
+PROG            = @PACKAGE_NAME@
+VERSION         = @PACKAGE_VERSION@
+DESTDIR         =
+
+prefix          = @prefix@
+exec_prefix     = @exec_prefix@
+datadir         = @datadir@
+includedir      = @includedir@
+bindir          = @bindir@
+sbindir         = @sbindir@
+sysconfdir      = @sysconfdir@
+filterdir       = @filterdir@
+
+MAKE            = @MAKE@
+INSTALL         = @INSTALL@
+GREP            = @GREP@
+RPM             = @RPM@
+SED             = @SED@
+PHP             = @PHP@
+RM              = @RM@ -f
+LS              = @LS@
+PS              = @PS@
+MKDIR           = @MKDIR@ -p
+GPG             = @GPG@
+AWK             = @AWK@
+MSGFMT          = @MSGFMT@
+
+WORKDIR         = workdir
