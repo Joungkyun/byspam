@@ -27,3 +27,10 @@ window\.open|<embed|codebase=|<object
 <map name=|refuse
 www\.lux-sa\.com|¹ß¼Û±â|wow3go
 src=http|hoop-bid|helpu-web
+Microsoft DHTML Editing
+<\/html>.+
+
+# SOBIG.F configuration
+Subject: [\s]*(Thank you!|Your Details)[\s]*
+Subject: (Re: )?Re:[\s]*(Thank you!|Details|Approved|Your application|Wicked screensaver|Taht movie)
+sobig\.f
