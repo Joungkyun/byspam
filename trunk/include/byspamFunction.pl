@@ -287,3 +287,16 @@ sub printHelp {
     }
   }
 }
+
+# check of no content
+sub noContentCheck {
+  if ($_[0] eq "") { return 1; }
+
+  my $content;
+  $content = $_[0];
+  $content =~ s/[\s]//ig;
+  $content =~ s/<html>.*<\/head>//ig;
+  $content =~ s/<[^>]*>//ig;
+
+  if ($content eq "") { return 1; }
+}
