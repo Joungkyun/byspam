@@ -1,0 +1,34 @@
+SHELL=/bin/sh
+VERBOSE=no
+
+# check evn
+HOMES=`echo $HOME | sed -e 's/\/$//g'`
+DATES=`date +%Y%m%d`
+
+# 사용자 로그파일 (계정 유저만 사용)
+#LOGFILE=${HOMES}/byspam/filter.log
+
+# 필터링 체크
+FilterValue=`@bindir@/byspamFilter`
+
+###################
+# start Filtering #
+###################
+:0 ic
+  * ? test ! -d "${HOMES}/byspam"
+  | mkdir -p ${HOMES}/byspam; \
+    chown $LOGNAME ${HOMES}/byspam;
+
+:0:
+  * < 5500000
+  * ? test -n "${FilterValue}"
+  {
+    :0 ic
+      * ? test ! -f "${HOMES}/byspam/spam-${DATES}"
+      | touch ${HOMES}/byspam/spam-${DATES}; \
+        chown $LOGNAME ${HOMES}/byspam/spam-${DATES};
+
+    :0 fbw
+    ${HOMES}/byspam/spam-${DATES}
+  }
+

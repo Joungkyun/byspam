@@ -1,0 +1,5 @@
+# This file is used to filter To: of mail header.
+# and use regular expression with perl type.
+# See also regex of perl.
+anonymous
+Undisclosed\.Recipients

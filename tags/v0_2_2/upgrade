@@ -1,0 +1,296 @@
+#!/bin/sh
+
+# include byspam version
+. VERSION
+
+printDot() {
+  if [ -z "${1}" ];then
+    chk=3
+  else
+    chk=${1}
+  fi
+
+  i=1
+  while [ "${i}" -le "${chk}" ]
+  do
+    no="$no ${i}"
+    i=$((${i}+1))
+  done
+
+  for i in ${no}
+  do
+    echo -n "."
+    sleep 1
+  done
+
+  no=
+  chk=
+}
+
+printError() {
+  l=$(echo ${LANG} | sed -n '/ko\|KO/p')
+
+  echo "  Check Failed"
+  echo
+  if [ -n "${l}" ]; then
+    echo "  이전 버젼의 경로를 확인할 수 없습니다. By SAPM 에서 제공하는"
+    echo "  uninstall 를 이용하여 이전 버젼을 삭제하시고 새로 설치하십시"
+    echo "  오. filter-*.conf 는 계속 사용을 할 수 있으니, 백업을 하시고"
+    echo "  새 버젼을 설치한 후 filterdir 에 덮어 씌우시면 됩니다."
+    echo
+  else
+    echo "  Can't find path of previous version by unknown error. First,"
+    echo "  uninstall previous By SPAM program with uninstall program that"
+    echo "   supported By SAPM in \$bindir, and install new version."
+    echo "  Don't Forget to backup filter-*.conf. After install new version,"
+    echo "  copy backuped filter-*.conf to \$filterdir"
+    echo
+  fi
+
+  exit 1
+}
+
+clear
+echo "####################################################################"
+echo "By SAPM ${BYVERSION} UPGRADE UTILITY"
+echo "####################################################################"
+echo
+
+while [ true ]
+do
+  echo -n "  Enter path of dir include byspam.conf : "
+  read etcPath 
+
+  if [ -d "${etcPath}" ]; then
+    if [ -f "${etcPath}/install.log" ]; then
+      upinfo="${etcPath}/install.log"
+      break
+    else
+      # if previous version is 0.1.1
+      if [ -f "${etcPath}/filter.rc" ]; then
+        chk=$(cat ${etcPath}/filter.rc | grep "^FilterValue=" | sed -e 's/FilterValue=\|\/byspamFilter\|`//g')
+      fi
+
+      if [ -f "${chk}/uninstall" ]; then
+        upinfo="${chk}/uninstall"
+        upinfochk=1
+        break
+      fi
+    fi
+  fi
+done
+
+while [ true ]
+do
+  echo -n "  Enter path of perl : "
+  read perlPath
+
+  [ -f "${perlPath}" ] && break
+done
+echo
+
+
+
+# create installation directory
+mkdir -p ./installdir
+
+# get installed path
+if [ -n "${upinfochk}" ]; then
+  CONF=$(cat ${upinfo} | sed -n -e '/^[a-zA-z]\+="[^"]\+"/p')
+else
+  CONF=$(cat ${upinfo} | sed -n -e '/^[a-zA-z]\+=/p')
+fi
+[ -n "${CONF}" ] && eval $CONF
+
+# version check
+if [ -f "${bindir}/uninstall" ]; then
+  lversion=$(cat ${bindir}/uninstall | sed -n '/^VERSION/p' | sed -e 's/VERSION=//g')
+else
+  echo "  Error: install log of previous version includes wrong install path"
+  exit 1
+fi
+
+[ "${lversion}" = "" ] && {
+  if [ -f "${confdir}/byspam.conf" ]; then
+    lversion=$(cat ${confdir}/byspam.conf | sed -n '/^$version/p' | \
+               sed -e "s/\$version[ ]*=[ ]*\"\([0-9.]\+\)\"/\1/g")
+  else
+    echo "  Error: install log of previous version includes wrong install path"
+    exit 1
+  fi
+}
+
+[ "${lversion}" = "" ] && lversion="Unknown"
+
+echo "Check of Installed directory on previous version"
+echo
+echo -n "  Previous version check      "
+printDot
+echo " ${lversion}"
+
+echo -n "  Level of Execute permission "
+printDot
+
+if [ -z "${level}" ]; then
+  printError
+else
+  echo " ${level}"
+fi
+
+echo -n "  Bin directory               "
+printDot
+
+if [ -z "${bindir}" ] && [ "${level}" = "root" ]; then
+  printError
+else
+  echo " ${bindir}"
+fi
+
+echo -n "  Config directory            "
+printDot
+
+if [ -z "${confdir}" ] && [ "${level}" = "root" ]; then
+  printError
+else
+  echo " ${confdir}"
+fi
+
+echo -n "  Filter directory            "
+printDot
+
+if [ -z "${filterdir}" ] && [ "${level}" = "root" ]; then
+  printError
+else
+  echo " ${filterdir}"
+fi
+
+echo -n "  Include directory           "
+printDot
+
+if [ -z "${includedir}" ] && [ "${level}" = "root" ]; then
+  printError
+else
+  echo " ${includedir}"
+fi
+
+echo -n "  Path of procmailrc          "
+printDot
+
+if [ -z "${procpath}" ] && [ "${level}" = "root" ]; then
+  printError
+else
+  echo " ${procpath}"
+fi
+
+echo -n "  Path of perl                "
+printDot
+echo " ${perlPath}"
+
+echo
+echo "Now start update By SPAM to ${BYVERSION} from ${lversion}"
+echo -n "  please wait for prepared update"
+printDot 5
+echo
+
+[ -z "${level}" ] && level=$(whoami)
+if [ "${level}" = "root" ]; then
+  pk=1
+else
+  pk=2
+fi
+
+CHK=0
+
+./configure --level=${level} \
+            --bindir=${bindir} \
+            --confdir=${confdir} \
+            --filterdir=${filterdir} \
+            --includedir=${includedir} \
+            --procpath=${procpath} \
+            --perlpath=${perlPath} \
+            --package=$pk
+
+
+echo
+echo
+echo "Now update ${BYVERSION} file"
+echo
+for i in byspamFilter byspamTrash byspamTrashFile plain.pl regexChk.pl
+do
+  install -m755 ./installdir/${i} ${bindir} > /dev/null 2>&1
+  CHK=$?
+
+  if [ "${CHK}" = 0 ]; then
+    echo "  update ${i} : OK"
+  else
+    echo "  update ${i} : Failed"
+    rm -rf ./installdir ./install
+    exit 1
+  fi
+done
+
+
+install -m644 ./installdir/byspam.conf ${confdir} > /dev/null 2>&1
+CHK=$?
+if [ "${CHK}" = 0 ]; then
+  echo "  update byspam.conf : OK"
+else
+  echo "  update byspam.conf : Failed"
+  rm -rf ./installdir ./install
+  exit 1
+fi
+
+install -m644 ./installdir/filter.rc ${confdir} > /dev/null 2>&1
+CHK=$?
+if [ "${CHK}" = 0 ]; then
+  echo "  update filter.rc : OK"
+else
+  echo "  update filter.rc : Failed"
+  rm -rf ./installdir ./install
+  exit 1
+fi
+
+install -m644 ./include/byspamFunction.pl ${includedir} > /dev/null 2>&1
+CHK=$?
+if [ "${CHK}" = 0 ]; then
+  echo "  update byspamFunction.pl : OK"
+else
+  echo "  update byspamFunction.pl : Failed"
+  rm -rf ./installdir ./install
+  exit 1
+fi
+
+install -m755 ./installdir/uninstall ${bindir} > /dev/null 2>&1
+CHK=$?
+if [ "${CHK}" = 0 ]; then
+  echo "  update uninstall utility : OK"
+else
+  echo "  update uninstall utility : Failed"
+  rm -rf ./installdir ./install
+  exit 1
+fi
+
+install -m644 ./installdir/install.log ${confdir} > /dev/null 2>&1
+CHK=$?
+if [ "${CHK}" = 0 ]; then
+  echo "  update install log : OK"
+else
+  echo "  update install log : Failed"
+  rm -rf ./installdir ./install
+  exit 1
+fi
+
+if [ "${datadir}" != "" ]; then
+  rm -rf ${datadir}
+  CHK=$?
+
+  if [ "${CHK}" = 0 ]; then
+    echo "  removed data dir : OK"
+  fi
+fi
+
+
+echo "completed upgrade"
+rm -rf ./installdir
+
+exit 0

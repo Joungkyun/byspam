@@ -1,0 +1,7 @@
+# This file is used to filter Any words of mail header.
+# and use regular expression with perl type.
+# See also regex of perl.
+AD_?2000
+RED[\s_]?SPIDER
+Produced By Microsoft MimeOLE V\(null\)
+littledisney\.co\.kr

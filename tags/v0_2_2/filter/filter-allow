@@ -1,0 +1,6 @@
+# This file is used to allow when filterd any filter rule,
+# For example mailing lists.
+# And use regular expression with perl type.
+# See also regex of perl.
+CERTCC-KR
+LogWatch
