@@ -10,13 +10,14 @@
 부자|바스트메일|수익|성인|테스트|SEX|PORN|YOUNG|STAR|STRIP|ADV|ADULT
 포.?르.?노|섹.?캠|뽀.?르.?노|강간|몰카|성폭행|초저가|모바일|PDA([^a-z]|$)|항문
 괌고|과[ ]?ㅇ[ ]?고|과[ ]?앙[ ]?고|과아앙고|ㄱㅗㅏㅇㄱㅗ
-NAMED|NUDE|CELEBRIT|casino|마케팅|test|DVD
+사까시|누나
+NAMED|NUDE|CELEBRIT|casino|마케팅|test|DVD|winner|lucky
 Important Message From
 C:\\CoolProgs\\Pretty Park\.exe
 영상으로 보내는 편지
 명랑소녀 빠굴기|발송기
 Trojaner-Info|pussy
-ILOVEYOU|stock|pokermoney|buyer|Unsubscribe
+ILOVEYOU|stock|poker|money|buyer|Unsubscribe|shopping
 Look at the pretty
 Some advice on your shortcoming
 Free XXX Pictures
@@ -33,3 +34,21 @@ v[^a-z0-9]*i[^a-z0-9]*a[^a-z0-9]*g[^a-z0-9]*r[^a-z0-9]*a
 # SOBIG.F configuration
 ^[\s]*(Thank you!|Your Details)[\s]*$
 Re:[\s]*(Thank you!|Details|Approved|Your application|Wicked screensaver|Taht movie)
+
+# Win32/Netsky.worm.18944.B
+Delivery failure notice
+
+# W32/Zafi@MM
+kepeslap erkezett!
+
+# Win32/Bagle.worm.P
+Re: (Msg reply|Hello|Yahoo|Thank|Text message|Document|Incoming|Hi)
+(Important|Account|Forum) notify
+(Notify|Warning) (about|from).* e-mail
+E-?mail (technical|account).*(warning|message|report)
+(Incoming|Hidden|Protected) message
+Pass(word)?[ ]?[:-] %s
+Encrypted document
+Fax Message Received
+Request response
+Site changes
