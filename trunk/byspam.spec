@@ -3,6 +3,7 @@ Summary(ko): 스팸방지를 위한 필터링 툴
 Name: byspam
 Version: 1.0.0
 Release: 1
+Epoch: 1
 Copyright: GPL
 Group: System Environment/Daemons
 URL: http://cvs.oops.org/cgi-bin/oopsdev.cgi/byspam/
@@ -46,6 +47,10 @@ mkdir -p $RPM_BUILD_ROOT
 
 make DESTDIR=$RPM_BUILD_ROOT install
 
+pushd $RPM_BUILD_ROOT/etc/byspam &> /dev/null
+mv -f byspam.conf.ko byspam.conf
+popd &> /dev/null
+
 %post
 if [ $1 = 0 ]; then
   PROCRCCHK=$(egrep "^INCLUDERC=.+\/filter\.rc" /etc/procmailrc)
@@ -80,29 +85,35 @@ rm -rf $RPM_BUILD_ROOT
 %dir /etc/byspam
 %config(noreplace) /etc/byspam/Filter/filter-allow
 %config(noreplace) /etc/byspam/Filter/filter-body
-%config(noreplace) /etc/byspam/Filter/filter-date
-%config(noreplace) /etc/byspam/Filter/filter-extra
+%config(noreplace) /etc/byspam/Filter/filter-date            
+%config(noreplace) /etc/byspam/Filter/filter-extra           
 %config(noreplace) /etc/byspam/Filter/filter-from
-%config(noreplace) /etc/byspam/Filter/filter-ignore
-%config(noreplace) /etc/byspam/Filter/filter-subject
-%config(noreplace) /etc/byspam/Filter/filter-to
-%config(noreplace) /etc/byspam/byspam.conf
-%config(noreplace) /etc/byspam/filter.rc
-%attr(644,root,root) /etc/cron.d/byspam
-%attr(755,root,root) /usr/bin/byspamFilter
+%config(noreplace) /etc/byspam/Filter/filter-ignore          
+%config(noreplace) /etc/byspam/Filter/filter-subject        
+%config(noreplace) /etc/byspam/Filter/filter-to              
+%config(noreplace) /etc/byspam/byspam.conf 
+%config(noreplace) /etc/byspam/filter.rc   
+%attr(755,root,root) /etc/cron.d/byspam  
+%attr(755,root,root) /usr/bin/byspamFilter   
 %attr(755,root,root) /usr/bin/byspamClear
 %attr(755,root,root) /usr/bin/byspamReload
-%attr(755,root,root) /usr/bin/byspamTrash
+%attr(755,root,root) /usr/bin/byspamTrash    
 %attr(755,root,root) /usr/bin/byspamTrashMgr
 %attr(755,root,root) /usr/bin/byspamPlain
 %attr(755,root,root) /usr/bin/byspamRegexChk
 %dir /usr/include/byspam
-/usr/include/byspam/Byspam/*.pm
+/usr/include/byspam/Byspam/Common.pm
+/usr/include/byspam/Byspam/Encode.pm
+/usr/include/byspam/Byspam/Getopt.pm
+/usr/include/byspam/Byspam/Init.pm
+/usr/include/byspam/Byspam/Mail.pm
+/usr/include/byspam/Byspam/Parse.pm
+/usr/include/byspam/Byspam/Trash.pm
 
-%doc Changelog ENVIRONMENT LICENSE README
+%doc Changelog ENVIRONMENT LICENSE README INSTALL REGEX
 
 %changelog
-* Wed Dec 01 2004 JoungKyun Kim <http://www.oopw.org> 1.0.0-1
+* Tue Dec 07 2004 JoungKyun Kim <http://www.oops.org> 1.0.0-1
 - update 1.0.0
 
 * Tue Apr 06 2004 JoungKyun Kim <http://www.oops.org> 0.2.3-1
