@@ -3,6 +3,9 @@ Changelog document
 Warn: date format is Y.m.d
 
 * v0.1.5
+  - 2002.06.26
+    by JoungKyun Kim : added check of body header with filter-extra
+
   - 2002.06.08
     by JoungKyun Kim : added iframe tag check function
                        added check function of no content except html tags

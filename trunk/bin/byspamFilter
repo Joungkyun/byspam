@@ -61,38 +61,40 @@ $mail = Mail::Internet->new(\@mailText);
 $header = getHeader($mail);
 $body = getBody($mail);
 
-# get size of array
-my $filesSize = @basics;
+if ( $body ne "checking spam" ) {
+  # get size of array
+  my $filesSize = @basics;
 
-#$tt = parseHeader($mail->get("From:"));
-#print $tt."\n"; exit;
+  # check filtering data
+  Line: for($i=0;$i<$filesSize;$i++) {
+    if( ! -f "$filterDir/$files[$i]") { next Line; }
+    $regex = filterText("$filterDir/$files[$i]");
 
-# check filtering data
-Line: for($i=0;$i<$filesSize;$i++) {
-  if( ! -f "$filterDir/$files[$i]") { next Line; }
-  $regex = filterText("$filterDir/$files[$i]");
-
-  if ($ctype[$i] eq "Body") {
-    if($body) { chomp($target = $body); }
-    # iframe tag check
-    if($filterIframe == 1) { $regex = "$regex|<iframe"; }
-  } elsif ($ctype[$i] eq "Extra") {
-    if($header) { chomp($target = $header); }
-  } else {
-    chomp($target = parseHeader($mail->get("$ctype[$i]:")));
-    if($ctype[$i] eq "From") {
-      $getReply = parseHeader($mail->get("Reply-To:"));
-      if($target && $getReply ne "null") { chomp($target .= " $getReply"); }
+    if ($ctype[$i] eq "Body") {
+      if($body) { chomp($target = $body); }
+      # iframe tag check
+      if($filterIframe == 1) { $regex = "$regex|<iframe"; }
+    } elsif ($ctype[$i] eq "Extra") {
+      if($header) { chomp($target = $header); }
+    } else {
+      chomp($target = parseHeader($mail->get("$ctype[$i]:")));
+      if($ctype[$i] eq "From") {
+        $getReply = parseHeader($mail->get("Reply-To:"));
+        if($target && $getReply ne "null") { chomp($target .= " $getReply"); }
+      }
+      if ($target) { $target =~ s/[\s]/ /g; }
     }
-    if ($target) { $target =~ s/[\s]/ /g; }
-  }
 
-  if( $regex && $target && $target =~ /$regex/i ) { $spam = 1; $fil = $ctype[$i]; last Line; }
+    if( $regex && $target && $target =~ /$regex/i ) { $spam = 1; $fil = $ctype[$i]; last Line; }
 
-  # no content check in body
-  if($ctype[$i] eq "Body" && $spam != 1 && $filterTag == 1) {
-    if (noContentCheck("$target") == 1) { $spam = 1; $fil = $ctype[$i]; last Line; }
+    # no content check in body
+    if($ctype[$i] eq "Body" && $spam != 1 && $filterTag == 1) {
+      if (noContentCheck("$target") == 1) { $spam = 1; $fil = $ctype[$i]; last Line; }
+    }
   }
+} else {
+  $spam = 1;
+  $fil = "Extra";
 }
 
 if ($spam) {
