@@ -1,3 +1,4 @@
 # This file is used to ignore filter-allow,
 # and use regular expression with perl type.
 # See also regex of perl.
+±¤°í|±¤[.,~!@#$%^&* \t]*°í
