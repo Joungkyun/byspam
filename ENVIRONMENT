@@ -15,7 +15,7 @@ MAILTOOS 모듈이 설치되어 있는지 확인하는 방법
 약 어떠한 메세지(에러 메세지이다.) 가 나온다면, 아래의 URL 에서 MAILTOOS 모듈
 을 받아서 설치를 하도록 한다.
 
-http://www.cpan.org/authors/id/M/MA/MARKOV/MailTools-1.43.tar.gz
+http://www.cpan.org/authors/id/M/MA/MARKOV/MailTools-1.44.tar.gz
 
 임의의 디렉토리에 위의 파일의 압축을 풀도록 한다.
 
