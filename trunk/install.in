@@ -1,4 +1,5 @@
 #!/bin/sh
+# $Id: install.in,v 1.9 2004-11-27 19:06:48 oops Exp $
 
 # include byspam version
 . VERSION

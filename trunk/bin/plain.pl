@@ -1,4 +1,9 @@
-#!@PERLPATH@ -w
+#!@PERLPATH@ -W
+#
+# Mail Parse Utility supported by BySPAM
+# JoungKyun Kim <http://www.oops.org>
+# $Id: plain.pl,v 1.2 2004-11-27 19:06:48 oops Exp $
+#
 use Mail::Internet;
 use Mail::Header;
 use MIME::Base64;

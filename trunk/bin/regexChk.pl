@@ -1,4 +1,9 @@
 #!@PERLPATH@ -W
+#
+# Perl regualr expression check utility in BySPAM
+# JoungKyun Kim <http://www.oops.org>
+# $Id: regexChk.pl,v 1.2 2004-11-27 19:06:48 oops Exp $
+#
 my $lcn;
 my $lc;
 my $USAGES;

@@ -1,4 +1,5 @@
 #!/bin/sh
+# $Id: upgrade,v 1.11 2004-11-27 19:06:48 oops Exp $
 
 # include byspam version
 . VERSION
