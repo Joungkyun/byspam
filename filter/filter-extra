@@ -10,3 +10,5 @@ charset="?big5"?
 = Multipart Boundary
 Received: from localhost
 market|event
+helo=localhost
+from test
