@@ -21,7 +21,7 @@ truehongbo
 X-EM-Registration
 adsl|vdsl|hdsl
 JBHsender|SNOOP Bpsh
-=_NextPart_[^=]+=_NextPart_
+=_NextPart_[^=\n]+=_NextPart_
 X-Keywords: Junk
 
 # virus attach file  filter
