@@ -1,6 +1,6 @@
 Changelog document
 
-$Id: Changelog,v 1.42 2004-12-30 08:18:00 oops Exp $
+$Id: Changelog,v 1.43 2004-12-30 08:23:42 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.1
@@ -10,6 +10,7 @@ Warn: date format is Y.m.d
 
     by JoungKyun Kim :
        - added new install-sh script
+       - fixed incompatible traditional sh on Makefile
 
   - 2004.12.27
     by HyunSung Jang :
