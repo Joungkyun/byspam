@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: upgrade,v 1.11 2004-11-27 19:06:48 oops Exp $
+# $Id: upgrade,v 1.12 2004-11-30 19:24:38 oops Exp $
 
 # include byspam version
 . VERSION
@@ -135,19 +135,10 @@ echo -n "  Previous version check      "
 printDot
 echo " ${lversion}"
 
-echo -n "  Level of Execute permission "
-printDot
-
-if [ -z "${level}" ]; then
-  printError
-else
-  echo " ${level}"
-fi
-
 echo -n "  Bin directory               "
 printDot
 
-if [ -z "${bindir}" ] && [ "${level}" = "root" ]; then
+if [ -z "${bindir}" ]; then
   printError
 else
   echo " ${bindir}"
@@ -156,7 +147,7 @@ fi
 echo -n "  Config directory            "
 printDot
 
-if [ -z "${confdir}" ] && [ "${level}" = "root" ]; then
+if [ -z "${confdir}" ]; then
   printError
 else
   echo " ${confdir}"
@@ -165,7 +156,7 @@ fi
 echo -n "  Filter directory            "
 printDot
 
-if [ -z "${filterdir}" ] && [ "${level}" = "root" ]; then
+if [ -z "${filterdir}" ]; then
   printError
 else
   echo " ${filterdir}"
@@ -174,7 +165,7 @@ fi
 echo -n "  Include directory           "
 printDot
 
-if [ -z "${includedir}" ] && [ "${level}" = "root" ]; then
+if [ -z "${includedir}" ]; then
   printError
 else
   echo " ${includedir}"
@@ -183,7 +174,7 @@ fi
 echo -n "  Path of procmailrc          "
 printDot
 
-if [ -z "${procpath}" ] && [ "${level}" = "root" ]; then
+if [ -z "${procpath}" ]; then
   printError
 else
   echo " ${procpath}"
@@ -199,39 +190,40 @@ echo -n "  please wait for prepared update"
 printDot 5
 echo
 
-[ -z "${level}" ] && level=$(whoami)
-if [ "${level}" = "root" ]; then
-  pk=1
-else
-  pk=2
-fi
-
 CHK=0
 
-./configure --level=${level} \
-            --bindir=${bindir} \
+./configure --bindir=${bindir} \
             --confdir=${confdir} \
             --filterdir=${filterdir} \
             --includedir=${includedir} \
             --procpath=${procpath} \
             --perlpath=${perlPath} \
-            --package=$pk
+            --package=1
 
+
+echo
+echo
+echo "Now removed needless old file"
+[ -f ${bindir}/byspamTrashFile ] && rm -f ${bindir}/byspamTrashFile
+[ -f ${bindir}/plain.pl ] && rm -f ${bindir}/plain.pl
+[ -f ${bindir}/regexChk.pl ] && rm -f ${bindir}/regexChk.pl
+[ -f ${includedir}/byspamFunction.pl ] && rm -f ${includedir}/byspamFunction.pl
+echo "  removed byspamTrashFile : OK"
 
 echo
 echo
 echo "Now update ${BYVERSION} file"
 echo
-for i in byspamFilter byspamTrash byspamTrashFile plain.pl regexChk.pl
+for i in byspamFilter byspamTrash byspamPlain byspamRegexChk
 do
   install -m755 ./installdir/${i} ${bindir} > /dev/null 2>&1
   CHK=$?
 
   if [ "${CHK}" = 0 ]; then
     echo "#=${bindir}/${i}" >> ./installdir/install.log
-    echo "  update ${i} : OK"
+    printf "  update %23s : OK\n" "${i}"
   else
-    echo "  update ${i} : Failed"
+    printf "  update %23s : Failed\n" "${i}"
     rm -rf ./installdir ./install
     exit 1
   fi
@@ -242,9 +234,9 @@ install -m644 ./installdir/byspam.conf ${confdir} > /dev/null 2>&1
 CHK=$?
 if [ "${CHK}" = 0 ]; then
   echo "#=${confdir}/byspam.conf" >> ./installdir/install.log
-  echo "  update byspam.conf : OK"
+  printf "  update %23s : OK\n" "byspam.conf"
 else
-  echo "  update byspam.conf : Failed"
+  printf "  update %23s : Failed\n" "byspam.conf"
   rm -rf ./installdir ./install
   exit 1
 fi
@@ -253,92 +245,40 @@ install -m644 ./installdir/filter.rc ${confdir} > /dev/null 2>&1
 CHK=$?
 if [ "${CHK}" = 0 ]; then
   echo "#=${confdir}/filter.rc" >> ./installdir/install.log
-  echo "  update filter.rc : OK"
+  printf "  update %23s : OK\n" "filter.rc"
 else
-  echo "  update filter.rc : Failed"
-  rm -rf ./installdir ./install
-  exit 1
-fi
-
-install -m644 ./include/byspamFunction.pl ${includedir} > /dev/null 2>&1
-CHK=$?
-if [ "${CHK}" = 0 ]; then
-  echo "#=${includedir}/byspamFunction.pl" >> ./installdir/install.log
-  echo "  update byspamFunction.pl : OK"
-else
-  echo "  update byspamFunction.pl : Failed"
+  printf "  update %23s : Failed\n" "filter.rc"
   rm -rf ./installdir ./install
   exit 1
 fi
 
 mkdir -p ${includedir}/Byspam
-install -m644 ./include/Common.pm ${includedir}/Byspam > /dev/null 2>&1
-CHK=$?
-if [ "${CHK}" = 0 ]; then
-  echo "#=${includedir}/Byspam/Common.pm" >> ./installdir/install.log
-  echo "  update Common.pm : OK"
-else
-  echo "  update Common.pm : Failed"
-  rm -rf ./installdir ./install
-  exit 1
-fi
-
-install -m644 ./include/Encode.pm ${includedir}/Byspam > /dev/null 2>&1
-CHK=$?
-if [ "${CHK}" = 0 ]; then
-  echo "#=${includedir}/Byspam/Encode.pm" >> ./installdir/install.log
-  echo "  update Encode.pm : OK"
-else
-  echo "  update Encode.pm : Failed"
-  rm -rf ./installdir ./install
-  exit 1
-fi
-
-install -m644 ./include/Getopt.pm ${includedir}/Byspam > /dev/null 2>&1
-CHK=$?
-if [ "${CHK}" = 0 ]; then
-  echo "#=${includedir}/Byspam/Getopt.pm" >> ./installdir/install.log
-  echo "  update Getopt.pm : OK"
-else
-  echo "  update Getopt.pm : Failed"
-  rm -rf ./installdir ./install
-  exit 1
-fi
-
-install -m644 ./include/Mail.pm ${includedir}/Byspam > /dev/null 2>&1
-CHK=$?
-if [ "${CHK}" = 0 ]; then
-  echo "#=${includedir}/Byspam/Mail.pm" >> ./installdir/install.log
-  echo "  update Mail.pm : OK"
-else
-  echo "  update Mail.pm : Failed"
-  rm -rf ./installdir ./install
-  exit 1
-fi
-
-install -m644 ./include/Parse.pm ${includedir}/Byspam > /dev/null 2>&1
-CHK=$?
-if [ "${CHK}" = 0 ]; then
-  echo "#=${includedir}/Byspam/Parse.pm" >> ./installdir/install.log
-  echo "  update Parse.pm : OK"
-else
-  echo "  update Parse.pm : Failed"
-  rm -rf ./installdir ./install
-  exit 1
-fi
+for i in Common.pm Encode.pm Getopt.pm Mail.pm Parse.pm Trash.pm
+do
+  install -m644 ./include/${i} ${includedir}/Byspam/${i} > /dev/null 2>&1
+  CHK=$?
+  if [ "${CHK}" = 0 ]; then
+    echo "#=${includedir}/Byspam/${i}" >> ./installdir/install.log
+    printf "  update %23s : OK\n" "${i}"
+  else
+    printf "  update %23s : Failed\n" "${i}"
+    rm -rf ./installdir ./install
+    exit 1
+  fi
+done
 
 install -m755 ./installdir/byspamUninstall ${bindir} > /dev/null 2>&1
 CHK=$?
 if [ "${CHK}" = 0 ]; then
-  echo "  update byspamUninstall utility : OK"
+  printf "  update %23s : OK\n" "byspamUninstall"
 else
-  echo "  update byspamUninstall utility : Failed"
+  printf "  update %23s : Failed\n" "byspamUninstall"
   rm -rf ./installdir ./install
   exit 1
 fi
 
 if [ ! -f "${filterdir}/filter-ignore" ]; then
-  install-m644 filter/filter-ignore ${filterdir} > /dev/null 2>&1
+  install -m644 filter/filter-ignore ${filterdir} > /dev/null 2>&1
   CHK=$?
 
   if [ "${CHK}" = 0 ]; then
@@ -353,9 +293,9 @@ fi
 install -m644 ./installdir/install.log ${confdir} > /dev/null 2>&1
 CHK=$?
 if [ "${CHK}" = 0 ]; then
-  echo "  update install log : OK"
+  printf "  update %23s : OK\n" "install log"
 else
-  echo "  update install log : Failed"
+  printf "  update %23s : Failed\n" "install log"
   rm -rf ./installdir ./install
   exit 1
 fi
@@ -370,6 +310,8 @@ if [ "${datadir}" != "" ]; then
 fi
 
 
+echo
+echo
 echo "Completed upgrade. Now you reconfig $confdir/byspam.conf !!"
 rm -rf ./installdir
 

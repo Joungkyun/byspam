@@ -1,6 +1,6 @@
 Changelog document
 
-$Id: Changelog,v 1.33 2004-11-30 16:49:03 oops Exp $
+$Id: Changelog,v 1.34 2004-11-30 19:24:37 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.0
@@ -8,6 +8,8 @@ Warn: date format is Y.m.d
     by JoungKyun Kim :
        - added delete article function on byspamTrash
        - added recovery article function on byspamTrash
+       - removed level option.
+       - no support root|account level
 
   - 2004.11.30
     by JoungKyun Kim :

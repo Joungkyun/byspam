@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://www.oops.org>
 #
-# $Id: Getopt.pm,v 1.1 2004-11-27 18:50:32 oops Exp $
+# $Id: Getopt.pm,v 1.2 2004-11-30 19:24:38 oops Exp $
 #
 
 package Byspam::Getopt;
@@ -223,7 +223,7 @@ Byspam::Getopt - perl getopt module with long option as C sytle
     #
     $opt = $o->getopt ("cd:xh", $#ARGV + 1, @ARGV);
 
-    # $opt 의 값이 없으면 root 를 종료한다.
+    # $opt 의 값이 없으면 roop 를 종료한다.
     # getopt 는 옵션의 분석 완료 후나, 에러가 발생할 경우 빈 값을 리턴한다.
     #
     last if ( ! $opt );

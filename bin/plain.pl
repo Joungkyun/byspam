@@ -2,7 +2,7 @@
 #
 # Mail Parse Utility supported by BySPAM
 # JoungKyun Kim <http://www.oops.org>
-# $Id: plain.pl,v 1.4 2004-11-29 06:25:27 oops Exp $
+# $Id: plain.pl,v 1.5 2004-11-30 19:24:38 oops Exp $
 #
 use lib '@includedir@';
 my $conf = "@confdir@/byspam.conf";
@@ -15,7 +15,7 @@ use Byspam::Parse;
 use Byspam::Mail;
 
 # declaration global variable on configuration file
-use vars qw ($version  $level $allows $ignore $filterIframe $filterTag);
+use vars qw ($version  $allows $ignore $filterIframe $filterTag);
 use vars qw ($nobody $noheader $charset @basics $trashPeriod);
 use vars qw ($binDir  $confdir $filterDir $includeDir $perlpath);
 
