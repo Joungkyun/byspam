@@ -2,7 +2,8 @@
 # For example mailing lists.
 # And use regular expression with perl type.
 # See also regex of perl.
-CERTCC-KR
-LogWatch
-byspam
+CERTCC-KR|LogWatch|byspam
 avatarfile.hanmail.net
+Postmaster notify
+Returned mail
+certcc|fedora|red[ ]hat

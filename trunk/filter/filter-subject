@@ -26,3 +26,7 @@ Snowhite and the Seven Dwarfs
 photos from my
 Screen Saver
 Click Here for more Information
+
+# SOBIG.F configuration
+^[\s]*(Thank you!|Your Details)[\s]*$
+Re:[\s]*(Thank you!|Details|Approved|Your application|Wicked screensaver|Taht movie)
