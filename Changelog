@@ -5,6 +5,7 @@ Warn: date format is Y.m.d
   - 2003.09.21
     by JoungKyun Kim : fixed miss operation on allow filter
                        removed getBodyTrash function
+                       update getBody function
 
   - 2003.09.09
     by JoungKyun Kim : fixed typo

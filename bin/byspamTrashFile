@@ -177,7 +177,7 @@ for($i=0;$i<$mailSize;$i++) {
   $dateis[$i] = parseHeader($getMail->get("Date:"));
   $dateis[$i] =~ s/![^!]*!//g;
 
-  $bodyis[$i] = getBody($getMail);
+  $bodyis[$i] = getBody($getMail, 1);
   $bodyis[$i] =~ s/!byspamEnter!/\n/g;
 }
 
