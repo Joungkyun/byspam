@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://www.oops.org>
 #
-# $Id: Trash.pm,v 1.10 2004-12-06 14:05:39 oops Exp $
+# $Id: Trash.pm,v 1.11 2004-12-06 18:18:07 oops Exp $
 #
 
 package Byspam::Trash;
@@ -242,6 +242,7 @@ sub printTrash {
 	my @from      = ();
 	my @date      = ();
 	my @body      = ();
+	my @_byspam   = ();
 	my $filedates = "";
 	my $p_page    = 1;
 
@@ -372,9 +373,10 @@ INIT:
 
 		# delete or recovery article mode
 		elsif ( $cmd =~ m/^(d|r)[\s]+([0-9]+)([\s]+.*)*/ ) {
-			my $_mode  = $1;
-			my $_actno = $2 - 1;
-			my $_s     = 0;
+			my $_mode     = $1;
+			my $_actno    = $2 - 1;
+			my $_s        = 0;
+			my $_savefile = "";
 
 			$_savefile = $cm->trim ($3) if ( $3 );
 
