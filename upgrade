@@ -35,14 +35,14 @@ printError() {
   if [ -n "${l}" ]; then
     echo "  이전 버젼의 경로를 확인할 수 없습니다. By SAPM 에서 제공하는"
     echo "  byspamUninstall 를 이용하여 이전 버젼을 삭제하시고 새로 설치하십시"
-    echo "  오. filter-*.conf 는 계속 사용을 할 수 있으니, 백업을 하시고"
+    echo "  오. filter-* 는 계속 사용을 할 수 있으니, 백업을 하시고"
     echo "  새 버젼을 설치한 후 filterdir 에 덮어 씌우시면 됩니다."
     echo
   else
     echo "  Can't find path of previous version by unknown error. First,"
     echo "  byspaUninstall previous By SPAM program with uninstall program that"
     echo "   supported By SAPM in \$bindir, and install new version."
-    echo "  Don't Forget to backup filter-*.conf. After install new version,"
+    echo "  Don't Forget to backup filter-*. After install new version,"
     echo "  copy backuped filter-*.conf to \$filterdir"
     echo
   fi
@@ -109,7 +109,7 @@ fi
 # version check
 if [ -f "${bindir}/byspamUninstall" ]; then
   lversion=$(cat ${bindir}/byspamUninstall | sed -n '/^VERSION/p' | sed -e 's/VERSION=//g')
-elif [  -f "${bindir}/byspamUninstall" ]; then
+elif [  -f "${bindir}/uninstall" ]; then
   lversion=$(cat ${bindir}/uninstall | sed -n '/^VERSION/p' | sed -e 's/VERSION=//g')
 else
   echo "  Error: install log of previous version includes wrong install path"
@@ -227,6 +227,7 @@ do
   CHK=$?
 
   if [ "${CHK}" = 0 ]; then
+    echo "#=${bindir}/${i}" >> ./installdir/install.log
     echo "  update ${i} : OK"
   else
     echo "  update ${i} : Failed"
@@ -239,6 +240,7 @@ done
 install -m644 ./installdir/byspam.conf ${confdir} > /dev/null 2>&1
 CHK=$?
 if [ "${CHK}" = 0 ]; then
+  echo "#=${confdir}/byspam.conf" >> ./installdir/install.log
   echo "  update byspam.conf : OK"
 else
   echo "  update byspam.conf : Failed"
@@ -249,6 +251,7 @@ fi
 install -m644 ./installdir/filter.rc ${confdir} > /dev/null 2>&1
 CHK=$?
 if [ "${CHK}" = 0 ]; then
+  echo "#=${confdir}/filter.rc" >> ./installdir/install.log
   echo "  update filter.rc : OK"
 else
   echo "  update filter.rc : Failed"
@@ -259,6 +262,7 @@ fi
 install -m644 ./include/byspamFunction.pl ${includedir} > /dev/null 2>&1
 CHK=$?
 if [ "${CHK}" = 0 ]; then
+  echo "#=${includedir}/byspamFunction.pl" >> ./installdir/install.log
   echo "  update byspamFunction.pl : OK"
 else
   echo "  update byspamFunction.pl : Failed"
@@ -274,6 +278,19 @@ else
   echo "  update byspamUninstall utility : Failed"
   rm -rf ./installdir ./install
   exit 1
+fi
+
+if [ ! -f "${filterdir}/filter-ignore" ]; then
+  install-m644 filter/filter-ignore ${filterdir} > /dev/null 2>&1
+  CHK=$?
+
+  if [ "${CHK}" = 0 ]; then
+    echo "  add new filter (filter-ignore) : OK"
+  else
+    echo "  add new filter (filter-ignore) : Failed"
+    rm -rf ./installdir ./install
+    exit 1
+  fi
 fi
 
 install -m644 ./installdir/install.log ${confdir} > /dev/null 2>&1
@@ -296,7 +313,7 @@ if [ "${datadir}" != "" ]; then
 fi
 
 
-echo "completed upgrade"
+echo "Completed upgrade. Now you reconfig $confdir/byspam.conf !!"
 rm -rf ./installdir
 
 exit 0
