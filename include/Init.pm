@@ -1,7 +1,7 @@
 #
 # Byspam Initial functions
 #
-# $Id: Init.pm,v 1.1 2004-12-03 10:55:48 oops Exp $
+# $Id: Init.pm,v 1.2 2004-12-03 11:16:03 oops Exp $
 #
 
 package Byspam::Init;
@@ -30,7 +30,6 @@ my %_filter;
 
 $conf       = "$confdir/$conf";
 
-$_shmout = 1;
 sub new {
 	my $self = {};
 
