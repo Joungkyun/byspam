@@ -25,3 +25,14 @@ JBHsender|SNOOP Bpsh
 # virus attach file  filter
 name[\s]*=[\s]*"?[^.]+(\.[^.]+)*\.(pif|vbs|exe|scr|com)
 See the attached file for details
+
+# Worm/Bagle.U.2 Win32.HLLM.Beagle.based, W32/Bagle.U@MM
+name[\s]*=[\s]*"?game\.exe
+
+# Win32/Netsky.worm.18944.B
+name[\s]*=[\s]*"?www\..*\.com"?
+
+# Win32/Netsky.worm.22016.D
+name[\s]*=[\s]*"?(Important|Details|Notice|Bill|Textfile|Data|Document)\.zip"?
+
+=_NextPart_[^=]+=_NextPart_
