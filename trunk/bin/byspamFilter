@@ -1,162 +1,318 @@
 #!@PERLPATH@
-use Mail::Internet;
-use Mail::Header;
-use MIME::Base64;
-use MIME::QuotedPrint;
+use lib '@includedir@';
+my $conf = "@confdir@/byspam.conf";
 
-local $version;
-local $level;
-local $mail;
-local $allows;
-local $filterDir;
-local $includeDir;
-local @basics = ();
-local $body_spam = 0;
-local $verbose = 0;
+use strict;
 
-my @ctype = ();
-my @files = ();
-my @gets = ();
+use Byspam::Getopt;
+use Byspam::Common;
+use Byspam::Parse;
+use Byspam::Mail;
 
-my @mailText;
-my $mailText;
-my $mailCopy;
+# declaration global variable on configuration file
+use vars qw ($version  $level $allows $ignore $filterIframe $filterTag);
+use vars qw ($nobody $noheader $charset @basics $_filtered $debug $verbose);
+use vars qw ($binDir  $confdir $filterDir $includeDir $perlpath);
+
+# init global variables
+$version      = "";
+$level        = "root";
+$filterIframe = 0;
+$filterTag    = 1;
+$nobody       = 1;
+$noheader     = 1;
+
+# declaration variables
+
+# common variables
+my $cm;
+my $ps;
+my $o;
+my $ov;
+
+# option variable;
+my $opt      = "";
+my $_file    = "";
+
+# area variables
+my @gets     = ();
+my @ctype    = ();
+my @files    = ();
+my @mailText = ();
+
+my $newline  = "";
+my $mail;
 my $header;
 my $body;
-my $target;
-my $regex;
-my $spam;
-my $fil;
-my $regignore;
-my $ignoreallow = 0;
-my $newline = "";
 
-# get config file
-$conf = "@confdir@/byspam.conf";
-if ( -f "$conf" ) { do "$conf"; }
+# common filter variables
+my $_ftarget = "";
 
-# get sub function
-do "$includeDir/byspamFunction.pl";
+# check result variables
+my $spam     = 0;
+my $fil      = "";
+my $ispam    = 0;
+my $nospam   = 0;
 
-# print out help message
-printHelp($#ARGV,@ARGV);
+# get argument on shell
+my $_argc    = $#ARGV;
+my @_argv    = @ARGV;
+
+$verbose  = 0;
+$debug    = 0;
+
+# get configuration file
+if ( ! -f "$conf" ) {
+	print "\n";
+	print "    Configuration file missing.\n";
+	print "    Check \"$conf\" file\n";
+	print "\n";
+	exit 1;
+}
+
+require $conf;
+
+if ( ! $charset ) {
+	$charset = $ENV{"LANG"};
+	CHARSET: { 
+	    ( $charset =~ m/^ko/i ) and $charset = "EUC-KR", last CHARSET;
+	    ( $charset =~ m/^utf/i ) and $charset = "UTF-8", last CHARSET;
+	    $charset = "";
+	}
+}
+
+# create reference Common
+$cm = new Byspam::Common;
+
+# create reference Getopt
+$o = new Byspam::Getopt;
+$ov = $o->{_var};
+
+# match long option whit short option
+$ov->{longopt} = {
+	'destination' => 'd',
+	'pipe'        => 'p',
+	'verbose'     => 'v',
+	'help'        => 'h'
+};
+
+while ( 1 ) {
+	$opt = $o->getopt ("d:hvp", $_argc + 1, @_argv);
+	last if ( ! $opt );
+
+	SWITCH: {
+		( $opt eq "d" ) and do {
+			if ( ! $ov->{optarg} ) {
+				$cm->printHelp;
+			}
+			$_file = $ov->{optarg};
+			$debug   = 1;
+			$newline = "\n";
+			last SWITCH;
+		};
+		( $opt eq "p" ) and do {
+			$debug   = 1;
+			$newline = "\n";
+			last SWITCH;
+		};
+		( $opt eq "v" ) and do {
+			$verbose = 1;
+			$debug   = 1;
+			$newline = "\n";
+			last SWITCH;
+		};
+
+		$cm->printHelp;
+	}
+}
+
+$cm->printHelp if ( $ov->{getopt_err} or $ov->{optcno} );
 
 # get filtering data
-foreach (@basics) {
-  @gets = split(/:/,$_);
-  push @ctype, $gets[0];
-  push @files, $gets[1];
+foreach ( @basics ) {
+	@gets = split (/:/, $_);
+	push @ctype, $gets[0];
+	push @files, $gets[1];
 }
 
-# parse mail
-if ($#ARGV > 0 && $ARGV[0] eq "-d") {
-  if( -f "$ARGV[1]" ) {
-    @mailText = getContext($ARGV[1]);
-    $newline = "\n";
-    $verbose = 1;
-  } else {
-    print "Error: Can't search path of $ARGV[1]\n";
-    exit;
-  }
+# import original mail format
+if ( $_file ) {
+	if ( ! -f $_file ) {
+		printf "Error: Can't found %s\n", $_file;
+		exit 1;
+	}
+
+	@mailText = $cm->getContext_rr ($_file);
 } else {
-  if ( $ARGV[0] eq "-z" ) {
-    $newline = "\n";
-    $verbose = 1;
-  }
-  @mailText = <STDIN>;
+	@mailText = <STDIN>;
 }
 
-$mail = Mail::Internet->new(\@mailText);
-$header = getHeader($mail);
-$body = getBody($mail, 0);
+################################################################################
+# parsing mail
+################################################################################
 
-$regignore = filterText("$filterDir/$ignore");
+# original mail format parsing
+$mail = Byspam::Mail->new (\@mailText);
+$ps = new Byspam::Parse;
 
-if ( $body_spam != 1) {
-  # get size of array
-  my $filesSize = @basics;
+$spam = 1, $fil = "No Head", goto CHECKEND if ( $noheader && ! $mail->{_header} );
+$spam = 1, $fil = "No Body", goto CHECKEND if ( $nobody && ! $mail->{_body} );
 
-  # check filtering data
-  for($i=0;$i<$filesSize;$i++) {
-    if( ! -f "$filterDir/$files[$i]") { next Line; }
-    $regex = filterText("$filterDir/$files[$i]");
+# header parsing
+$header = $ps->getHeader ($mail->{_header});
 
-    if ($ctype[$i] eq "Body") {
-      if($body) { chomp($target = $body); }
-      # iframe tag check
-      if($filterIframe == 1) { $regex = "$regex|<iframe"; }
-    } elsif ($ctype[$i] eq "Extra") {
-      if($header) { chomp($target = $header); }
-    } else {
-      chomp($target = parseHeader($mail->get("$ctype[$i]:")));
-      if($ctype[$i] eq "From") {
-        $getReply = parseHeader($mail->get("Reply-To:"));
-        if($target && $getReply ne "null") { chomp($target .= " $getReply"); }
-      }
-      if ($target) { $target =~ s/[\s]/ /g; }
-    }
+# body parsing
+$body = $ps->getBody ($mail);
 
-    if( $regex && $target && $target =~ /$regex/i ) {
-      $spam = 1; $fil = $ctype[$i];
-      if ( $verbose ) { print "Check By $fil\n"; }
 
-      if ( $regignore && $target =~ /$regignore/i ) {
-        $ignoreallow = 1;
-        if ( $vewbose ) { print "$fil set No Ignore case\n"; }
-      }
-      goto CHKIGNORE;
-    }
+################################################################################
+# filter mail
+################################################################################
 
-    # no content check in body
-    if($ctype[$i] eq "Body" && $spam != 1 && $filterTag == 1) {
-      if (noContentCheck("$target") == 1) {
-        $spam = 1;
-        $fil = $ctype[$i];
+#
+# check EXTRA unparsing header and body
+#
 
-        if ( $verbose ) { print "Check By $fil\n"; }
-        goto CHKIGNORE;
-      }
-    }
-  }
-
-CHKIGNORE:
-  if ( $spam && ! $ignoreallow ) {
-    if ( $regignore && $body && $body =~ /$regignore/i ) {
-      $ignoreallow = 1;
-      if ( $verbose ) { print "Body set No Ignore case\n"; }
-    }
-    goto CHKALLOW;
-  }
-} else {
-  if ( $regignore && $body =~ /$regignore/i ) {
-    $ignoreallow = 1;
-    if ( $verbose ) { printf "Extra set No Ignore case\n"; }
-  }
-
-  $spam = 1;
-  $fil = "Extra";
+$_ftarget = $header . "\n\n" . $mail->{_body};
+if ( checkFilter ($_ftarget, "filter-extra") ) {
+    $spam     = 1;
+    $fil      = "Extra";
+    
+	printMessage ($fil, $_filtered);
+	$_ftarget = $header . "\n\n" . $body;
+    
+    goto CHECKALLOW;
 }
 
-CHKALLOW:
-if ($spam) {
-  # check of exception of mail filter
-  if( ! $ignoreallow && -f "$filterDir/$allows" ) {
-    $regex = filterText("$filterDir/$allows");
-    if ( $regex && $header =~ /$regex/i ) {
-      if ( $verbose ) { print "Ignore $fil on Header by Allows\n"; }
-      $spam = ""; $fil = "";
-    }
-    if ( $spam && $regex && $body =~ /$regex/i ) {
-      if ( $verbose ) { print "Ignore $fil on Body by Allows\n"; }
-      $spam = ""; $fil = "";
-    }
-  }
+#
+# check each part
+#
 
-  if($spam) {
-    if ( $verbose ) { printf "RESULT: "; }
-    print "$fil$newline";
-    exit(0);
-  }
+my $checkNo = @basics;
+my $i       = 0;
+my $_regs   = "";
+
+for ( $i=0; $i<$checkNo; $i++ ) {
+	next if ( ! -f "$filterDir/$files[$i]" );
+	$fil = $ctype[$i];
+	next if ( $fil eq "Extra" );
+
+	PART: {
+		( $fil eq "Body" ) and do {
+			if ( $filterTag && $cm->noContentCheck ($body) ) {
+				$spam = 1;
+				printMessage ($fil, $_filtered);
+				goto CHECKALLOW;
+			}
+
+			$_ftarget = $body;
+			$_regs = "|<ifrmae" if ( $filterIframe );
+			last PART;
+		};
+
+		$_ftarget = $ps->parseHeader ($mail->header ($fil));
+		$_ftarget .= $ps->parseHeader ($mail->header ("Reply-To")) if ($fil eq "From");
+		$_regs = "";
+	}
+
+	$_ftarget = $cm->trim ($_ftarget);
+	$spam = checkFilter ($_ftarget, $files[$i], $_regs);
+
+	if ( $spam ) {
+		printMessage ($fil, $_filtered);
+		goto CHECKALLOW;
+	}
 }
 
-exit(1);
+goto CHECKEND if ( ! $spam );
+
+CHECKALLOW:
+if ( $spam && $fil ) {
+	$nospam = checkFilter ($_ftarget, $allows);
+
+	if ( $nospam ) {
+		printMessage ($fil, $_filtered, "Allow");
+		goto CHECKIGNORE;
+	}
+
+	goto CHECKEND;
+}
+
+CHECKIGNORE:
+if ( $spam && $nospam && $fil ) {
+	$ispam = checkFilter ($_ftarget, $ignore);
+
+	if ( $ispam ) {
+		printMessage ($fil, $_filtered, "Ignore");
+		$nospam = 0;
+	}
+}
+
+#
+# Print Result
+#
+# spam = 1 is spam
+# nodpam = 1 not spam
+# ispam = 1 ignore nospam
+#
+# if not spam, no message and return code 0
+# if spam, print spam, print part message and return code 405
+#
+#
+CHECKEND:
+if ( $spam && ! $nospam ) {
+	print "RESULT: " if ( $debug );
+	printf "%s%s", $fil, $newline;
+	exit 405;
+}
+
+
+#
+# Byspam
+#
+
+sub checkFilter {
+	my ($_text, $_filter, $_addreg ) = @_;
+	my $_reg;
+	my $_f;
+
+	$_filtered = "";
+
+	$_f = "$filterDir/$_filter";
+	$_reg = $cm->filterText ( $_f );
+	$_reg .= $_addreg if ( $_addreg );
+		
+	if ( $_reg ) {
+		if ( $_text =~ /($_reg)/i ) {
+			$_filtered = $1;
+			return 1;
+		}
+	}
+
+	return 0;
+}
+
+sub printMessage {
+	my ( $_p, $_f, $_m ) = @_;
+
+	if ( $main::debug ) {
+		if ( $_m ) {
+			printf "Ignore %s filtered by %s", $fil, $_m;
+		} else {
+			printf "Checked By %s", $fil;
+		}
+		printf " => \"$_f\"" if ( $main::verbose );
+		printf "\n";
+	}
+}
+
+exit 0;
+
+#
+# Local variables:
+# tab-width: 4
+# c-basic-offset: 4
+# End:
+# vim600: noet sw=4 ts=4 fdm=marker
+# vim<600: noet sw=4 ts=4
+#
