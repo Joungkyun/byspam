@@ -77,7 +77,7 @@ if ( $body_spam != 1) {
   my $filesSize = @basics;
 
   # check filtering data
-  Line: for($i=0;$i<$filesSize;$i++) {
+  for($i=0;$i<$filesSize;$i++) {
     if( ! -f "$filterDir/$files[$i]") { next Line; }
     $regex = filterText("$filterDir/$files[$i]");
 
@@ -104,7 +104,7 @@ if ( $body_spam != 1) {
         $ignoreallow = 1;
         if ( $vewbose ) { print "$fil set No Ignore case\n"; }
       }
-      last Line;
+      goto CHKIGNORE;
     }
 
     # no content check in body
@@ -114,9 +114,18 @@ if ( $body_spam != 1) {
         $fil = $ctype[$i];
 
         if ( $verbose ) { print "Check By $fil\n"; }
-        last Line;
+        goto CHKIGNORE;
       }
     }
+  }
+
+CHKIGNORE:
+  if ( $spam && ! $ignoreallow ) {
+    if ( $regignore && $body && $body =~ /$regignore/i ) {
+      $ignoreallow = 1;
+      if ( $verbose ) { print "Body set No Ignore case\n"; }
+    }
+    goto CHKALLOW;
   }
 } else {
   if ( $regignore && $body =~ /$regignore/i ) {
@@ -128,6 +137,7 @@ if ( $body_spam != 1) {
   $fil = "Extra";
 }
 
+CHKALLOW:
 if ($spam) {
   # check of exception of mail filter
   if( ! $ignoreallow && -f "$filterDir/$allows" ) {
