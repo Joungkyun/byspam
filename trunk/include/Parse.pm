@@ -1,7 +1,7 @@
 #
 # Byspam Mail parsing library
 #
-# $Id: Parse.pm,v 1.4 2004-11-30 14:15:54 oops Exp $
+# $Id: Parse.pm,v 1.5 2004-11-30 16:49:03 oops Exp $
 #
 
 package Byspam::Parse;
@@ -101,22 +101,22 @@ sub parseHeader {
 
 	my $head = $_[0];
 	my $headReturn;
+	my %charset;
 
 	if ( $head && $head =~ m/=\?[^?]*\?[BQ]\?[^?]+\?=/i ) {
 		my @heads = ();
 		my @lines =();
 		my $line;
 		my $encode;
-		my %charset;
 
 		$head =~ s/(=\?[^?]*\?[BQ]\?[^?]+\?=)/\n$1\n/ig;
 		@heads = split (/\r?\n/, $head);
 
-		LINE: foreach $line ( @heads ) {
+		foreach $line ( @heads ) {
 			if ( $line !~ /=\?[^?]*\?([BQ])\?/i ) {
-				next LINE if ( $line =~ m/^[\s]*$/i );
+				next if ( $line =~ m/^[\s]*$/i );
 			} else {
-				$line =~ s/[\s]*=\?[^?]*\?([BQ])\?([^?]+)\?=[\s]*/$1:$2:$3/ig;
+				$line =~ s/[\s]*=\?([^?]*)\?([BQ])\?([^?]+)\?=[\s]*/$1:$2:$3/ig;
 				@lines = split (/:/, $line);
 
 				# utf-8 problem

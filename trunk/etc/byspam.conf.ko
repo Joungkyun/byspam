@@ -1,7 +1,7 @@
 # Byspam - PROCMAIL 을 이용한 메일 필터 설정 파일
 # 필터파일: @confdir@/Filter
 # 김정균 <http://www.oops.org>
-# $Id: byspam.conf.ko,v 1.1 2004-11-27 18:54:53 oops Exp $
+# $Id: byspam.conf.ko,v 1.2 2004-11-30 16:49:03 oops Exp $
 #
 $version         = "@byversion@";
 
@@ -28,6 +28,10 @@ $confdir         = "@confdir@";
 $filterDir       = "@filterdir@";
 $includeDir      = "@includedir@";
 $perlpath        = "@PERLPATH@";
+
+# INBOX 가 있는 경로
+#
+$inbox           = "/var/spool/mail";
 
 # 메일 본문에 iframe 태그가 존재할 경우 스팸으로 처리 합니다.
 # 1 => 필터링을 함

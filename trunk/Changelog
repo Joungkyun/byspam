@@ -1,9 +1,21 @@
 Changelog document
 
-$Id: Changelog,v 1.32 2004-11-29 12:49:41 oops Exp $
+$Id: Changelog,v 1.33 2004-11-30 16:49:03 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.0
+  - 2004.12.01
+    by JoungKyun Kim :
+       - added delete article function on byspamTrash
+       - added recovery article function on byspamTrash
+
+  - 2004.11.30
+    by JoungKyun Kim :
+       - fixed miss alternative parsing on Parse.pm
+       - merged byspamTrash version at BySpam numbering
+       - rewrite byspamTrash with pure perl code
+       - removed byspamTrashFile
+
   - 2004.11.29
     by JoungKyun Kim :
        - redirect stderr error messages

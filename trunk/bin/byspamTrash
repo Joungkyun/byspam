@@ -1,7 +1,7 @@
 #!@PERLPATH@
 #
 # By SPAM trash viewer front end
-# $Id: byspamTrash,v 1.13 2004-11-29 13:18:17 oops Exp $
+# $Id: byspamTrash,v 1.14 2004-11-30 16:49:03 oops Exp $
 #
 
 use lib '@includedir@';
@@ -18,7 +18,7 @@ use Byspam::Trash;
 # declaration global variable on configuration file
 use vars qw ($version  $level $allows $ignore $filterIframe $filterTag $trashPeriod);
 use vars qw ($nobody $noheader $charset @basics $_filtered $debug $verbose);
-use vars qw ($binDir  $confdir $filterDir $includeDir $perlpath);
+use vars qw ($binDir  $confdir $filterDir $includeDir $perlpath $inbox);
 
 # reference variable
 my $cm;
@@ -27,19 +27,25 @@ my $ov;
 my $ts;
 
 # options variable
-use vars qw ( $_path );
+use vars qw ( $_hdebug $_bdebug $_path $_user $_root $_direct );
 my $opt;
 my %_opt;
-my $_user  = "";
 my $_file  = "";
 my $_upath = "";
 my $_arg   = "";
 
-$_path  = "";
+$_path     = "";
+$_user     = "";
+$_root     = 1;
+$_direct   = 0;
+
+# body & header parsing debug mode
+$_hdebug   = 0;
+$_bdebug   = 0;
 
 # get argument on shell
-my $_argc    = $#ARGV;
-my @_argv    = @ARGV;
+my $_argc  = $#ARGV;
+my @_argv  = @ARGV;
 
 
 # usage option
@@ -122,17 +128,22 @@ while ( 1 ) {
 	}
 }
 
-Help () if ( $ov->{getopt_err} or $ov->{optcno} != 1 );
+Help () if ( $ov->{getopt_err} );
 $_arg = $ov->{optcmd}->[0];
 
 if ( -f "$_arg" && ! -d "$_arg" ) {
 	$_file = $_arg;
 	$_path = "";
+
+	$_root = 0 if ( $ENV{"USER"} ne "root" );
+	$_direct = 1;
 } else {
 	$_user = $ENV{"USER"};
 
 	if ( $_user eq "root" ) {
 		$_user = ( ! $_arg ) ? "root" : $_arg;
+	} else {
+		$_root = 0;
 	}
 
 	$_upath = $ts->getHomePath ($_user);
@@ -169,7 +180,7 @@ while ( 1 ) {
 	} else {
 		# direct view specify file
 		if ( ! $_path && -f $_file && ! -d $_file ) {
-			$ts->printTrash ($_path, $_file, $_sublen, $_from);
+			$ts->printTrash ($_path, $_file, $_user, $_sublen, $_from);
 			print "\n";
 			exit 0;
 		}
