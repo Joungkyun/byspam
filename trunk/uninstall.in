@@ -1,9 +1,8 @@
 #!/bin/sh
-# $Id: uninstall.in,v 1.7 2004-11-27 19:06:48 oops Exp $
+# $Id: uninstall.in,v 1.8 2004-11-30 19:24:38 oops Exp $
 
 VERSION=@byversion@
 
-level="@level@"
 bindir="@bindir@"
 confdir="@confdir@"
 filterdir="@filterdir@"

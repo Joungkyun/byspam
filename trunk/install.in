@@ -1,11 +1,11 @@
 #!/bin/sh
-# $Id: install.in,v 1.9 2004-11-27 19:06:48 oops Exp $
+# $Id: install.in,v 1.10 2004-11-30 19:24:38 oops Exp $
 
 # include byspam version
 . VERSION
 
 pwd=$(pwd)
-level=@level@
+level=$(whoami)
 perlpath=@PERLPATH@
 installdir=@INSTALLDIR@
 prefix=@prefix@
@@ -47,7 +47,7 @@ do
 
   case "${i}" in
     bindir)
-                list="byspamFilter plain.pl regexChk.pl byspamTrash byspamTrashFile"
+                list="byspamFilter byspamPlain byspamRegexChk byspamTrash"
                 inst=${installdir}
                 perm=755
                 ;;
@@ -75,25 +75,12 @@ do
   done
 done
 
-install -m 644 include/byspamFunction.pl ${DESTDIR}${includedir}/byspamFunction.pl
-echo "#=${includedir}/byspamFunction.pl" >> ${installdir}/install.log
-echo "install .... ${DESTDIR}${includedir}/byspamFunction.pl"
-install -m 644 include/Common.pm ${DESTDIR}${includedir}/Byspam/Common.pm
-echo "#=${includedir}/Byspam/Common.pm" >> ${installdir}/install.log
-echo "install .... ${DESTDIR}${includedir}/Byspam/Common.pm"
-install -m 644 include/Encode.pm ${DESTDIR}${includedir}/Byspam/Encode.pm
-echo "#=${includedir}/Byspam/Encode.pm" >> ${installdir}/install.log
-echo "install .... ${DESTDIR}${includedir}/Byspam/Encode.pm"
-install -m 644 include/Getopt.pm ${DESTDIR}${includedir}/Byspam/Getopt.pm
-echo "#=${includedir}/Byspam/Getopt.pm" >> ${installdir}/install.log
-echo "install .... ${DESTDIR}${includedir}/Byspam/Getopt.pm"
-install -m 644 include/Mail.pm ${DESTDIR}${includedir}/Byspam/Mail.pm
-echo "#=${includedir}/Byspam/Mail.pm" >> ${installdir}/install.log
-echo "install .... ${DESTDIR}${includedir}/Byspam/Mail.pm"
-install -m 644 include/Parse.pm ${DESTDIR}${includedir}/Byspam/Parse.pm
-echo "#=${includedir}/Byspam/Parse.pm" >> ${installdir}/install.log
-echo "install .... ${DESTDIR}${includedir}/Byspam/Parse.pm"
-
+for i in Common.pm Encode.pm Getopt.pm Mail.pm Parse.pm Trash.pm
+do
+  install -m 644 include/${i} ${DESTDIR}${includedir}/Byspam/${i}
+  echo "#=${includedir}/Byspam/${i}" >> ${installdir}/install.log
+  echo "install .... ${DESTDIR}${includedir}/Byspam/${i}"
+done
 
 
 if [ -d "/etc/cron.daily" ]; then
@@ -124,7 +111,7 @@ if [ "${package}" = "" ]; then
         echo "INCLUDERC=${confdir}/filter.rc" >> ${HOME}/.procmailrc
         echo "Complete registration of procmailrc : OK"
       else
-        echo "^[[1;31mWarnning^[[7;0m : filter.rc is already registed."
+        echo "[1;31mWarnning[7;0m : filter.rc is already registed."
         echo "After check that is \"INCLUDERC=${confdir}/filter.rc\""
         echo "in ${procpath},"
         echo "if this path is uncollected, modified ${procpath} with this path."

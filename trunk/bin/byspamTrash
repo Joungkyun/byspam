@@ -1,7 +1,7 @@
 #!@PERLPATH@
 #
 # By SPAM trash viewer front end
-# $Id: byspamTrash,v 1.14 2004-11-30 16:49:03 oops Exp $
+# $Id: byspamTrash,v 1.15 2004-11-30 19:24:38 oops Exp $
 #
 
 use lib '@includedir@';
@@ -16,7 +16,7 @@ use Byspam::Common;
 use Byspam::Trash;
 
 # declaration global variable on configuration file
-use vars qw ($version  $level $allows $ignore $filterIframe $filterTag $trashPeriod);
+use vars qw ($version  $allows $ignore $filterIframe $filterTag $trashPeriod);
 use vars qw ($nobody $noheader $charset @basics $_filtered $debug $verbose);
 use vars qw ($binDir  $confdir $filterDir $includeDir $perlpath $inbox);
 

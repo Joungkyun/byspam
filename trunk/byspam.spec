@@ -1,7 +1,7 @@
 Summary: The By SPAM is filtering tool for Anti Spam
 Summary(ko): 스팸방지를 위한 필터링 툴
 Name: byspam
-Version: 0.2.4
+Version: 1.0.0
 Release: 1
 Copyright: GPL
 Group: System Environment/Daemons
@@ -28,8 +28,7 @@ By SPAM 은 smtp 데몬과 procmail 과 연동하여 스팸메일을 필터링 하기위한 도구
 %prep
 %setup -q
 
-./configure --level=root \
-	--prefix=/usr \
+./configure --prefix=/usr \
 	--bindir=/usr/bin \
 	--confdir=/etc/byspam \
 	--filterdir=/etc/byspam/Filter \
@@ -93,15 +92,17 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) /etc/cron.daily/byspam  
 %attr(755,root,root) /usr/bin/byspamFilter   
 %attr(755,root,root) /usr/bin/byspamTrash    
-%attr(755,root,root) /usr/bin/byspamTrashFile
-%attr(755,root,root) /usr/bin/plain.pl
-%attr(755,root,root) /usr/bin/regexChk.pl    
+%attr(755,root,root) /usr/bin/byspamPlain
+%attr(755,root,root) /usr/bin/byspamRegexChk
 %dir /usr/include/byspam
-/usr/include/byspam/byspamFunction.pl    
+/usr/include/byspam/Byspam/*.pm
 
 %doc Changelog ENVIRONMENT LICENSE README
 
 %changelog
+* Wed Dec 01 2004 JoungKyun Kim <http://www.oopw.org> 1.0.0-1
+- update 1.0.0
+
 * Tue Apr 06 2004 JoungKyun Kim <http://www.oops.org> 0.2.3-1
 - update 0.2.4
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: configure,v 1.9 2004-11-27 19:06:48 oops Exp $
+# $Id: configure,v 1.10 2004-11-30 19:24:38 oops Exp $
 #
 export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin/:/usr/local/bin:/usr/local/sbin
 
@@ -9,7 +9,6 @@ export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin/:/usr/local/bin:/usr/local/sbin
 
 byversion=${BYVERSION}
 PWD=$(pwd)
-HUMAN=$(whoami)
 INSTALLDIR=${PWD}/installdir
 
 CHK=0
@@ -18,7 +17,7 @@ CHK=0
 while [ "$1" != "" ]
 do
   opt=$(echo $1 | sed -e 's/-//g')
-  chk=$(echo $1 | egrep 'prefix|bindir|confdir|filterdir|includedir|level|package')
+  chk=$(echo $1 | egrep 'prefix|bindir|confdir|filterdir|includedir|package')
   helps=$(echo $1 | egrep '\-h')
 
   if [ -n "${helps}" ]; then
@@ -38,8 +37,6 @@ if [ -n "${helpmsg}" ]; then
     echo
     echo "사용법: configure [옵션]=[경로]"
     echo "옵션  :"
-    echo "  --level=LEVEL     By SAPM 을 운영하는 권한 지정. root/account 중 지정"
-    echo "                    [default: root]"
     echo "  --prefix=PREFIX   나머지 옵션들이 지정되지 않았을 경우 기본값"
     echo "                    [default: /usr/local/byspam]"
     echo "  --bindir=DIR      실행 스크립트가 위치할 디렉토리"
@@ -61,8 +58,6 @@ if [ -n "${helpmsg}" ]; then
     echo
     echo "Usage  : configure [option]=[vlaue]"
     echo "Options:"
-    echo "  --level=LEVEL     root or account. root is systemwide and account is for normal user."
-    echo "                    [default: root]"
     echo "  --prefix=PREFIX   install architecture-independent files in PREFIX"
     echo "                    [default: /usr/local/byspam]"
     echo "  --bindir=DIR      user executables in DIR"
@@ -85,7 +80,7 @@ fi
 
 echo "By SAPM ${BYVERSION} Configure"
 echo "Script By JoungKyun Kim <http://www.oops.org>"
-echo "Copyright 2002 by BPL"
+echo "Copyright 2002-2004 by BPL"
 echo
 
 echo "STEP 1. Ready Installation"
@@ -110,60 +105,16 @@ echo
 echo "STEP 2. Option Check"
 echo "----------------------------------------------------------------------"
 
-# 기본 옵션 설정
-if [ "${package}" = "1" ]; then
-  level=root
-elif [ "${package}" = "2" ]; then
-  level=${level}
-else
-  if [ "${level}" != "root" ]  && [ "${level}" != "account" ]; then
-    echo "  You are now installing as ${HUMAN}."
-    echo "  If you want to install as a normal user(not root),"
-    echo "  input account and if you want a systemwide operation, input ENTER"
-    echo
-    echo -n "  Your choice ? [ENTER/account] : "
-    read lev
-
-    case "${lev}" in
-      account) level=account ;;
-      *) level=root ;;
-    esac
-  fi
-fi
-
-if [ "${HUMAN}" != "root" ] && [ "${level}" = "root" ]; then
-  echo
-  echo "Error: Can't install ${level} level with ${HUMAN} user"
-  echo
-  rm -rf ${INSTALLDIR}
-  exit 1
-fi
-
-echo
-echo "  Operation Level : $level"
-echo
-
-if [ "${level}" = "root" ]; then
-  [ -z "${prefix}" ] && prefix=/usr/local/byspam
-  [ -z "${bindir}" ] && bindir=${prefix}/bin
-  [ -z "${confdir}" ] && confdir=${prefix}/etc
-  [ -z "${filterdir}" ]  && filterdir=${confdir}/Filter
-  [ -z "${includedir}" ] && includedir=${prefix}/include
-  [ -z "${perlpath}" ] && perlpath=/usr/bin/perl
-  [ -z "${procpath}" ] && procpath=/etc/procmailrc
-else
-  prefix=${HOME}/byspam
-  bindir=${prefix}/bin
-  confdir=${prefix}/conf
-  filterdir=${confdir}/Filter
-  includedir=${prefix}/include
-  [ -z "${perlpath}" ] && perlpath=/usr/bin/perl
-  [ -z "${procpath}" ] && procpath=${HOME}/.procmailrc
-fi
+[ -z "${prefix}" ] && prefix=/usr/local/byspam
+[ -z "${bindir}" ] && bindir=${prefix}/bin
+[ -z "${confdir}" ] && confdir=${prefix}/etc
+[ -z "${filterdir}" ]  && filterdir=${confdir}/Filter
+[ -z "${includedir}" ] && includedir=${prefix}/include
+[ -z "${perlpath}" ] && perlpath=/usr/bin/perl
+[ -z "${procpath}" ] && procpath=/etc/procmailrc
 
 echo "  INSATALLATION PATH"
 echo
-echo "  LEVEL      : ${level}"
 echo "  PREFIX     : ${prefix}"
 echo "  BINDIR     : ${bindir}"
 echo "  CONFDIR    : ${confdir}"
@@ -174,20 +125,15 @@ echo "  PROCMAILRC : ${procpath}"
 echo
 
 if [ -z "${package}" ]; then
-  if [ "${level}" = "root" ]; then
-    echo -n "  Is right giving your path? [y/n] : "
-    read userpath
+  echo -n "  Is right giving your path? [y/n] : "
+  read userpath
 
-    case "${userpath}" in
-      [nN]*)
-        echo
-        exit 1
-        ;;
-    esac
-  else
-    echo "  path of account level is : ${HOME}/byspam"
-    echo
-  fi
+  case "${userpath}" in
+    [nN]*)
+      echo
+      exit 1
+      ;;
+  esac
 fi
 
 echo
@@ -196,14 +142,14 @@ echo "STEP 3. Perl Check"
 echo "----------------------------------------------------------------------"
 
 PERLCHK=$(which perl 2> /dev/null)
-echo "This program requires perl, MailTools module and MIME-Base64 module"
+echo "This program requires perl and MIME-Base64 module"
 echo
 if [ -n "${perlpath}"  ]; then
   PERLPATH=${perlpath}
   if [ -f "${PERLPATH}" ]; then
-    echo "  PERL installation check : OK"
+    echo "  PERL installation check    : OK"
   else
-    echo "  PERL installation check : Failed"
+    echo "  PERL installation check    : Failed"
     echo "  Error: Can't find ${PERLPATH}. Return Again"
     echo
     exit 1
@@ -216,36 +162,25 @@ else
     [ -z "${PERLPATH}" ] && PERLPATH=${PERLCHK}
 
     if [ -f "${PERLPATH}" ]; then
-      echo "  PERL installation check : OK"
+      echo "  PERL installation check    : OK"
       break
     else
-      echo "  PERL installation check : Failed"
+      echo "  PERL installation check    : Failed"
       echo "  Error: Can't find ${PERLPATH}. Return Again"
       echo
     fi
   done
 fi
 
-for i in byspamFilter plain.pl regexChk.pl byspamTrashFile
+for i in byspamFilter byspamTrash plain.pl regexChk.pl
 do
   ${PERLPATH} -p -e "s!\@PERLPATH\@!${PERLPATH}!g" bin/${i} > ${INSTALLDIR}/${i}
   chmod 755 ${INSTALLDIR}/${i}
 done
 
-MAILMODCHK=0
 MIMEMODCHK=0
-${PERLPATH} -e "use Mail::Internet;" > /dev/null 2>&1
-MAILMODCHK=$?
 ${PERLPATH} -e "use MIME::Base64;" > /dev/null 2>&1
 MIMEMODCHK=$?
-
-if [ "${MAILMODCHK}" = "0" ]; then
-  echo "  checked MAIL-Tools module : OK"
-else
-  echo "  checked MAIL-Tools module : FAILED"
-  echo "  See also ENVIRONMENT document"
-  exit 1
-fi
 
 if [ "${MIMEMODCHK}" = "0" ]; then
   echo "  checked MIME-BASE64 module : OK"
@@ -263,7 +198,7 @@ echo
 echo "STEP 4. Configure Script of By SPAM"
 echo "----------------------------------------------------------------------"
 
-for i in byspam.cron byspamFilter byspamTrashFile plain.pl
+for i in byspam.cron byspamFilter byspamTrash plain.pl
 do
   if [ ${i} = "byspam.cron" ]; then
     ${PERLPATH} -p -e "s!\@confdir\@!${confdir}!g" ./bin/${i} > ${INSTALLDIR}/${i}
@@ -285,17 +220,8 @@ do
   fi
 done
 
-${PERLPATH} -p -e "s!\@bindir\@!${bindir}!g" ./bin/byspamTrash > ${INSTALLDIR}/byspamTrash
-CHK=$?
-
-if [ "${CHK}" = 0 ]; then
-  chmod 755 ${INSTALLDIR}/byspamTrash
-  echo "  configred .. byspamTrash"
-else
-  rm -rf ${INSTALLDIR}
-  echo "  Error: removed install directory"
-  exit 1
-fi
+mv -f ${INSTALLDIR}/plain.pl ${INSTALLDIR}/byspamPlain
+mv -f ${INSTALLDIR}/regexChk.pl ${INSTALLDIR}/byspamRegexChk
 
 ${PERLPATH} -p -e "s!\@bindir\@!${bindir}!g" ./etc/filter.rc > ${INSTALLDIR}/filter.rc
 CHK=$?
@@ -314,7 +240,7 @@ do
   eval tostr='$'${i}
 
   if [ "${i}" = "level" ]; then
-    ${PERLPATH} -p -e "s!\@${i}\@!${tostr}!g" ./etc/byspam.conf > ${INSTALLDIR}/byspam.conf
+    cp -af ./etc/byspam.conf ${INSTALLDIR}/byspam.conf
     CHK=$?
   else
     ${PERLPATH} -p -i -e "s!\@${i}\@!${tostr}!g" ${INSTALLDIR}/byspam.conf
@@ -340,7 +266,7 @@ echo "----------------------------------------------------------------------"
 echo
 echo
 
-conv="prefix bindir confdir filterdir includedir INSTALLDIR PERLPATH level procpath package"
+conv="prefix bindir confdir filterdir includedir INSTALLDIR PERLPATH procpath package"
 
 for i in ${conv}
 do
@@ -354,17 +280,18 @@ do
   ${PERLPATH} -p -i -e "s!\@${i}\@!${chg}!g" ${catfile}
   [ "$CHK" = 0 ] && CHK=$?
 
+  printf "  create %10s data in install file   : " "${i}"
   if [ "${CHK}" = 0 ]; then
-    echo "  create ${i} data in install file : OK"
+    echo "OK"
   else
-    echo "  create ${i} data in install file : Failed"
+    echo "Failed"
     rm -rf ${INSTALLDIR}
     exit 1
   fi
 done
 
 
-conv="bindir confdir filterdir includedir procpath level byversion PERLPATH"
+conv="bindir confdir filterdir includedir procpath byversion PERLPATH"
 
 for i in ${conv}
 do
@@ -379,10 +306,11 @@ do
   ${PERLPATH} -p -i -e "s!\@${i}\@!${chg}!g" ${catfile}
   [ "$CHK" = 0 ] && CHK=$?
 
+  printf "  create %10s data in uninstall file : " "${i}"
   if [ "${CHK}" = 0 ]; then
-    echo "  create ${i} data in uninstall file : OK"
+    echo "OK"
   else
-    echo "  create ${i} data in uninstall file : Failed"
+    echo "Failed"
     rm -f /tmp/byspam-uninstallfile
     exit 1
   fi
@@ -390,8 +318,6 @@ done
 
 echo "# Never touch or remove this file!!!" > ${INSTALLDIR}/install.log
 CHK=$?
-echo "level=${level}" >> ${INSTALLDIR}/install.log
-[ "${CHK}" = 0 ] && CHK=$?
 echo "perlpath=${PERLPATH}" >> ${INSTALLDIR}/install.log
 [ "${CHK}" = 0 ] && CHK=$?
 echo "procpath=${procpath}" >> ${INSTALLDIR}/install.log
