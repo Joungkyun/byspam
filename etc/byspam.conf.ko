@@ -1,7 +1,7 @@
 # Byspam - PROCMAIL 을 이용한 메일 필터 설정 파일
 # 필터파일: @confdir@/Filter
 # 김정균 <http://www.oops.org>
-# $Id: byspam.conf.ko,v 1.4 2004-12-03 11:21:32 oops Exp $
+# $Id: byspam.conf.ko,v 1.5 2004-12-06 13:39:22 oops Exp $
 #
 version         = @byversion@
 
@@ -23,6 +23,8 @@ includeDir      = @includedir@
 perlpath        = @PERLPATH@
 
 # INBOX 가 있는 경로
+# 이 옵션은 byspamTrash 에서 메일을 복구할 때 사용이 되어진다. 보통 메일
+# 의 inbox 는 /var/spool/mail/$USER 로 되어있다 (sendmail 의 경우)
 #
 inbox           = /var/spool/mail
 
