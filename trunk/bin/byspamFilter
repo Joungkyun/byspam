@@ -4,7 +4,7 @@
 # This package code follows BPL License
 # JoungKyun Kim <http://www.oops.org>
 #
-# $Id: byspamFilter,v 1.14 2004-11-27 19:06:48 oops Exp $
+# $Id: byspamFilter,v 1.15 2004-11-28 08:43:55 oops Exp $
 #
 use lib '@includedir@';
 my $conf = "@confdir@/byspam.conf";
@@ -17,7 +17,7 @@ use Byspam::Parse;
 use Byspam::Mail;
 
 # declaration global variable on configuration file
-use vars qw ($version  $level $allows $ignore $filterIframe $filterTag);
+use vars qw ($version  $level $allows $ignore $filterIframe $filterTag $trashPeriod);
 use vars qw ($nobody $noheader $charset @basics $_filtered $debug $verbose);
 use vars qw ($binDir  $confdir $filterDir $includeDir $perlpath);
 
