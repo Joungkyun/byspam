@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for pkgserv
 #
-# $Id: configure.ac,v 1.2 2004-12-06 08:48:17 oops Exp $
+# $Id: configure.ac,v 1.3 2005-02-01 13:34:16 oops Exp $
 
 #
 AC_PREREQ(2.53)
@@ -10,7 +10,7 @@ AC_SUBST(filterdir)
 AC_SUBST(perlpath)
 AC_SUBST(procpath)
 
-AC_INIT([byspam], [1.0.0], [http://devel.oops.org])
+AC_INIT([byspam], [1.0.1], [http://devel.oops.org])
 AC_CONFIG_SRCDIR([README])
 AC_CONFIG_HEADERS(config.h)
 AC_PREFIX_DEFAULT([/usr/local/byspam])
