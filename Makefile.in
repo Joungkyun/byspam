@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.4 2004-12-06 09:11:27 oops Exp $
+# $Id: Makefile.in,v 1.5 2004-12-06 17:58:15 oops Exp $
 
 PROG            = @PACKAGE_NAME@
 VERSION         = @PACKAGE_VERSION@
@@ -67,6 +67,7 @@ install:
 	$(MKDIR) $(DESTDIR)$(sysconfdir)
 	$(MKDIR) $(DESTDIR)$(filterdir)
 	$(MKDIR) $(DESTDIR)$(includedir)/Byspam
+	$(MKDIR) $(DESTDIR)/etc/cron.d
 
 	echo "# Don't touch follow lines. This is uninstall information!!" >> $(installlog)
 
