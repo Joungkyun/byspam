@@ -11,7 +11,7 @@ if [ "${USERPRIV}" = "root" ]; then
   fi
   USEROPT="-u $1"
 fi
-USERPATH=$(cat /etc/passwd | grep "^${USERPRIV}" | awk -F ":" '{print $6}')
+USERPATH=$(cat /etc/passwd | grep "^${USERPRIV}:" | awk -F ":" '{print $6}')
 USERPATH=$(echo ${USERPATH} | sed 's/\/$//g')
 TRASHPATH="${USERPATH}/byspam"
 
