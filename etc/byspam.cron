@@ -4,4 +4,4 @@
 # Minutes Hour Date Month Week User Command
 
 # delete trash mail per $trashPeroid on @confdir@/byspam.conf
-01 00 01 * * root @bindir@/byspamTrashMgr &> /dev/null
+01 00 * * * root @bindir@/byspamTrashMgr &> /dev/null
