@@ -2,7 +2,12 @@ Changelog document
 
 Warn: date format is Y.m.d
 
-* v0.1.5
+* v0.2.0
+  - 2002.06.27
+    by JoungKyun Kim : changed save method to daily from monthly
+                       devieded save file per each user account
+                       added delete mode on byspamTrash
+
   - 2002.06.26
     by JoungKyun Kim : added check of body header with filter-extra
 

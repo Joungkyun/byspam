@@ -1,7 +1,7 @@
 #!/bin/sh
 export PATH=$PATH:/bin:/sbin:/usr/bin:/usr/sbin/:/usr/local/bin:/usr/local/sbin
 
-BYVERSION=0.1.4
+BYVERSION=0.2.0
 PWD=$(pwd)
 HUMAN=$(whoami)
 INSTALLDIR=${PWD}/installdir
@@ -12,7 +12,7 @@ CHK=0
 while [ "$1" != "" ]
 do
   opt=$(echo $1 | sed -e 's/-//g')
-  chk=$(echo $1 | egrep 'prefix|bindir|confdir|filterdir|includedir|datadir|level|package')
+  chk=$(echo $1 | egrep 'prefix|bindir|confdir|filterdir|includedir|level|package')
   helps=$(echo $1 | egrep '\-h')
 
   if [ -n "${helps}" ]; then
@@ -40,8 +40,6 @@ if [ -n "${helpmsg}" ]; then
     echo "                    [default: \${prefix}/bin]"
     echo "  --confdir=DIR     간단한 옵션 설정 파일이 위치할 디렉토리"
     echo "                    [default: \${prefix}/conf]"
-    echo "  --datadir=DIR     필터링된 메일을 저장할 경우의 데이타 디렉토리"
-    echo "                    [default: \${prefix}/data]"
     echo "  --filterdir=DIR   필터링 설정 파일이 위치할 디렉토리"
     echo "                    [default: \${confdir}/Filter]"
     echo "  --includedir=DIR  필터링 스크립트에서 사용하는 함수가 들어갈 디렉토리"
@@ -65,8 +63,6 @@ if [ -n "${helpmsg}" ]; then
     echo "                    [default: \${prefix}/bin]"
     echo "  --confdir=DIR     config file in DIR"
     echo "                    [default: \${prefix}/conf]"
-    echo "  --datadir=DIR     filtered mail in DIR"
-    echo "                    [default: \${prefix}/data]"
     echo "  --filterdir=DIR   filtering rule config file in DIR"
     echo "                    [default: \${confdir}/Filter]"
     echo "  --includedir=DIR  filtering function files in DIR"
@@ -140,7 +136,6 @@ echo
 if [ "${level}" = "root" ]; then
   [ -z "${prefix}" ] && prefix=/usr/local/byspam
   [ -z "${bindir}" ] && bindir=${prefix}/bin
-  [ -z "${datadir}" ] && datadir=${prefix}/data
   [ -z "${confdir}" ] && confdir=${prefix}/etc
   [ -z "${filterdir}" ]  && filterdir=${confdir}/Filter
   [ -z "${includedir}" ] && includedir=${prefix}/include
@@ -150,7 +145,6 @@ else
   prefix=${HOME}/byspam
   bindir=${prefix}/bin
   confdir=${prefix}/conf
-  datadir=${prefix}/data
   filterdir=${confdir}/Filter
   includedir=${prefix}/include
   [ -z "${perlpath}" ] && perlpath=/usr/bin/perl
@@ -163,7 +157,6 @@ echo "  LEVEL      : ${level}"
 echo "  PREFIX     : ${prefix}"
 echo "  BINDIR     : ${bindir}"
 echo "  CONFDIR    : ${confdir}"
-echo "  DATADIR    : ${datadir}"
 echo "  FILTERDIR  : ${filterdir}"
 echo "  INCLUDEDIR : ${includedir}"
 echo "  PERL       : ${perlpath}"
@@ -322,56 +315,12 @@ fi
 
 echo
 echo
-echo "STEP 5. Configure Environment"
-echo "----------------------------------------------------------------------"
-
-echo "  You may choose to save or delete those filtered mails"
-echo "  If you want to save them, type 'Y' or 'y'."
-echo "  Or if you want to delete them, type 'N' or 'n'."
-echo
-echo "  If you selected save, filtered mail is saved in"
-echo "  ${datadir}/spam-YearMonth or"
-echo "  ${HOME}/mail/spam/spam-YearMonth if you are a normal user"
-echo
-
-if [ -n "${package}" ]; then
-  SAVE=y
-else
-  echo -n "  Do you want to save filtered mails? [y/n] : "
-  read SAVE
-fi
-
-case ${SAVE} in
-  Y|y) VA=1 ;;
-  N|n) VA=0 ;;
-  *) VA=1 ;;
-esac
-
-cat ${INSTALLDIR}/byspam.conf | sed -e "s/@saveoption@/${VA}/g" > ${INSTALLDIR}/byspam.tmp
-mv -f ${INSTALLDIR}/byspam.tmp ${INSTALLDIR}/byspam.conf
-CHK=$?
-
-if [ "${CHK}" = 0 ]; then
-  echo "  configured .. byspam.conf"
-  echo
-else
-  rm -rf ${BASE}
-  echo "  Configure Error: removed install directory"
-  echo
-  exit 1
-fi
-
-rm -f ${INSTALLDIR}/*.tmp*
-
-
-echo
-echo
-echo "STEP 6. Make INSTALL PROGRAM"
+echo "STEP 5. Make INSTALL PROGRAM"
 echo "----------------------------------------------------------------------"
 echo
 echo
 
-conv="prefix bindir confdir datadir filterdir includedir INSTALLDIR PERLPATH level procpath package"
+conv="prefix bindir confdir filterdir includedir INSTALLDIR PERLPATH level procpath package"
 
 for i in ${conv}
 do
@@ -399,7 +348,7 @@ do
 done
 
 
-conv="bindir confdir datadir filterdir includedir procpath level"
+conv="bindir confdir filterdir includedir procpath level"
 
 for i in ${conv}
 do
@@ -439,8 +388,6 @@ echo "prefix=${prefix}" >> ${INSTALLDIR}/install.log
 echo "bindir=${bindir}" >> ${INSTALLDIR}/install.log
 [ "${CHK}" = 0 ] && CHK=$?
 echo "confdir=${confdir}" >> ${INSTALLDIR}/install.log
-[ "${CHK}" = 0 ] && CHK=$?
-echo "datadir=${datadir}" >> ${INSTALLDIR}/install.log
 [ "${CHK}" = 0 ] && CHK=$?
 echo "filterdir=${filterdir}" >> ${INSTALLDIR}/install.log
 [ "${CHK}" = 0 ] && CHK=$?

@@ -1,5 +1,5 @@
 #!/bin/sh
-VERSION=0.1.4
+VERSION=0.2.0
 
 pwd=$(pwd)
 level=@level@
@@ -8,7 +8,6 @@ installdir=@INSTALLDIR@
 prefix=@prefix@
 bindir=@bindir@
 confdir=@confdir@
-datadir=@datadir@
 filterdir=@filterdir@
 includedir=@includedir@
 procpath=@procpath@
@@ -31,12 +30,11 @@ fi
 
 [ ! -d "${DESTDIR}${bindir}" ] && mkdir -p ${DESTDIR}${bindir}
 [ ! -d "${DESTDIR}${confdir}" ] && mkdir -p ${DESTDIR}${confdir}
-[ ! -d "${DESTDIR}${datadir}" ] && mkdir -p ${DESTDIR}${datadir}
 [ ! -d "${DESTDIR}${filterdir}" ] && mkdir -p ${DESTDIR}${filterdir}
 [ ! -d "${DESTDIR}${includedir}" ] && mkdir -p ${DESTDIR}${includedir}
 
 
-for i in bindir confdir datadir filterdir includedir
+for i in bindir confdir filterdir includedir
 do
   eval target='$'${i}
   [ ! -d "${DESTDIR}${target}" ] && mkdir -p ${DESTDIR}${target}
@@ -124,6 +122,11 @@ rm -rf ${installdir}
 echo "removed installdir ${installdir}"
 rm -f ./install
 echo "removed install file ./install"
+
+echo
+echo "Complete install byspam $VERSION"
+echo "[1;31mFirst, configured ${confdir}/byspam.conf !!![7;0m"
+echo
 
 echo
 echo
