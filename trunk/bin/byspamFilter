@@ -49,7 +49,7 @@ foreach (@basics) {
 # parse mail
 if ($#ARGV > 0 && $ARGV[0] eq "-d") {
   if( -f "$ARGV[1]" ) {
-    @mailText = fileContext($ARGV[1]);
+    @mailText = getContext($ARGV[1]);
   } else {
     print "Error: Can't search path of $ARGV[1]\n";
     exit;
