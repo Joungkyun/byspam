@@ -124,7 +124,8 @@ sub getBody {
   }
 
   if ( $bodyRegex && $bodyText =~ /$bodyRegex/i ) {
-    return "checking spam";
+    $body_spam = 1;
+    return $bodyText;
   } else {
     # get whole content type of mail
     my $ctChk = $_[0]->get("Content-Type:");
@@ -152,50 +153,6 @@ sub getBody {
     if( $bodyReturn ) { return $bodyReturn; }
     else { return "null"; }
   }
-}
-
-# get mail body plain of html type for Trash.
-#
-sub getBodyTrash {
-  my $ct;
-  my $bound;
-  my $bodyText;
-  my $bodyReturn;
-  my $bodyRegex;
-
-  # get mail body
-  foreach $line (@{$_[0]->body()}) { $bodyText .= $line; }
-
-  # previous spam check of body header
-  if ( -f "$filterDir/filter-extra" ) {
-    $bodyRegex = filterText("$filterDir/filter-extra");
-  }
-
-  # get whole content type of mail
-  my $ctChk = $_[0]->get("Content-Type:");
-  if($ctChk) {
-    chomp($ctChk);
-    $ctChk =~ s/\s/ /g;
-
-    # get content type
-    $ct = $ctChk;
-    $ct =~ s/^([a-z]+\/[a-z]+)[\s]*;.+/$1/ig;
-
-    $bound = $ctChk;
-    $bound =~ s/.*boundary[\s]*=[\s]*"?([^";\s]+)"?.*/$1/ig;
-    $bound =~ s/!byspamEnter!//g;
-  }
-
-  if($ct && $ct =~ /multipart\/alternative/i ) {
-    $bodyReturn = actAlternative($bodyText,$bound);
-  } elsif($ct && $ct =~ /multipart\/(mixed|related)/i ) {
-    $bodyReturn = actMixed($bodyText,$bound);
-  } else {
-    $bodyReturn = actPlain($bodyText,$_[0]);
-  }
-
-  if( $bodyReturn ) { return $bodyReturn; }
-  else { return "null"; }
 }
 
 sub actPlain {
