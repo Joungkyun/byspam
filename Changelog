@@ -6,6 +6,8 @@ Warn: date format is Y.m.d
     by JoungKyun Kim : enable view with direct file path on byspamTrash
                        enable user define subject length with BYLEN=80
                        environment variable on byspamTrash
+                       enable view From address with BYFROM environment
+                       variable on byspamTrash
 
 * v0.2.4
   - 2004.04.04

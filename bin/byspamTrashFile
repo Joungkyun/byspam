@@ -213,12 +213,19 @@ LINE: while (1) {
   my $j;
   my $filtersubject;
   my $filterlength;
+  my $filterfrom;
   for($i=$start;$i>$until;$i--) {
     $j = $i+1;
     $filterlength = ( $ENV{"BYLEN"} eq "" ) ? 60 : $ENV{"BYLEN"};
     $filtersubject = substr($subject[$i], 0, $filterlength);
     $filtersubject =~ s/(([\x80-\xff].)*)[\x80-\xff]?$/$1/;
     printf "%6s. %s\n", $j, $filtersubject;
+    if ( $ENV{"BYFROM"} ne "" ) {
+      $filterfrom = $fromis[$i];
+      $filterfrom =~ s/\"|^[\s]*//g;
+      chomp ($filterfrom);
+      printf "%8sFROM: %s\n", "", $filterfrom;
+    }
   }
 
   print "-----------------------------------------------------------------------------\n";
