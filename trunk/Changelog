@@ -1,12 +1,13 @@
 Changelog document
 
-$Id: Changelog,v 1.44 2004-12-30 08:34:46 oops Exp $
+$Id: Changelog,v 1.45 2004-12-30 08:36:18 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.1
   - 2004.12.30
     by HyunSung Jang :
        - fixed typo ifrmae to iframe
+       - fixed allow-check routine
 
     by JoungKyun Kim :
        - added new install-sh script
