@@ -10,6 +10,23 @@ By SPAM 설치 및 사용 설명서
 6. Trash 관리
 
 
+* 설치하기 전에
+
+BySPAM 은 smtp dameon 과 procmail 에 연동되어 작동을 합니다. 설치 후에 따로 구동을
+하는 것이 아니라 smtp 에 연동이 되어 알아서 작동이 되게 됩니다. 일단 설치를 마친다
+음에 제대로 설치가 되었는지는 일단, procmailrc 에 INCLUDERC 행에서 filter.rc 를 인
+클루드 하고 있는지 여부를 확인한 다음 smtp daemon 을 재 시작한 후에 /var/log 에 있
+는 procmail 파일을 살펴 보면 됩니다. 간단하게 제대로 작동하는지 테스트 하는 방법은
+
+1. 설치 후 procmailrc 에 fliter.rc 가 등록되었는지 확인 후 smtp 재시작
+2. tail -f /var/log/procmail 명령을 실행하여 실시간 모니터링
+3. 제목에 광고 라는 문자를 넣어 메일을 발송
+4. byspamTrash 를 실행하여 이 메일이 Trash 에 있는지 확인
+
+의 과정을 거치면 된다.
+
+
+RPM 설치자들은 smtp 를 재시작 한 후, 4번, 5번, 6번 항목만 보도록 한다.
 
 
 1. By SPAM 의 설치 옵션
