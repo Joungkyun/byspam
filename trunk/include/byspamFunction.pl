@@ -150,6 +150,8 @@ sub getBody {
       $bodyReturn = actPlain($bodyText,$_[0]);
     }
 
+    $bodyReturn =~ s///g;
+
     if( $bodyReturn ) { return $bodyReturn; }
     else { return "null"; }
   }
