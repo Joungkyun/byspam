@@ -9,9 +9,7 @@ local $level;
 local $mail;
 local $allows;
 local $filterDir;
-local $filterSave;
 local $includeDir;
-local $filterSaveDir;
 local @basics = ();
 
 my @ctype = ();
@@ -36,7 +34,7 @@ if ( -f "$conf" ) { do "$conf"; }
 do "$includeDir/byspamFunction.pl";
 
 # print out help message
-printHelp($#ARGV,@ARGV,$filterSave,$filterSaveDir,$level);
+printHelp($#ARGV,@ARGV);
 
 # get filtering data
 foreach (@basics) {
