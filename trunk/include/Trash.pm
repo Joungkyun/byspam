@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://www.oops.org>
 #
-# $Id: Trash.pm,v 1.5 2004-12-01 10:56:44 oops Exp $
+# $Id: Trash.pm,v 1.6 2004-12-01 10:59:27 oops Exp $
 #
 
 package Byspam::Trash;
@@ -290,14 +290,18 @@ INIT:
 
 	my $printBody;
 
-	my $p_page = 1;
+	$p_page = $p_page > 1 ? $p_page : 1;
 	while (1) {
 		system ("clear");
-		print "=============================================================================\n";
-		print "[1;37mby SPAM Trash Viewer[7;0m $main::version by JoungKyun Kim <http://www.oops.org>\n";
-		print "Command [ [1;37mq[7;0muit | [1;37mn[7;0mumber | [1;37md[7;0melete | [1;37mr[7;0mecovery | enter - next | b - back ]\n";
-		print "=============================================================================\n";
-		print "Current Date: $filedates\n";
+		print "=============================================================================\n" .
+			  "[1;37mby SPAM Trash Viewer[7;0m $main::version by JoungKyun Kim <http://www.oops.org>\n" .
+			  "Command [ [1;37mq[7;0muit | [1;37mn[7;0mumber | [1;37md[7;0melete | [1;37mr[7;0mecovery | enter - next | b - back ]\n" .
+			  "=============================================================================\n";
+		if ( $main::_direct ) {
+			print "Current File: $filedates\n";
+		} else {
+			print "Current Date: $filedates\n";
+		}
 		print "$p_page page / total $lastpage pages\n\n";
 
 		$start = ($p_page > 1 ) ? $mailSize - ($p_page * $__limit - $__limit) - 1 : $mailSize - 1;
@@ -392,6 +396,15 @@ INIT:
 			rewriteTrash ($path, $name, @mails);
 
 			goto INIT;
+		}
+
+		# jump page
+		elsif ( $cmd =~ m/^p[\s]+([0-9]+)/ ) {
+			$p_page = $1;
+			if ( $p_page < 1 ) { $p_page = 1; }
+			elsif ( $p_page > $lastpage ) { $p_page = $lastpage; }
+
+			redo;
 		}
 
 		elsif ($until == -1 && $cmd !~ m/^b/i) { last; }
