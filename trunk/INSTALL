@@ -1,0 +1,338 @@
+By SPAM 설치 설명서
+
+By SPAM 은 중앙 집중식 필터링과 각 계정별 필터링 2 가지 방법으로 운영을 할 수 있
+으며, 이 운영 방법에 따라 설치가 틀려 집니다. 
+
+By SPAM 을 설치 방법은 ./configure --help 로 알 수 있습니다.
+
+byspam-version# ./configure --help
+
+By SAPM v 설치 옵션
+
+사용법: configure [옵션]=[경로]
+옵션  :
+  --level=LEVEL     By SAPM 을 운영하는 권한 지정. root/account 중 지정
+                    [default: root]
+  --prefix=PREFIX   나머지 옵션들이 지정되지 않았을 경우 기본값
+                    [default: /usr/local/byspam]
+  --bindir=DIR      실행 스크립트가 위치할 디렉토리
+                    [default: ${prefix}/bin]
+  --confdir=DIR     간단한 옵션 설정 파일이 위치할 디렉토리
+                    [default: ${prefix}/conf]
+  --datadir=DIR     필터링된 메일을 저장할 경우의 데이타 디렉토리
+                    [default: ${prefix}/data]
+  --filterdir=DIR   필터링 설정 파일이 위치할 디렉토리
+                    [default: ${confdir}/Filter]
+  --includedir=DIR  필터링 스크립트에서 사용하는 함수가 들어갈 디렉토리
+                    [default: ${prefix}/include]
+  --perlpath=PATH   펄이 설치되어 있는 경로를 지정한다.
+                    [default: /usr/bin/perl]
+  --procpath=PATH   procmailrc 가 설치되어 있는 경로를 지정한다.
+                    [default: /etc/procmailrc]
+
+
+byspam-version#
+
+
+--level 은 중앙 집중식 필터링과, 각 계정에서의 필터링 방식을 지원합니다. 계정 유
+저가 단독적으로 사용을 할 경우에는 --level=account 로 지정을 해 줘야 합니다.  이
+경우 By SPAM 은 ${HOME}/byspam 으로 설치가 되며, 설정 파일은
+${HOME}/byspam/conf/Filter 에서 필터링 설정을 합니다.
+
+--prefix 는 나머지 디렉토리 경로를 지정하지 않았을 경우 이 prefix 를 기준으로 디
+렉토리들이 위치합니다. 보통
+
+${prefix}/bin
+${prefix}/conf
+${prefix}/datadir
+${prefix}/confi/Filter
+${prefix}/include
+
+로 설치가 됩니다.
+
+--bindir, --confdir, --datadir, --filterdir, --includedir
+
+각각의 디렉토리를 따로 설정을 할 수 있습니다. 이 지시지들을 지정해주면 prefix 에
+영향을 받지 않습니다.
+
+
+By SPAM 예제 ( --level=root )
+
+byspam-version# ./configure --level=root
+
+STEP 1. Ready Installation
+----------------------------------------------------------------------
+  make temp directory : OK
+
+
+STEP 2. Option Check
+----------------------------------------------------------------------
+
+  Operation Level : root
+
+  INSATALLATION PATH
+
+  LEVEL      : root
+  PREFIX     : /usr/local/byspam
+  BINDIR     : /usr/local/byspam/bin
+  CONFDIR    : /usr/local/byspam/etc
+  DATADIR    : /usr/local/byspam/data
+  FILTERDIR  : /usr/local/byspam/etc/Filter
+  INCLUDEDIR : /usr/local/byspam/include
+
+  Is right giving your path? [y/n] :
+
+
+     설정 파일의 위치가 지정한데로 되었는지를 확인합니다.  위의 경우는 아무것도
+     지정하지 않았을 경우 prefix 가 /usr/local/byspam 으로 되며,  지정시 지정한
+     데로 출력을 합니다. n 을 선택하면 설치를 종료합니다.
+
+
+STEP 3. Perl Check
+----------------------------------------------------------------------
+By SPAM is required perl and MailTools module and MIME-Base64 module
+
+  Typing path of perl [ /usr/bin/perl ] :
+
+     펄이 설치되어 있는 경로를 지정합니다.  기본값으로 시스템의 펄을 찾기는 하지
+     만 제대로 찾지 못하는 경우에는 직접 지정을 해 주셔야 합니다.
+
+  PERL installation check : OK
+  checked MAIL-Tools module : OK
+  checked MIME-BASE64 module : OK
+
+    MAIL-Tools moduel 과 MIME-BASE64 module 이 Failed 로 나올 경우에는 ENVIRONMENT
+    파일을 참고하여 모듈을 설치 하도록 한다.
+
+
+STEP 4. Configure Script of By SPAM
+----------------------------------------------------------------------
+  configred .. byspam.conf
+  configred .. filter.rc
+  configred .. byspamFilter
+  configred .. plain.pl
+
+
+STEP 5. Configure Environment
+----------------------------------------------------------------------
+  You enable to choise save or delete filtered mail
+  If you want save, type 'Y' or 'y'.
+  Or if you want delete, type 'N' or 'n'.
+
+  If you selected save, filtered mail is saved in
+  /usr/local/byspam/data/spam-YearMonth or for account user, saved in
+  /home/oops/mail/spam/spam-YearMonth
+
+  Do you want to save filtered mail? [y/n] : 
+
+     필터링된 메일을 저장할지 삭제할지를 결정합니다. y 를 선택했을 경우
+     --datadir 로 지정한 디렉토리에 byspam-년월 의 형식으로 저장이 됩니다. 이 옵
+     션은 설치 후 @confidr@/byspam.conf 에서 수정 할 수 있습니다.
+
+  configured .. byspam.conf
+
+
+
+STEP 6. Make INSTALL PROGRAM
+----------------------------------------------------------------------
+
+  Input your path of procmail.rc [ /etc/procmailrc ] : 
+
+     procmailrc 의 파일 경로를 지정합니다.  이 역시 기본값으로 시스템에서 찾기는
+     하지만 제대로 찾지 못할 경우에는 직접 지정해 주셔야 합니다.
+
+  configured .. byspam.conf
+
+
+
+STEP 6. Make INSTALL PROGRAM
+----------------------------------------------------------------------
+
+  Input your path of procmail.rc [ /etc/procmailrc ] : 
+
+  create prefix data in install file : OK
+  create bindir data in install file : OK
+  create confdir data in install file : OK
+  create datadir data in install file : OK
+  create filterdir data in install file : OK
+  create includedir data in install file : OK
+  create INSTALLDIR data in install file : OK
+  create PERLPATH data in install file : OK
+  create level data in install file : OK
+  create procpath data in install file : OK
+  create bindir data in uninstall file : OK
+  create confdir data in uninstall file : OK
+  create datadir data in uninstall file : OK
+  create filterdir data in uninstall file : OK
+  create includedir data in uninstall file : OK
+  create procpath data in uninstall file : OK
+  create level data in uninstall file : OK
+
+  complete create uninstall file.
+
+
+  complete create install file. and excute install file
+
+
+     설치 준비가 완료 되었음을 알려 주며, instal 파일을 생성합니다.
+     종료 후 install 파일을 실행합니다.
+
+
+byspam-version# ./install
+
+install .... /usr/local/byspam/bin/byspamFilter
+install .... /usr/local/byspam/bin/plain.pl
+install .... /usr/local/byspam/bin/regexChk.pl
+install .... /usr/local/byspam/etc/filter.rc
+install .... /usr/local/byspam/etc/byspam.conf
+install .... /usr/local/byspam/etc/Filter/filter-allow
+install .... /usr/local/byspam/etc/Filter/filter-body
+install .... /usr/local/byspam/etc/Filter/filter-date
+install .... /usr/local/byspam/etc/Filter/filter-extra
+install .... /usr/local/byspam/etc/Filter/filter-from
+install .... /usr/local/byspam/etc/Filter/filter-subject
+install .... /usr/local/byspam/etc/Filter/filter-to
+install .... /usr/local/byspam/include/byspamFunction.pl
+
+Registration of procmailrc CHECK ..........
+Complete registration of procmailrc : OK
+
+removed installdir /tmp/byspam-version/installdir
+removed install file ./install
+
+설치가 완료 되었습니다.  중앙 집중식 관리로 설치를 하였을 경우에는 By SPAM 을 설
+치 후 smtp 를 재시작 해 줘야 합니다. smtp 의 재시작후 Filter 디렉토리의 설정파일
+filter-xxx 에서 적당한 설정을 하도록 합니다.
+
+
+By SPAM 예제2 ( --level=account )
+
+byspam-version# ./configure --level=account
+
+
+STEP 1. Ready Installation
+----------------------------------------------------------------------
+  make temp directory : OK
+
+
+STEP 2. Option Check
+----------------------------------------------------------------------
+
+  Operation Level : account
+
+  INSATALLATION PATH
+
+  LEVEL      : account
+  PREFIX     : /home/oops/byspam
+  BINDIR     : /home/oops/byspam/bin
+  CONFDIR    : /home/oops/byspam/conf
+  DATADIR    : /home/oops/mail/spam
+  FILTERDIR  : /home/oops/byspam/conf/Filter
+  INCLUDEDIR : /home/oops/byspam/include
+
+  path of account level is fixed under /home/oops/byspam
+
+     계정 설치시에는 디렉토리 경로가 픽스 됨을 알려줍니다.
+
+
+STEP 3. Perl Check
+----------------------------------------------------------------------
+By SPAM is required perl and MailTools module and MIME-Base64 module
+
+  Typing path of perl [ /usr/bin/perl ] : 
+
+     펄이 설치되어 있는 경로를 지정합니다.  기본값으로 시스템의 펄을 찾기는 하지
+     만 제대로 찾지 못하는 경우에는 직접 지정을 해 주셔야 합니다.
+
+  PERL installation check : OK
+  checked MAIL-Tools module : OK
+  checked MIME-BASE64 module : OK
+
+    MAIL-Tools moduel 과 MIME-BASE64 module 이 Failed 로 나올 경우에는 ENVIRONMENT
+    파일을 참고하여 모듈을 설치 하도록 한다.
+
+
+STEP 4. Configure Script of By SPAM
+----------------------------------------------------------------------
+  configred .. byspam.conf
+  configred .. filter.rc
+  configred .. byspamFilter
+  configred .. plain.pl
+
+
+STEP 5. Configure Environment
+----------------------------------------------------------------------
+  You enable to choise save or delete filtered mail
+  If you want save, type 'Y' or 'y'.
+  Or if you want delete, type 'N' or 'n'.
+
+  If you selected save, filtered mail is saved in
+  /home/oops/mail/spam/spam-YearMonth or for account user, saved in
+  /home/oops/mail/spam/spam-YearMonth
+
+  Do you want to save filtered mail? [y/n] : 
+
+     필터링된 메일을 저장할지 삭제할지를 결정합니다. y 를 선택했을 경우
+     --datadir 로 지정한 디렉토리에 byspam-년월 의 형식으로 저장이 됩니다. 이 옵
+     션은 설치 후 @confidr@/byspam.conf 에서 수정 할 수 있습니다.
+
+
+
+STEP 6. Make INSTALL PROGRAM
+----------------------------------------------------------------------
+
+
+  create prefix data in install file : OK
+  create bindir data in install file : OK
+  create confdir data in install file : OK
+  create datadir data in install file : OK
+  create filterdir data in install file : OK
+  create includedir data in install file : OK
+  create INSTALLDIR data in install file : OK
+  create PERLPATH data in install file : OK
+  create level data in install file : OK
+  create procpath data in install file : OK
+  create bindir data in uninstall file : OK
+  create confdir data in uninstall file : OK
+  create datadir data in uninstall file : OK
+  create filterdir data in uninstall file : OK
+  create includedir data in uninstall file : OK
+  create procpath data in uninstall file : OK
+  create level data in uninstall file : OK
+
+  complete create uninstall file.
+
+
+  complete create install file. and excute install file
+
+     설치 준비가 완료 되었음을 알려 주며, instal 파일을 생성합니다.
+     종료 후 install 파일을 실행합니다.
+
+
+byspam-version# ./install
+
+install .... /home/oops/byspam/bin/byspamFilter
+install .... /home/oops/byspam/bin/plain.pl
+install .... /home/oops/byspam/bin/regexChk.pl
+install .... /home/oops/byspam/conf/filter.rc
+install .... /home/oops/byspam/conf/byspam.conf
+install .... /home/oops/byspam/conf/Filter/filter-allow
+install .... /home/oops/byspam/conf/Filter/filter-body
+install .... /home/oops/byspam/conf/Filter/filter-date
+install .... /home/oops/byspam/conf/Filter/filter-extra
+install .... /home/oops/byspam/conf/Filter/filter-from
+install .... /home/oops/byspam/conf/Filter/filter-subject
+install .... /home/oops/byspam/conf/Filter/filter-to
+install .... /home/oops/byspam/include/byspamFunction.pl
+
+Registration of procmailrc CHECK ..........
+Complete registration of procmailrc : OK
+
+removed installdir /tmp/byspam-version/installdir
+removed install file ./install
+
+
+설치가 완료 되었습니다. Filter 디렉토리의 설정파일 filter-xxx 에서 적당한 설정을
+하도록 합니다.
+
+
