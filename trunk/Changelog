@@ -1,6 +1,6 @@
 Changelog document
 
-$Id: Changelog,v 1.38 2004-12-06 13:39:10 oops Exp $
+$Id: Changelog,v 1.39 2004-12-06 14:05:39 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.0
@@ -8,6 +8,7 @@ Warn: date format is Y.m.d
     by JoungKyun Kim :
        - support autoconf system
        - added X-BySpam-Filter header if spam
+       - added save mail to some file on byspamTrash
 
   - 2004.12.03
     by JoungKyun Kim :
