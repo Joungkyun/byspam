@@ -9,7 +9,7 @@ DATES=`date +%Y%m%d`
 #LOGFILE=${HOMES}/byspam/filter.log
 
 # 필터링 체크
-FilterValue=`/usr/local/byspam/bin/byspamFilter`
+FilterValue=`@bindir@/byspamFilter`
 
 ###################
 # start Filtering #
