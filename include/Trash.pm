@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://www.oops.org>
 #
-# $Id: Trash.pm,v 1.4 2004-11-30 16:49:03 oops Exp $
+# $Id: Trash.pm,v 1.5 2004-12-01 10:56:44 oops Exp $
 #
 
 package Byspam::Trash;
@@ -18,14 +18,6 @@ my $cm = new Byspam::Common;
 
 sub new {
 	my $self = {};
-
-    #$self->{_var}->{gno} = 0;
-    #$self->{_var}->{optcno} = 0;
-    #$self->{_var}->{optarg} = undef;
-    #$self->{_var}->{optcmd} = [];
-    #$self->{_var}->{longopt} = {};
-    #$self->{_var}->{getopt_err} = 0;
-
 	return bless $self;
 }
 
@@ -250,12 +242,10 @@ sub printTrash {
 	my @date      = ();
 	my @body      = ();
 	my $filedates = "";
+	my $p_page    = 1;
 
 	@mails = splitMail ($tpath);
 	chomp (@mails);
-
-INIT:
-	$mailSize = @mails;
 
 	foreach my $permail ( @mails ) {
 		my $tsub;
@@ -282,13 +272,16 @@ INIT:
 		$permail =~ s/!byspamsplit!//g;
 	}
 
+INIT:
+	$mailSize = @mails;
+
 	my $__limit = $main::_limit;
 	my $lastpage = $mailSize/$__limit;
 	my $lastchk  = int $lastpage;
 	$lastpage = $lastchk + 1 if ( $lastchk < $lastpage );
 
 	$filedates = $name;
-	$filedates =~ s/[^-]+-(.*)/$1/g;
+	$filedates =~ s/[^-]+-(.*)/$1/g if ( ! $main::_direct );
 
 	my $start;
 	my $until;
@@ -370,7 +363,7 @@ INIT:
 		}
 
 		# delete or recovery article mode
-		elsif ( $cmd =~ m/^(d|r)[\s]([0-9]+)/ ) {
+		elsif ( $cmd =~ m/^(d|r)[\s]+([0-9]+)/ ) {
 			my $_mode  = $1;
 			my $_actno = $2 - 1;
 			my $_s     = 0;
@@ -390,6 +383,10 @@ INIT:
 
 			# article removed
 			splice (@mails, $_actno, 1);
+			splice (@subject, $_actno, 1);
+			splice (@date, $_actno, 1);
+			splice (@body, $_actno, 1);
+			splice (@from, $_actno, 1);
 
 			# rewrite original file
 			rewriteTrash ($path, $name, @mails);
