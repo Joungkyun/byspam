@@ -1,7 +1,7 @@
 #
 # Byspam Common functions
 #
-# $Id: Common.pm,v 1.3 2004-11-29 06:25:27 oops Exp $
+# $Id: Common.pm,v 1.4 2004-11-30 13:13:52 oops Exp $
 #
 
 package Byspam::Common;
@@ -133,9 +133,7 @@ sub printError {
 	my $self = shift if ref ($_[0]);
 	my $_msg = $_[0];
 
-	open STDOUT, ">> /dev/stderr";
-	print $_msg;
-	open STDOUT, ">> /dev/stdout";
+	print STDOUT $_msg;
 }
 
 1; # keep require happy
