@@ -142,7 +142,7 @@ for($i=0;$i<$mailSize;$i++) {
   @tmpMail = split(/\n/,$mails[$i]);
   $getMail = Mail::Internet->new(\@tmpMail);
   $subject[$i] = $getMail->get("Subject:");
-  $subject[$i] =~ s/\s*Subject: .+|!byspamEnter!//g;
+  $subject[$i] =~ s/\s*Subject: .+|!byspamEnter!|//g;
   $subject[$i] =~ s/\s+/ /ig;
   chomp($subject[$i]);
 
@@ -200,12 +200,7 @@ LINE: while (1) {
   my $j;
   for($i=$start;$i>$until;$i--) {
     $j = $i+1;
-    if($j < 10) { $sp = "    "; }
-    elsif($j < 100) { $sp = "   "; }
-    elsif($j < 1000) { $sp = "  "; }
-    elsif($j < 10000) { $sp = " "; }
-    $j = "$sp$j";
-    print "$j. $subject[$i]\n";
+    printf "%6s. %s\n", $j, $subject[$i];
   }
 
   print "-----------------------------------------------------------------------------\n";
