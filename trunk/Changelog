@@ -1,9 +1,13 @@
 Changelog document
 
-$Id: Changelog,v 1.40 2004-12-28 07:25:12 oops Exp $
+$Id: Changelog,v 1.41 2004-12-30 08:10:55 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.1
+  - 2004.12.30
+    by HyunSung Jang :
+       - fixed typo ifrmae to iframe
+
   - 2004.12.27
     by HyunSung Jang :
        - fixed miss check size over 55000000 on filter.rc
