@@ -3,6 +3,10 @@ Changelog document
 Warn: date format is Y.m.d
 
 * v0.2.3
+  - 2003.06.11
+    by JoungKyun Kim : changed sed to perl on install script
+                       add ignore filter-allow mode to filter-ignore
+
   - 2002.11.01
     by JoungKyun Kim : fixed multipart content type check
 
