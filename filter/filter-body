@@ -3,7 +3,7 @@
 # See also regex of perl.
 수신[\s]*거부|수.신.거.부|mailtouch
 속보|소호|홍보|1회성|투자|증권|청약|무작위|광고
-허락[\s]*없이
+허락[\s]*없이|만[\s]*19[\s]*세
 미성년|성인|오빠천사
 \[\s*광[^]]*고\s*\]
 정보[\s]*통신망[\s]*이용[\s]*촉진법
@@ -17,5 +17,4 @@ If you\s*(do not|don't)*\s*wish to
 사이버[\s]*머니
 Discount|marketing|sex
 (reject|email)\.(cgi|php|jsp|pl)
-mail=admin@oops\.org
 <HTML><HEAD><\/HEAD><BODY>
