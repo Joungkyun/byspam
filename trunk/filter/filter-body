@@ -2,7 +2,7 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 수신[\s]*거부|수.신.거.부|mailtouch
-속보|소호|홍보|1회성|투자|증권|청약|무작위
+속보|소호|홍보|1회성|투자|증권|청약|무작위|광고
 허락[\s]*없이
 미성년|성인|오빠천사
 \[\s*광[^]]*고\s*\]
