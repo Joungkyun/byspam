@@ -34,13 +34,13 @@ printError() {
   echo
   if [ -n "${l}" ]; then
     echo "  이전 버젼의 경로를 확인할 수 없습니다. By SAPM 에서 제공하는"
-    echo "  uninstall 를 이용하여 이전 버젼을 삭제하시고 새로 설치하십시"
+    echo "  byspamUninstall 를 이용하여 이전 버젼을 삭제하시고 새로 설치하십시"
     echo "  오. filter-*.conf 는 계속 사용을 할 수 있으니, 백업을 하시고"
     echo "  새 버젼을 설치한 후 filterdir 에 덮어 씌우시면 됩니다."
     echo
   else
     echo "  Can't find path of previous version by unknown error. First,"
-    echo "  uninstall previous By SPAM program with uninstall program that"
+    echo "  byspaUninstall previous By SPAM program with uninstall program that"
     echo "   supported By SAPM in \$bindir, and install new version."
     echo "  Don't Forget to backup filter-*.conf. After install new version,"
     echo "  copy backuped filter-*.conf to \$filterdir"
@@ -71,7 +71,11 @@ do
         chk=$(cat ${etcPath}/filter.rc | grep "^FilterValue=" | sed -e 's/FilterValue=\|\/byspamFilter\|`//g')
       fi
 
-      if [ -f "${chk}/uninstall" ]; then
+      if [ -f "${chk}/byspamUninstall" ]; then
+        upinfo="${chk}/byspamUninstall"
+        upinfochk=1
+        break
+      elif [ -f "${chk}/uninstall" ]; then
         upinfo="${chk}/uninstall"
         upinfochk=1
         break
@@ -103,7 +107,9 @@ fi
 [ -n "${CONF}" ] && eval $CONF
 
 # version check
-if [ -f "${bindir}/uninstall" ]; then
+if [ -f "${bindir}/byspamUninstall" ]; then
+  lversion=$(cat ${bindir}/byspamUninstall | sed -n '/^VERSION/p' | sed -e 's/VERSION=//g')
+elif [  -f "${bindir}/byspamUninstall" ]; then
   lversion=$(cat ${bindir}/uninstall | sed -n '/^VERSION/p' | sed -e 's/VERSION=//g')
 else
   echo "  Error: install log of previous version includes wrong install path"
@@ -260,12 +266,12 @@ else
   exit 1
 fi
 
-install -m755 ./installdir/uninstall ${bindir} > /dev/null 2>&1
+install -m755 ./installdir/byspamUninstall ${bindir} > /dev/null 2>&1
 CHK=$?
 if [ "${CHK}" = 0 ]; then
-  echo "  update uninstall utility : OK"
+  echo "  update byspamUninstall utility : OK"
 else
-  echo "  update uninstall utility : Failed"
+  echo "  update byspamUninstall utility : Failed"
   rm -rf ./installdir ./install
   exit 1
 fi

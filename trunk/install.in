@@ -13,7 +13,7 @@ confdir=@confdir@
 filterdir=@filterdir@
 includedir=@includedir@
 procpath=@procpath@
-uninstall=${installdir}/uninstall
+uninstall=${installdir}/byspamUninstall
 package=@package@
 
 CHK=0
@@ -66,10 +66,15 @@ do
                 list=
   esac
 
+  echo "" >> ${installdir}/install.log
+  echo "# Don't touch follow lines. This is uninstall information!!" >> ${installdir}/install.log
+  echo "" >> ${installdir}/install.log
+
   for j in $list
   do
     if [ ${j} != "CVS" ]; then
       install -m${perm} ${inst}/${j} ${DESTDIR}${target}
+      echo "#=${target}/${j}" >> ${installdir}/install.log
       echo "install .... ${DESTDIR}${target}/${j}"
     fi
   done
@@ -78,10 +83,11 @@ done
 if [ -d "/etc/cron.daily" ]; then
   [ ! -d "${DESTDIR}/etc/cron.daily" ] && mkdir ${DESTDIR}/etc/cron.daily
   install -m755 ${installdir}/byspam.cron ${DESTDIR}/etc/cron.daily/byspam
+  echo "#=/etc/cron.daily/byspam" >> ${installdir}/install.log
   echo "install .... ${DESTDIR}/etc/cron.daily/byspam"
 fi
 install -m755 ${uninstall} ${DESTDIR}${bindir}
-echo "install .... ${DESTDIR}${bindir}/uninstall"
+echo "install .... ${DESTDIR}${bindir}/byspamUninstall"
 install -m644 ${installdir}/install.log ${DESTDIR}${confdir}/install.log
 echo "install .... ${DESTDIR}${confdir}/install.log"
 

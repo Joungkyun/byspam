@@ -8,95 +8,51 @@ filterdir="@filterdir@"
 includedir="@includedir@"
 procpath="@procpath@"
 
-echo
-echo "CHECK REMOVE By SPAM"
-echo "---------------------------------------------------------------"
-echo
-tree ${filterdir}
-echo
-tree ${bindir}
-echo
-tree ${confdir}
-echo
-tree ${includedir}
-echo
-echo
+dirlist="filterdir confdir includedir bindir"
+list=$(cat ${confdir}/install.log | sed -n -e '/^#=.*/p' | sed 's/^#=//g' )
 
-echo
-echo "Removed config. [ default value is not removed"
-echo "---------------------------------------------------------------"
-echo -n "Do you want to remove ${filterdir} ? [y/n] : "
-read rmfil
-echo -n "Do you want to remove ${bindir} ? [y/n] : "
-read rmbin
-echo -n "Do you want to remove ${confdir} ? [y/n] : "
-read rmconf
-echo -n "Do you want to remove ${includedir} ? [y/n] : "
-read rminc
-
-for i in rmbin rmconf rmfil rminc
+# remove file
+for i in ${list}
 do
-  eval chk='$'$i
-  case ${chk} in
-    Y|y) eval $i=y ;;
-    *) eval $i=n ;;
-  esac
-done
-
-echo
-echo
-echo "Result"
-echo "---------------------------------------------------------------"
-# remove filter dir
-if [ "${rmfil}" = "y" ]; then
-  rm -rf ${filterdir}
-  echo "removed ${filterdir} : OK"
-else
-  echo "removed ${filterdir} : NOT DELETE"
-fi
-
-# remove bin dir
-if [ "${rmbin}" = "y" ]; then
-  rm -rf ${bindir}
-  echo "removed ${bindir} : OK"
-else
-  echo "removed ${bindir} : NOT DELETE"
-fi
-
-# remove conf dir
-if [ "${rmconf}" = "y" ]; then
-  if [ "${rmfil}" = "n" ]; then
-    rm -f ${confdir}/*.*
-  else
-    rm -rf ${confdir}
+  if [ -f "${i}" ]; then
+    rm -f ${i}
+    echo "Removed ${i}"
   fi
-  echo "removed ${confdir} : OK"
-else
-  echo "removed ${confdir} : NOT DELETE"
-fi
-
-# remove include dir
-if [ "${rminc}" = "y" ]; then
-  rm -rf ${includedir}
-  echo "removed ${includedir} : OK"
-else
-  echo "removed ${includedir} : NOT DELETE"
-fi
-
-# remove cron file
-if [ -f "/etc/cron.daily/byspam" ]; then
-  rm -f /etc/cron.daily/byspam
-fi
+done
 
 # unregisted procmailrc
 procchk=$(egrep "^INCLUDERC=.+\/filter\.rc" ${procpath})
 if [ -n "${procchk}" ]; then
+  CHK=
   procchk=$(echo ${procchk} | sed -e 's/\//\\\//g')
   procchk=$(echo ${procchk} | sed -e 's/filter\.rc/filter\\\.rc/g')
-  cat ${procpath} | sed -e 's/^INCLUDERC=.\+\/filter\.rc//g' > /tmp/procmailrc.uninstall
-  mv -f /tmp/procmailrc.uninstall ${procpath}
-  echo "removed byspam registration in procmail"
+  @PERLPATH@ -p -i -e 's/^[ \t]*INCLUDERC=.+\/filter\.rc[\s]*//mg' ${procpath}
+  CHK=$?
+
+  if [ "${CHK}" = 0 ]; then
+    echo "removed byspam registration in procmail"
+  else
+    echo "Failed remove byspam registration in procmail"
+  fi
 fi
 
+for i in ${dirlist}
+do
+  eval dirpath='$'${i}
+
+  if [ -d "${dirpath}" ]; then
+    dirchk=$(echo ${dirpath} | grep -v "^\(/sbin\|/usr\/sbin\|/usr/local/sbin\|/bin\|/usr/bin\|/usr/local/bin\|/etc\|/usr/local/etc\|/usr/include\|/usr/local/include\)$")
+    if [ -n "${dirchk}" ]; then
+      echo -n "Do you want remove ${dirpath}? [y/n] : "
+      read answer
+
+      case ${answer} in
+        y|Y)
+          rm -rf ${dirpath}
+          ;;
+      esac
+    fi
+  fi
+done
 
 exit 0

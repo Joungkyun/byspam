@@ -59,6 +59,7 @@ By SPAM 의 필터링 방식은 인코딩 되어 있는 내용들을 우리가 인식을 할 수 있도록 디
    |   |-- filter-date
    |   |-- filter-extra
    |   |-- filter-from
+   |   |-- filter-ignore
    |   |-- filter-subject
    |   `-- filter-to
    |-- include
@@ -149,6 +150,7 @@ filter/*
                     수 있습니다. 즉, 메일 본문의 multipart 헤더들을 체크할 수 있
                     습니다.
    filter-from    : 메일 헤더의 From 헤더를 체크합니다.
+   filter-ignore  : fileter-allow 를 무력화 할 단어를 등록합니다.
    filter-subject : 메일 헤더의 메일 제목 헤더를 체크합니다.
    filter-to      : 메일 헤더의 To 헤더를 체크합니다.
 
@@ -163,6 +165,6 @@ install.in
 
 uninstall.in
 
-설치시 제공할 uninstall 파일의 템플릿입니다. 설치후 @bindir@/uninstall 로 설치가
+설치시 제공할 uninstall 파일의 템플릿입니다. 설치후 @bindir@/byspamUninstall 로 설치가
 됩니다.
 

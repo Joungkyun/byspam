@@ -223,10 +223,9 @@ else
   done
 fi
 
-PERLPATHS=$(echo ${PERLPATH} | sed -e 's/\//\\\//g')
 for i in byspamFilter plain.pl regexChk.pl byspamTrashFile
 do
-  cat bin/${i} | sed -e "s/@PERLPATH@/${PERLPATHS}/g" > ${INSTALLDIR}/${i}
+  ${PERLPATH} -p -e "s!\@PERLPATH\@!${PERLPATH}!g" bin/${i} > ${INSTALLDIR}/${i}
   chmod 755 ${INSTALLDIR}/${i}
 done
 
@@ -263,16 +262,12 @@ echo "----------------------------------------------------------------------"
 
 for i in byspam.cron byspamFilter byspamTrashFile plain.pl
 do
-  regex="@confdir@";
-  tostr=$(echo ${confdir} | sed -e 's/\//\\\//g')
-
   if [ ${i} = "byspam.cron" ]; then
-    cat ./bin/${i} | sed -e "s/$regex/${tostr}/g" > ${INSTALLDIR}/${i}
+    ${PERLPATH} -p -e "s!\@confdir\@!${confdir}!g" ./bin/${i} > ${INSTALLDIR}/${i}
     CHK=$?
   else
-    cat ${INSTALLDIR}/${i} | sed -e "s/$regex/${tostr}/g" > ${INSTALLDIR}/${i}.tmp
+    ${PERLPATH} -p -i -e "s!\@confdir\@!${confdir}!g" ${INSTALLDIR}/${i}
     CHK=$?
-    mv ${INSTALLDIR}/${i}.tmp ${INSTALLDIR}/${i}
     [ "${CHK}" = "0" ] && CHK=$?
   fi
 
@@ -286,10 +281,7 @@ do
   fi
 done
 
-regex="@bindir@"
-tostr=$(echo ${bindir} | sed -e 's/\//\\\//g')
-
-cat ./bin/byspamTrash | sed -e "s/${regex}/${tostr}/g" > ${INSTALLDIR}/byspamTrash
+${PERLPATH} -p -e "s!\@bindir\@!${bindir}!g" ./bin/byspamTrash > ${INSTALLDIR}/byspamTrash
 CHK=$?
 
 if [ "${CHK}" = 0 ]; then
@@ -301,7 +293,7 @@ else
   exit 1
 fi
 
-cat ./etc/filter.rc | sed -e "s/${regex}/${tostr}/g" > ${INSTALLDIR}/filter.rc
+${PERLPATH} -p -e "s!\@bindir\@!${bindir}!g" ./etc/filter.rc > ${INSTALLDIR}/filter.rc
 CHK=$?
 
 if [ "${CHK}" = 0 ]; then
@@ -316,14 +308,12 @@ fi
 for i in level bindir confdir filterdir includedir PERLPATH datadir byversion
 do
   eval tostr='$'${i}
-  tostr=$(echo ${tostr} | sed -e 's/\//\\\//g')
+
   if [ "${i}" = "level" ]; then
-    cat ./etc/byspam.conf | sed -e "s/@${i}@/${tostr}/g" > ${INSTALLDIR}/byspam.conf
+    ${PERLPATH} -p -e "s!\@${i}\@!${tostr}!g" ./etc/byspam.conf > ${INSTALLDIR}/byspam.conf
     CHK=$?
   else
-    cat ${INSTALLDIR}/byspam.conf | sed -e "s/@${i}@/${tostr}/g" > ${INSTALLDIR}/byspam.conf.tmp
-    [ "${CHK}" = 0 ] && CHK=$?
-    mv ${INSTALLDIR}/byspam.conf.tmp ${INSTALLDIR}/byspam.conf
+    ${PERLPATH} -p -i -e "s!\@${i}\@!${tostr}!g" ${INSTALLDIR}/byspam.conf
     [ "${CHK}" = 0 ] && CHK=$?
   fi
 
@@ -350,18 +340,14 @@ conv="prefix bindir confdir filterdir includedir INSTALLDIR PERLPATH level procp
 
 for i in ${conv}
 do
+  catfile="/tmp/byspam-installfile"
   eval chg='$'${i}
-  chg=$(echo $chg | sed -e 's/\//\\\//g')
 
   if [ "${i}" = "prefix" ]; then
-    catfile="./install.in"
-  else
-    catfile="/tmp/byspam-installfile"
+    cp -af ./install.in ${catfile}
   fi
 
-  cat ${catfile} | sed -e "s/@${i}@/${chg}/g" > /tmp/byspam-installfile.tmp
-  [ "$CHK" = 0 ] && CHK=$?
-  mv -f /tmp/byspam-installfile.tmp /tmp/byspam-installfile
+  ${PERLPATH} -p -i -e "s!\@${i}\@!${chg}!g" ${catfile}
   [ "$CHK" = 0 ] && CHK=$?
 
   if [ "${CHK}" = 0 ]; then
@@ -374,22 +360,19 @@ do
 done
 
 
-conv="bindir confdir filterdir includedir procpath level byversion"
+conv="bindir confdir filterdir includedir procpath level byversion PERLPATH"
 
 for i in ${conv}
 do
+  catfile="/tmp/byspam-uninstallfile"
+
   eval chg='$'${i}
-  chg=$(echo $chg | sed -e 's/\//\\\//g')
 
   if [ "${i}" = "bindir" ]; then
-    catfile="./uninstall.in"
-  else
-    catfile="/tmp/byspam-uninstallfile"
+    cp -af ./uninstall.in ${catfile}
   fi
 
-  cat ${catfile} | sed -e "s/@${i}@/${chg}/g" > /tmp/byspam-uninstallfile.tmp
-  [ "$CHK" = 0 ] && CHK=$?
-  mv -f /tmp/byspam-uninstallfile.tmp /tmp/byspam-uninstallfile
+  ${PERLPATH} -p -i -e "s!\@${i}\@!${chg}!g" ${catfile}
   [ "$CHK" = 0 ] && CHK=$?
 
   if [ "${CHK}" = 0 ]; then
@@ -428,7 +411,7 @@ else
   exit 1
 fi
 
-install -m755 /tmp/byspam-uninstallfile ${INSTALLDIR}/uninstall
+install -m755 /tmp/byspam-uninstallfile ${INSTALLDIR}/byspamUninstall
 [ "$CHK" = 0 ] && CHK=$?
 
 if [ "${CHK}" = 0 ]; then
