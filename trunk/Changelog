@@ -1,9 +1,13 @@
 Changelog document
 
-$Id: Changelog,v 1.36 2004-12-03 11:21:32 oops Exp $
+$Id: Changelog,v 1.37 2004-12-06 07:58:56 oops Exp $
 
 Warn: date format is Y.m.d
 * v1.0.0
+  - 2004.12.06
+    by JoungKyun Kim :
+       - support autoconf system
+
   - 2004.12.03
     by JoungKyun Kim :
        - support shared memory (shm) function
