@@ -1,5 +1,5 @@
 #!/bin/sh
-CURVERSION="0.1.5"
+CURVERSION="0.2.0"
 
 printDot() {
   if [ -z "${1}" ];then
@@ -143,15 +143,6 @@ else
   echo " ${confdir}"
 fi
 
-echo -n "  Data directory              "
-printDot
-
-if [ -z "${datadir}" ] && [ "${level}" = "root" ]; then
-  printError
-else
-  echo " ${datadir}"
-fi
-
 echo -n "  Filter directory            "
 printDot
 
@@ -201,7 +192,6 @@ CHK=0
 ./configure --level=${level} \
             --bindir=${bindir} \
             --confdir=${confdir} \
-            --datadir=${datadir} \
             --filterdir=${filterdir} \
             --includedir=${includedir} \
             --procpath=${procpath} \
@@ -227,11 +217,6 @@ do
   fi
 done
 
-
-byspamconf=$(cat ${confdir}/byspam.conf | grep "^\$filterSave[\t ]*=" | sed -e 's/[^0-9]//g')
-byspamconf="\$filterSave      = $byspamconf;"
-cat ./installdir/byspam.conf | sed -e "s/^\$filterSave[\t ]*=[\t ]*1;/$byspamconf/g" > ./installdir/by.spam
-mv -f installdir/by.spam installdir/byspam.conf
 
 install -m644 ./installdir/byspam.conf ${confdir} > /dev/null 2>&1
 CHK=$?
@@ -281,6 +266,15 @@ else
   echo "  update install log : Failed"
   rm -rf ./installdir ./install
   exit 1
+fi
+
+if [ "${datadir}" != "" ]; then
+  rm -rf ${datadir}
+  CHK=$?
+
+  if [ "${CHK}" = 0 ]; then
+    echo "  removed data dir : OK"
+  fi
 fi
 
 

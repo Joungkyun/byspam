@@ -102,9 +102,8 @@ By SPAM 을 설치준비를 위한 수행 파일입니다.
 
 etc/byspam.conf
 
-By SPAM 사용시, 필터링 된 메일을 삭제할 지 보관할지를 결정합니다. $filterSave 옵
-션에서 정의할 수 있으며, 설치시에 이를 결정할 수 있습니다.  나머지는 건드리지 않
-습니다. @confdir@/byspam.conf 로 설치가 됩니다.
+
+몇가지 옵션을 설정할 수 있습니다. @confdir@/byspam.conf 로 설치가 됩니다.
 
 etc/filter.rc
 

@@ -5,7 +5,6 @@ use MIME::Base64;
 use MIME::QuotedPrint;
 
 local $includeDir;
-local $filterSaveDir;
 
 my $i = 0;
 my $enc;
@@ -23,28 +22,81 @@ my @subject = ();
 my @bodyis = ();
 my @devide = ();
 my @tmpMail = ();
+my $homedir = $ENV{"HOME"};
+my $myuser = $ENV{"USER"};
+
+# Local ENV
+my $users = "";
+my $dfile = "";
+my $filedates = "";
 
 do "@confdir@/byspam.conf";
 do "$includeDir/byspamFunction.pl";
 
-$copy = "By SAPM TRASH VIEW v0.3\n".
+$copy = "By SAPM TRASH VIEW v0.4\n".
         "Script by JoungKyun <http://www.oops.org> in BPL License\n\n";
 
-if ( $#ARGV < 0 ) {
-  use Time::gmtime;
-  my $byspamYear = gmtime->year() + 1900;
-  my $byspamMon  = gmtime->mon() + 1;
-  if($byspamMon < 10) { $byspamMon = "0$byspamMon"; }
+$homedir =~ s/\/$//g;
 
-  $trash = "$filterSaveDir/spam-$byspamYear$byspamMon";
+use Time::gmtime;
+my $byspamYear = gmtime->year() + 1900;
+my $byspamMon  = gmtime->mon() + 1;
+my $byspamDay  = gmtime->mday();
+if($byspamMon < 10) { $byspamMon = "0$byspamMon"; }
+if($byspamDay < 10) { $byspamDay = "0$byspamDay"; }
+
+if ( $#ARGV < 0 ) {
+  $trash = "$homedir/byspam/spam-$byspamYear$byspamMon$byspamDay";
 } else {
-  $trash = "$filterSaveDir/spam-$ARGV[0]";
+  for ($i=0; $i <= $#ARGV; $i++) {
+    if ($ARGV[$i] eq "-u") {
+      if ($myuser eq "root") {
+        $users = $ARGV[$i+1];
+        $users = `cat /etc/passwd | grep \"^$users:\" | awk -F : '{print \$6}'`;
+        $users =~ s/\n|\/$//g;
+      } else {
+        print $copy;
+        print "Error: Only root user excute wiht -u option\n";
+        exit;
+      }
+    } elsif ($ARGV[$i] eq "-d") {
+      $filedates = $ARGV[$i+1];
+    } elsif ($ARGV[$i] eq "-x") {
+      $dfile = $ARGV[$i+1];
+    }
+    $i++;
+  }
+
+  if ($users eq "") { $users = $homedir; }
+  if ($filedates eq "") { $filedates = "$byspamYear$byspamMon$byspamDay"; }
+
+  $trash = "$users/byspam/spam-$filedates";
+}
+
+# delete mode
+if ($dfile ne "") {
+  $dfile = "$users/byspam/spam-$dfile";
+
+  if ( -f "$dfile" ) {
+    unlink $dfile;
+  }
+  exit 0;
 }
 
 if( ! -f "$trash" ) {
   print $copy;
-  print "Error: File not fount\n";
-  print "Usage: byspamTrash 200203\n";
+  print "Error: Trash file not found\n";
+  print "Usage: byspamTrash [ -u/-d/-x ]\n\n";
+  print "       -u USERNAME (only root)\n";
+  print "       -d DATE_FORMAT (Ymd, default value is today)\n";
+  print "       -x DATE_FORMAT (delete DATE_FORMAT trash file)\n\n";
+  if($myuser eq "root") {
+    print "       View Mode   : byspamTrash -u oops -d 20020627\n";
+    print "       Delete Mode : byspamTrash -u oops -x 20020627\n";
+  } else {
+    print "       View Mode   : byspamTrash -d 20020627\n";
+    print "       Delete Mode : byspamTrash -x 20020627\n";
+  }
   exit 0;
 }
 

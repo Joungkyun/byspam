@@ -19,8 +19,6 @@ By SAPM v 설치 옵션
                     [default: ${prefix}/bin]
   --confdir=DIR     간단한 옵션 설정 파일이 위치할 디렉토리
                     [default: ${prefix}/conf]
-  --datadir=DIR     필터링된 메일을 저장할 경우의 데이타 디렉토리
-                    [default: ${prefix}/data]
   --filterdir=DIR   필터링 설정 파일이 위치할 디렉토리
                     [default: ${confdir}/Filter]
   --includedir=DIR  필터링 스크립트에서 사용하는 함수가 들어갈 디렉토리
@@ -44,13 +42,12 @@ ${HOME}/byspam/conf/Filter 에서 필터링 설정을 합니다.
 
 ${prefix}/bin
 ${prefix}/conf
-${prefix}/datadir
 ${prefix}/confi/Filter
 ${prefix}/include
 
 로 설치가 됩니다.
 
---bindir, --confdir, --datadir, --filterdir, --includedir
+--bindir, --confdir, --filterdir, --includedir
 
 각각의 디렉토리를 따로 설정을 할 수 있습니다. 이 지시지들을 지정해주면 prefix 에
 영향을 받지 않습니다.
@@ -76,7 +73,6 @@ STEP 2. Option Check
   PREFIX     : /usr/local/byspam
   BINDIR     : /usr/local/byspam/bin
   CONFDIR    : /usr/local/byspam/etc
-  DATADIR    : /usr/local/byspam/data
   FILTERDIR  : /usr/local/byspam/etc/Filter
   INCLUDEDIR : /usr/local/byspam/include
 
@@ -113,27 +109,7 @@ STEP 4. Configure Script of By SPAM
   configred .. plain.pl
 
 
-STEP 5. Configure Environment
-----------------------------------------------------------------------
-  You enable to choise save or delete filtered mail
-  If you want save, type 'Y' or 'y'.
-  Or if you want delete, type 'N' or 'n'.
-
-  If you selected save, filtered mail is saved in
-  /usr/local/byspam/data/spam-YearMonth or for account user, saved in
-  /home/oops/mail/spam/spam-YearMonth
-
-  Do you want to save filtered mail? [y/n] : 
-
-     필터링된 메일을 저장할지 삭제할지를 결정합니다. y 를 선택했을 경우
-     --datadir 로 지정한 디렉토리에 byspam-년월 의 형식으로 저장이 됩니다. 이 옵
-     션은 설치 후 @confidr@/byspam.conf 에서 수정 할 수 있습니다.
-
-  configured .. byspam.conf
-
-
-
-STEP 6. Make INSTALL PROGRAM
+STEP 5. Make INSTALL PROGRAM
 ----------------------------------------------------------------------
 
   Input your path of procmail.rc [ /etc/procmailrc ] : 
@@ -153,7 +129,6 @@ STEP 6. Make INSTALL PROGRAM
   create prefix data in install file : OK
   create bindir data in install file : OK
   create confdir data in install file : OK
-  create datadir data in install file : OK
   create filterdir data in install file : OK
   create includedir data in install file : OK
   create INSTALLDIR data in install file : OK
@@ -162,7 +137,6 @@ STEP 6. Make INSTALL PROGRAM
   create procpath data in install file : OK
   create bindir data in uninstall file : OK
   create confdir data in uninstall file : OK
-  create datadir data in uninstall file : OK
   create filterdir data in uninstall file : OK
   create includedir data in uninstall file : OK
   create procpath data in uninstall file : OK
@@ -226,7 +200,6 @@ STEP 2. Option Check
   PREFIX     : /home/oops/byspam
   BINDIR     : /home/oops/byspam/bin
   CONFDIR    : /home/oops/byspam/conf
-  DATADIR    : /home/oops/mail/spam
   FILTERDIR  : /home/oops/byspam/conf/Filter
   INCLUDEDIR : /home/oops/byspam/include
 
@@ -260,32 +233,13 @@ STEP 4. Configure Script of By SPAM
   configred .. plain.pl
 
 
-STEP 5. Configure Environment
-----------------------------------------------------------------------
-  You enable to choise save or delete filtered mail
-  If you want save, type 'Y' or 'y'.
-  Or if you want delete, type 'N' or 'n'.
-
-  If you selected save, filtered mail is saved in
-  /home/oops/mail/spam/spam-YearMonth or for account user, saved in
-  /home/oops/mail/spam/spam-YearMonth
-
-  Do you want to save filtered mail? [y/n] : 
-
-     필터링된 메일을 저장할지 삭제할지를 결정합니다. y 를 선택했을 경우
-     --datadir 로 지정한 디렉토리에 byspam-년월 의 형식으로 저장이 됩니다. 이 옵
-     션은 설치 후 @confidr@/byspam.conf 에서 수정 할 수 있습니다.
-
-
-
-STEP 6. Make INSTALL PROGRAM
+STEP 5. Make INSTALL PROGRAM
 ----------------------------------------------------------------------
 
 
   create prefix data in install file : OK
   create bindir data in install file : OK
   create confdir data in install file : OK
-  create datadir data in install file : OK
   create filterdir data in install file : OK
   create includedir data in install file : OK
   create INSTALLDIR data in install file : OK
@@ -294,7 +248,6 @@ STEP 6. Make INSTALL PROGRAM
   create procpath data in install file : OK
   create bindir data in uninstall file : OK
   create confdir data in uninstall file : OK
-  create datadir data in uninstall file : OK
   create filterdir data in uninstall file : OK
   create includedir data in uninstall file : OK
   create procpath data in uninstall file : OK
@@ -345,11 +298,6 @@ $filterIframe   = 1;
 # 메일 내용에 아무런 내용없이 태그들로만 이루어져 있을 경우
 # 스팸처리
 $filterTag      = 0;
-
-# After filtering, whether save or remove filterd mail
-# 1 -> save to $MAIL/spam
-# 0 -> removed
-$filterSave      = 1;
 
 이다. $filterIframe 은 html 형식으로 온 메일중 iframe tag 가 존재할 경우 스팸으로
 간주하겠다는 설정이다. $filterTag 의 경우에는 메일 본문에서 html tag 를 삭제하고
