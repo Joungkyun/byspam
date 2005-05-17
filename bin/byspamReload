@@ -4,7 +4,7 @@
 # This package code follows BPL License
 # JoungKyun Kim <http://www.oops.org>
 #
-# $Id: byspamReload,v 1.1 2004-12-03 10:55:48 oops Exp $
+# $Id: byspamReload,v 1.2 2005-05-17 07:55:13 oops Exp $
 #
 
 use lib '@includedir@';
@@ -57,7 +57,7 @@ foreach $_line ( @{$shm->opts('basics')} ) {
 		$verbose && printf "%-13s %-40s reload\n", $_name, $_file;
 		$_conf = $cm->filterText ($_file);
 		$_name = lc ($_name);
-		$_conf && $shm->{$_name}->store ($_conf);
+		$shm->{$_name}->store ($_conf);
 	}
 }
 
@@ -69,7 +69,7 @@ $_shmkey = $_line_r[1];
 if ( -f "$_file" ) {
 	$verbose && printf "%-13s %-40s reload\n", 'Allows', $_file;
 	$_conf = $cm->filterText ($_file);
-	$_conf && $shm->{'allows'}->store ($_conf);
+	$shm->{'allows'}->store ($_conf);
 }
 
 # reload ignore data
@@ -80,7 +80,7 @@ $_shmkey = $_line_r[1];
 if ( -f "$_file" ) {
     $verbose && printf "%-13s %-40s reload\n", 'Ignore', $_file;
     $_conf = $cm->filterText ($_file);
-    $_conf && $shm->{'ignore'}->store ($_conf);
+    $shm->{'ignore'}->store ($_conf);
 }
 
 exit 0;
