@@ -1,7 +1,7 @@
 #
 # Byspam Initial functions
 #
-# $Id: Init.pm,v 1.2 2004-12-03 11:16:03 oops Exp $
+# $Id: Init.pm,v 1.3 2005-05-17 07:51:02 oops Exp $
 #
 
 package Byspam::Init;
@@ -51,7 +51,7 @@ sub new {
 		if ( ! $self->{conf}->fetch ) {
 			my $_pconf = $cm->formatConfig ($conf);
 			$_pconf && $self->{conf}->store ($_pconf);
-			$_shmdeb && print "load configuratoins\n";
+			$_shmdeb && print "load configurations\n";
 		}
 	}
 

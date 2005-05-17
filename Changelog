@@ -1,8 +1,13 @@
 Changelog document
 
-$Id: Changelog,v 1.46 2005-02-01 13:34:16 oops Exp $
+$Id: Changelog,v 1.47 2005-05-17 07:51:02 oops Exp $
 
 Warn: date format is Y.m.d
+* v1.0.2
+  - 2005.04.22
+    by HyunSung Jang :
+       - fixed typo
+
 * v1.0.1
   - 2005.02.01
     by JoungKyun Kim :
