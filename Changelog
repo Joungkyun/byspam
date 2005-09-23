@@ -1,8 +1,14 @@
 Changelog document
 
-$Id: Changelog,v 1.48 2005-05-17 07:55:13 oops Exp $
+$Id: Changelog,v 1.49 2005-09-23 09:47:30 oops Exp $
 
 Warn: date format is Y.m.d
+
+* v1.0.3
+  - 2005.09.23
+    by JoungKyun Kim :
+      - fixed shared memory access problem between the other users
+
 * v1.0.2
   - 2005.04.22
     by HyunSung Jang :
