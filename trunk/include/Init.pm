@@ -1,7 +1,7 @@
 #
 # Byspam Initial functions
 #
-# $Id: Init.pm,v 1.3 2005-05-17 07:51:02 oops Exp $
+# $Id: Init.pm,v 1.4 2005-09-23 09:47:23 oops Exp $
 #
 
 package Byspam::Init;
@@ -165,7 +165,7 @@ sub byspamShmInit {
 					-create  => 1,
 					-destroy => 0,
 					-size    => $_size,
-					-mode    => 0600
+					-mode    => 0666
 	);
 
 	return $_shm;
