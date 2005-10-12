@@ -1,7 +1,7 @@
 #
 # Byspam Mail parsing library
 #
-# $Id: Parse.pm,v 1.5 2004-11-30 16:49:03 oops Exp $
+# $Id: Parse.pm,v 1.6 2005-10-12 16:36:05 oops Exp $
 #
 
 package Byspam::Parse;
@@ -62,7 +62,7 @@ sub getHeader {
 	# get whole header
 	if ( $head ) {
 		$head =~ s/\r?\n/\n/g;
-		$head =~ s/(=\?[^?]*\?[BQ]\?[^?]+\?=)/\n$1\n/g;
+		$head =~ s/(=\?[^?]*\?[BQ]\?[^?]+\?=)/\n$1\n/ig;
 		@heads = split (/\r?\n/, $head);
 	}
 
