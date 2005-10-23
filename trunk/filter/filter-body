@@ -2,7 +2,7 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-body,v 1.24 2004-12-28 07:22:39 oops Exp $
+# $Id: filter-body,v 1.25 2005-10-23 16:46:55 oops Exp $
 
 (&#44305|광|廣|관)[^\xB0-\xFEa-z]*(고|go|告)
 홍[^\xB0-\xFEa-z]*보
@@ -35,7 +35,7 @@ Discount|marketing|sex|animal|pussy|poker|buyer|credit|finance
 mini10928@dreamwiz\.com
 (운세|사주)[\s]*정보|신년[\s]*운세
 unregist|인테리어|신규[\s]*창업
-회원님|kavmodel|연예인|H양|성현아|럭셔리
+회원님|kavmodel|연예인|H양|성현아|럭셔리|일회성
 get start now
 window\.open|<embed|codebase=|<object
 <map name=|refuse
@@ -52,6 +52,13 @@ and lots more
 bodyting|rolex|well-being
 샘\.?플
 (클릭|click)[\s]*(하|해[\s]*주)(세요|십시오)
+풀[ ]*사이즈|디빅스|Divx
+공.인.중.개.사|무.료.자.료
+(auto|view)\.html
+\.thml
+casino|카지노|money
+erqewqwrq\.vv\.st
+Namo WebEditor
 ---- system information ----
 
 # user define

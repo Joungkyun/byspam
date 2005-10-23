@@ -2,7 +2,7 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-subject,v 1.18 2004-12-28 07:22:39 oops Exp $
+# $Id: filter-subject,v 1.19 2005-10-23 16:46:55 oops Exp $
 
 (&#44305|광|廣|관|괌)[^\xB0-\xFEa-z]*(고|go|告)
 홍[^\xB0-\xFEa-z]*보
@@ -46,6 +46,10 @@ Screen Saver
 Loose up|well-being
 Click Here for more Information
 하드[ \t]*코어|야동
+백화점|직거래|악성|회생
+납품|명품|세일|피에르
+re:[\s]*(문의|요청)하신
+(Re\|Fw): FYI
 
 # SOBIG.F configuration
 ^[\s]*(Thank you!|Your Details)[\s]*$
