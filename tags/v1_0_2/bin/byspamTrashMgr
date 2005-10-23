@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# $Id: byspamTrashMgr,v 1.2 2004-12-06 08:57:54 oops Exp $
+
+CONFNAME="@confdir@/byspam.conf";
+REGs="^[[:space:]]*trashPeriod[[:space:]]*=[[:space:]]*[\"']*[0-9]\+[\"']*"
+
+CONF=$(cat ${CONFNAME} | grep "${REGs}" | sed 's/\(#\|;\).*//g')
+
+ 
+if [ -z "${CONF}" ]; then
+  CONF=30
+else
+  CONF=$(echo ${CONF} | awk -F "=" '{print $2}' | sed 's/[^0-9]//g')
+fi
+
+CHK_DATE=$(date -d "${CONF} days ago" +%Y%m%d)
+
+DELLIST=$(cat /etc/passwd | awk -F : '{print $6}')
+
+for i in ${DELLIST}
+do
+  i=$(echo ${i} | sed 's/\/$//g')
+  if [ -d "${i}/byspam" ] && [ -f "${i}/byspam/spam-${CHK_DATE}" ]; then
+    rm -f ${i}/byspam/spam-${CHK_DATE} > /dev/null 2>&1
+  fi
+done
+
+exit 0

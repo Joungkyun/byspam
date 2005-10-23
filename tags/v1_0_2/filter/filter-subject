@@ -1,0 +1,77 @@
+# This file is used to filter Subject: of mail header.
+# and use regular expression with perl type.
+# See also regex of perl.
+#
+# $Id: filter-subject,v 1.19 2005-10-23 16:46:55 oops Exp $
+
+(&#44305|광|廣|관|괌)[^\xB0-\xFEa-z]*(고|go|告)
+홍[^\xB0-\xFEa-z]*보
+선[^\xB0-\xFEa-z]*전
+투[^\xB0-\xFEa-z]*자
+정[^\xB0-\xFEa-z]*보
+안[^\xB0-\xFEa-z]*내
+제[^\xB0-\xFEa-z]*안
+대[^\xB0-\xFEa-z]*출
+직[^\xB0-\xFEa-z]*장[^\xB0-\xFEa-z]*인
+수[^\xB0-\xFEa-z]*수[^\xB0-\xFEa-z]*료
+비[^\xB0-\xFEa-z]*아[^\xB0-\xFEa-z]*그[^\xB0-\xFEa-z]*라
+과[^\xB0-\xFEa-z]*(ㅇ|앙|아앙)[^\xB0-\xFEa-z]*고
+ㄱ[^\xB0-\xFEa-z]*ㅗ[^\xB0-\xFEa-z]*ㅏ[^\xB0-\xFEa-z]*ㅇ[^\xB0-\xFEa-z]*ㄱ[^\xB0-\xFEa-z]*ㅗ
+v[^\xB0-\xFEa-z]*i[^\xB0-\xFEa-z]*a[^\xB0-\xFEa-z]*g[^\xB0-\xFEa-z]*r[^\xB0-\xFEa-z]*a
+구입[\s]*(문의|방법|신청|동의)
+카드[\s]*대금|잔여한도|창업|포커|고스톱
+수신을[\s]*원하지
+부자|바스트메일|수익|성인|테스트|SEX|PORN|YOUNG|STAR|STRIP|ADV|ADULT
+포.?르.?노|섹.?캠|뽀.?르.?노|강간|몰카|성폭행
+초\.?저\.?가|모\.?바\.?일|PDA([^a-z]|$)|항\.?문
+사까시|누나|채팅|다이어트|신용|아쿠아|정수기|최신형
+토익|토플|보증|담보|연체|상담[\s]*신청
+NAMED|NUDE|CELEBRIT|casino|마케팅|test|DVD|winner|lucky
+Important Message From
+C:\\CoolProgs\\Pretty Park\.exe
+영상으로 보내는 편지|현\.?금|속\.?보
+명랑소녀 빠굴기|발송기|명품|무료|마일리지|골프|여행
+Trojaner-Info|pussy
+ILOVEYOU|stock|poker|money|buyer|Unsubscribe|shopping
+Look at the pretty
+Some advice on your shortcoming
+Free XXX Pictures
+A Free hot porn site
+Why don't you reply to me
+Never kiss a stranger
+How about have dinner with me together
+Snowhite and the Seven Dwarfs
+photos from my
+Screen Saver
+Loose up|well-being
+Click Here for more Information
+하드[ \t]*코어|야동
+백화점|직거래|악성|회생
+납품|명품|세일|피에르
+re:[\s]*(문의|요청)하신
+(Re\|Fw): FYI
+
+# SOBIG.F configuration
+^[\s]*(Thank you!|Your Details)[\s]*$
+Re:[\s]*(Thank you!|Details|Approved|Your application|Wicked screensaver|Taht movie)
+
+# Win32/Netsky.worm.18944.B
+Delivery failure notice
+
+# W32/Zafi@MM
+kepeslap erkezett!
+
+# Win32/Bagle.worm.P
+Re: (Msg reply|Hello|Yahoo|Thank|Text message|Document|Incoming|Hi)
+(Important|Account|Forum) notify
+(Notify|Warning) (about|from).* e-mail
+E-?mail (technical|account).*(warning|message|report)
+(Incoming|Hidden|Protected) message
+Pass(word)?[ ]?[:-] %s
+Encrypted document
+Fax Message Received
+Request response
+Site changes
+
+# user define
+
