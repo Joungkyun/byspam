@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://oops.org>
 #
-# $Id: Trash.pm,v 1.12 2009-12-02 07:34:53 oops Exp $
+# $Id: Trash.pm,v 1.13 2009-12-02 10:59:27 oops Exp $
 #
 
 package Byspam::Trash;
@@ -12,6 +12,7 @@ use strict;
 use Byspam::Common;
 use Byspam::Mail;
 use Byspam::Parse;
+use Byspam::Encode;
 use File::Copy;
 
 my $cm = new Byspam::Common;
@@ -270,7 +271,7 @@ sub printTrash {
 		push (@date, $mx->header ('Date'));
 		push (@_byspam, $mx->header ('X-BySpam-Filter'));
 
-		$main::_bdebug && print "### " . $mx->header("Subject") ."\n";
+		$main::_bdebug && print "### convert subject : " . $tsub ."\n";
 		push (@body, $ps->getBody ($mx));
 		$permail =~ s/!byspamsplit!//g;
 	}

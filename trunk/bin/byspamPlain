@@ -2,7 +2,7 @@
 #
 # Mail Parse Utility supported by BySPAM
 # JoungKyun Kim <http://oops.org>
-# $Id: byspamPlain,v 1.3 2009-12-02 07:34:51 oops Exp $
+# $Id: byspamPlain,v 1.4 2009-12-02 10:59:24 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -35,16 +35,7 @@ my @_argv    = @ARGV;
 
 # create reference Common
 $cm = new Byspam::Common;
-
-$charset = $shm->opts ('charset');
-if ( ! $charset ) {
-	$charset = $ENV{"LANG"};
-	CHARSET: {
-		( $charset =~ m/utf[-]?8$/i ) and $charset = "UTF-8", last CHARSET;
-		( $charset =~ m/^ko/i ) and $charset = "EUC-KR", last CHARSET;
-		$charset = "";
-	}
-}
+$charset = 'EUC-KR' if ( ! $charset );
 
 # create reference Getopt
 $o = new Byspam::Getopt;
@@ -116,14 +107,14 @@ sub Help {
 	my @helps = ();
 	my $USAGES;
 
-	if ( $main::charset eq "EUC-KR" || $ENV{'LANG'} =~ m/^ko/i ) {
+	if ( $ENV{'LANG'} =~ m/^ko/i ) {
 		$USAGES = "사용법";
 		@helps = (
 					"현재 메세지를 출력",
 					"지정된 파일의 메일 본문만 디코딩 하여 출력",
 					"지정된 파일의 메일 헤더만 디코딩 하여 출력"
 		);
-		if ( $main::charset ne 'EUC-KR' ) {
+		if ( $ENV['LANG'] =~ m/utf/i ) {
 			Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
 			my $i = 0;
 			my $size = @helps;

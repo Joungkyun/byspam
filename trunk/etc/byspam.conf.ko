@@ -1,7 +1,7 @@
 # Byspam - PROCMAIL 을 이용한 메일 필터 설정 파일
 # 필터파일: @confdir@/Filter
 # 김정균 <http://oops.org>
-# $Id: byspam.conf.ko,v 1.7 2009-12-02 07:34:52 oops Exp $
+# $Id: byspam.conf.ko,v 1.8 2009-12-02 10:59:25 oops Exp $
 #
 version         = @byversion@
 
@@ -13,6 +13,11 @@ version         = @byversion@
 # 일해야 합니다.
 #
 #$charset        = EUC-KR
+
+#
+# 메일의 charset이 없을 경우 처리할 default charset
+#
+#$charset_mail  = EUC-KR
 
 # 유저 설정 경로 (변경하지 마십시오)
 #

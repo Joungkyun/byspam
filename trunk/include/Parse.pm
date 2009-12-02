@@ -1,7 +1,7 @@
 #
 # Byspam Mail parsing library
 #
-# $Id: Parse.pm,v 1.6 2005-10-12 16:36:05 oops Exp $
+# $Id: Parse.pm,v 1.7 2009-12-02 10:59:27 oops Exp $
 #
 
 package Byspam::Parse;
@@ -33,6 +33,7 @@ sub setCharset {
 	$ret{"to"} = lc ($ret{"to"});
 	$ret{"from"} = "";
 
+	return %ret if ( $locale =~ m/[^0-9a-z-]/i );
 
 	if ( $locale ) {
 		$locale = lc ($locale);
@@ -40,8 +41,13 @@ sub setCharset {
 		$locale = "cp949" if ( $locale =~ m/uhc|windows-949|ks_c_5601-1987/i );
 
 		# if not euc-kr or utf-8, unset;
-		$locale = "" if ( $locale ne "utf-8" && $locale ne "euc-kr" && $locale ne "cp949" );
-		$ret{"from"} = $locale if ( $locale && $locale ne $ret{"to"} && $locale ne "cp949" );
+		if ( $ret{'to'} ne 'utf-8' ) {
+			$locale = "" if ( $locale ne "utf-8" && $locale ne "euc-kr" && $locale ne "cp949" );
+			$ret{"from"} = $locale if ( $locale && $locale ne $ret{"to"} && $locale ne "cp949" );
+		} else {
+			$ret{'from'} = $locale;
+		}
+
 	}
 
 	return %ret;
@@ -129,7 +135,8 @@ sub parseHeader {
 			$headReturn .= " ".$line;
 		}
 	} else {
-		$headReturn = $head;
+		%charset = setCharset ($main:charset_mail);
+		$headReturn = $cv->byconv ($head, $charset{"from"}, $charset{"to"});
 	}
 
 	if ( $headReturn ) {
