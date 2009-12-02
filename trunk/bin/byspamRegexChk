@@ -2,7 +2,7 @@
 #
 # Perl regualr expression check utility in BySPAM
 # JoungKyun Kim <http://www.oops.org>
-# $Id: byspamRegexChk,v 1.1 2004-12-06 07:24:29 oops Exp $
+# $Id: byspamRegexChk,v 1.2 2009-12-02 07:30:09 oops Exp $
 #
 
 use strict;
@@ -15,8 +15,8 @@ my $WN;
 
 $charset = $ENV{"LANG"};
 CHARSET: {
+	( $charset =~ m/utf[-]?8$/i ) and $charset = "UTF-8", last CHARSET;
 	( $charset =~ m/^ko/i ) and $charset = "EUC-KR", last CHARSET;
-	( $charset =~ m/^utf/i ) and $charset = "UTF-8", last CHARSET;
 	$charset = "";
 }
 

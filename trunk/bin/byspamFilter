@@ -4,7 +4,7 @@
 # This package code follows BPL License
 # JoungKyun Kim <http://www.oops.org>
 #
-# $Id: byspamFilter,v 1.22 2004-12-30 08:36:18 oops Exp $
+# $Id: byspamFilter,v 1.23 2009-12-02 07:30:09 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -14,6 +14,7 @@ use Byspam::Getopt;
 use Byspam::Common;
 use Byspam::Parse;
 use Byspam::Mail;
+use Byspam::Encode;
 
 # declaration global variable on configuration file
 use vars qw ($version $charset $_filtered $debug $verbose);
@@ -70,8 +71,8 @@ $charset = $shm->opts ("charset");
 if ( ! $charset ) {
 	$charset = $ENV{"LANG"};
 	CHARSET: { 
+	    ( $charset =~ m/utf[-]?8$/i ) and $charset = "UTF-8", last CHARSET;
 	    ( $charset =~ m/^ko/i ) and $charset = "EUC-KR", last CHARSET;
-	    ( $charset =~ m/^utf/i ) and $charset = "UTF-8", last CHARSET;
 	    $charset = "";
 	}
 }
@@ -306,7 +307,7 @@ sub printHelp {
 
 	$lc = $main::charset;
 	my @helps = ();
-	if( $lc eq "EUC-KR" ) {
+	if ( $lc eq "EUC-KR" || $ENV{'LANG'} =~ m/^ko/i ) {
 		$USAGES = "사용법";
 		@helps = (
 				  "현재 메세지를 출력",
@@ -314,6 +315,14 @@ sub printHelp {
 				  "메일 형식을 파이프로 넘기는 형식",
 				  "메일 형식을 파이프로 넘기는 형식 [ 디버그 모드 ]"
 		);
+        if ( $main::charset ne 'EUC-KR' ) {
+            Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
+            my $i = 0;
+            my $size = @helps;
+            for ( ; $i<$size; $i++ ) {
+                Encode::from_to ($helps[$i], 'euc-kr', 'utf-8');
+            }
+        }
 	} else {
 		$USAGES = "USAGE";
 		@helps = (

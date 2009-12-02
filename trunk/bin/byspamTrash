@@ -1,7 +1,7 @@
 #!@PERLPATH@
 #
 # By SPAM trash viewer front end
-# $Id: byspamTrash,v 1.17 2004-12-06 14:05:08 oops Exp $
+# $Id: byspamTrash,v 1.18 2009-12-02 07:30:09 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -10,6 +10,7 @@ use Byspam::Init;
 use Byspam::Getopt;
 use Byspam::Common;
 use Byspam::Trash;
+use Byspam::Encode;
 
 # declaration global variable on configuration file
 use vars qw ( $charset $version $debug $verbose $inbox);
@@ -73,8 +74,8 @@ $cm = new Byspam::Common;
 
 $charset = $ENV{"LANG"};
 CHARSET: {
+	( $charset =~ m/utf[-]?8/i ) and $charset = "UTF-8", last CHARSET;
 	( $charset =~ m/^ko/i ) and $charset = "EUC-KR", last CHARSET;
-	( $charset =~ m/^utf/i ) and $charset = "UTF-8", last CHARSET;
 	$charset = "";
 }
 
@@ -207,7 +208,7 @@ sub Help {
 	my $OPTN;
 	my $ARGUMENT;
 
-	if ( $main::charset eq "EUC-KR" ) {
+	if ( $main::charset eq "EUC-KR" || $ENV{'LANG'} =~ m/^ko/i ) {
 		$USAGES = "사용법";
 		$OPTN = "옵션";
 		$ARGUMENT = "파일이름 | 계정";
@@ -217,6 +218,16 @@ sub Help {
 					"출력할 메일 제목 길이 [기본 60자]",
 					"현재 메세지를 출력"
 		);
+		if ( $main::charset ne 'EUC-KR' ) {
+			Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
+			Encode::from_to ($OPTN, 'euc-kr', 'utf-8');
+			Encode::from_to ($ARGUMENT, 'euc-kr', 'utf-8');
+			my $i = 0;
+			my $size = @helps;
+			for ( ; $i<$size; $i++ ) {
+				Encode::from_to ($helps[$i], 'euc-kr', 'utf-8');
+			}
+		}
 	} else {
 		$USAGES = "USAGE";
 		$OPTN = "OPTION";
