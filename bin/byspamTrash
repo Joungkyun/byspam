@@ -1,7 +1,7 @@
 #!@PERLPATH@
 #
 # By SPAM trash viewer front end
-# $Id: byspamTrash,v 1.20 2009-12-02 10:59:24 oops Exp $
+# $Id: byspamTrash,v 1.21 2009-12-02 11:03:45 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -25,7 +25,8 @@ my $shm;
 # init configuration and filter variables
 $shm = Byspam::Init->new ();
 
-$version = $shm->opts ('version');
+#$version = $shm->opts ('version');
+$version = '1.0.3';
 $inbox   = $shm->opts('inbox');
 
 # options variable
