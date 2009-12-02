@@ -1,7 +1,7 @@
 # Byspam - PROCMAIL 을 이용한 메일 필터 설정 파일
 # 필터파일: @confdir@/Filter
-# 김정균 <http://www.oops.org>
-# $Id: byspam.conf.ko,v 1.6 2004-12-06 18:09:42 oops Exp $
+# 김정균 <http://oops.org>
+# $Id: byspam.conf.ko,v 1.7 2009-12-02 07:34:52 oops Exp $
 #
 version         = @byversion@
 
