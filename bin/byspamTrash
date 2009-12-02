@@ -1,7 +1,7 @@
 #!@PERLPATH@
 #
 # By SPAM trash viewer front end
-# $Id: byspamTrash,v 1.18 2009-12-02 07:30:09 oops Exp $
+# $Id: byspamTrash,v 1.19 2009-12-02 07:34:51 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -149,7 +149,7 @@ $_until = 0;
 while ( 1 ) {
 	system ("clear");
 	print "=============================================================================\n";
-	print "[1;37mby SPAM Trash Viewer[7;0m $version by JoungKyun Kim <http://www.oops.org>\n";
+	print "[1;37mby SPAM Trash Viewer[7;0m $version by JoungKyun Kim <http://oops.org>\n";
 	print "Command [ q - quit | no - view no | d no - del no | enter - next | b - back ]\n";
 	print "=============================================================================\n";
 	print "Total $_tpage page / Current $_page page\n";

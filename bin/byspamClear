@@ -2,9 +2,9 @@
 #
 # By SPAM Shared Memory Clear code.
 # This package code follows BPL License
-# JoungKyun Kim <http://www.oops.org>
+# JoungKyun Kim <http://oops.org>
 #
-# $Id: byspamClear,v 1.1 2004-12-03 10:55:48 oops Exp $
+# $Id: byspamClear,v 1.2 2009-12-02 07:34:50 oops Exp $
 #
 use lib '@includedir@';
 use strict;
