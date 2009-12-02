@@ -1,7 +1,7 @@
 Summary: The By SPAM is filtering tool for Anti Spam
 Summary(ko): 스팸방지를 위한 필터링 툴
 Name: byspam
-Version: 1.0.2
+Version: 1.0.3
 Release: 1
 Epoch: 3
 License: BPL

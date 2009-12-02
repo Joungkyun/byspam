@@ -4,7 +4,7 @@
 # This package code follows BPL License
 # JoungKyun Kim <http://oops.org>
 #
-# $Id: byspamFilter,v 1.25 2009-12-02 10:59:24 oops Exp $
+# $Id: byspamFilter,v 1.26 2009-12-02 11:03:45 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -30,7 +30,8 @@ my $shm;
 $shm = Byspam::Init->new ();
 
 # init global variables
-$version      = $shm->opts('version');
+#$version      = $shm->opts('version');
+$version      = '1.0.3';
 
 # option variable;
 my $opt      = "";
