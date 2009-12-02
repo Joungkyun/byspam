@@ -1,7 +1,7 @@
 #
 # Byspam EUC-KR UTF-8 convert module
 #
-# $Id: Encode.pm,v 1.3 2009-12-02 10:59:27 oops Exp $
+# $Id: Encode.pm,v 1.4 2009-12-02 15:45:57 oops Exp $
 #
 
 package Byspam::Encode;
@@ -31,7 +31,8 @@ sub byconv {
 	return $string if ( ! $from || ! $to || $from eq $to );
 
 	$buf = $string;
-	Encode::from_to ($buf, $from, $to);
+	eval ("Encode::from_to (\$buf, uc ('$from'), uc ('$to'));");
+	$buf = $string if ( $@ );
 
 	return $buf if ( $buf );
 	return $string;
