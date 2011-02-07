@@ -1,7 +1,7 @@
 #
 # Byspam Common functions
 #
-# $Id: Common.pm,v 1.6 2011-02-07 19:01:44 oops Exp $
+# $Id: Common.pm,v 1.7 2011-02-07 19:13:08 oops Exp $
 #
 
 package Byspam::Common;
@@ -141,6 +141,7 @@ sub checkReceived {
 	my @lines = split (/\n/, $_headers);
 	my $rcout = 0;
 	foreach my $_v ( @lines ) {
+		return 100 if ( $_v =~ /Received-SPF:/ && $_v =~ /authenticated connection/ );
 		$rcout++ if ( $_v =~ /^Received: / );
 	}
 
