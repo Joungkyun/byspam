@@ -4,7 +4,7 @@
 # This package code follows BPL License
 # JoungKyun Kim <http://oops.org>
 #
-# $Id: byspamFilter,v 1.26 2009-12-02 11:03:45 oops Exp $
+# $Id: byspamFilter,v 1.27 2011-02-07 19:01:42 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -151,6 +151,16 @@ $spam = 1, $fil = "No Body", goto CHECKEND if ( $shm->opts('nobody') && ! $mail-
 
 # header parsing
 $header = $ps->getHeader ($mail->{_header});
+
+# If received header is smaller than 2, it's regard as spam bot!
+my $receivedNo = $cm->checkReceived ($header);
+if ( $receivedNo eq 1 ) {
+	$spam = 1;
+	$nospam = 0;
+	$fil = "Recieved header";
+	printMessage ($fil, "1 lines");
+	goto CHECKEND;
+}
 
 # body parsing
 $body = $ps->getBody ($mail);
@@ -313,12 +323,12 @@ sub printHelp {
 	$lc = $main::charset;
 	my @helps = ();
 	if ( $ENV{'LANG'} =~ m/^ko/i ) {
-		$USAGES = "»ç¿ë¹ý";
+		$USAGES = "ì‚¬ìš©ë²•";
 		@helps = (
-				  "ÇöÀç ¸Þ¼¼Áö¸¦ Ãâ·Â",
-				  "ÀÎÀÚ·Î ³Ñ±ä ¸ÞÀÏÇü½ÄÀÇ Àý´ë°æ·Î ÆÄÀÏÀ» Ã¼Å© [ µð¹ö±× ¸ðµå ]",
-				  "¸ÞÀÏ Çü½ÄÀ» ÆÄÀÌÇÁ·Î ³Ñ±â´Â Çü½Ä",
-				  "¸ÞÀÏ Çü½ÄÀ» ÆÄÀÌÇÁ·Î ³Ñ±â´Â Çü½Ä [ µð¹ö±× ¸ðµå ]"
+				  "í˜„ìž¬ ë©”ì„¸ì§€ë¥¼ ì¶œë ¥",
+				  "ì¸ìžë¡œ ë„˜ê¸´ ë©”ì¼í˜•ì‹ì˜ ì ˆëŒ€ê²½ë¡œ íŒŒì¼ì„ ì²´í¬ [ ë””ë²„ê·¸ ëª¨ë“œ ]",
+				  "ë©”ì¼ í˜•ì‹ì„ íŒŒì´í”„ë¡œ ë„˜ê¸°ëŠ” í˜•ì‹",
+				  "ë©”ì¼ í˜•ì‹ì„ íŒŒì´í”„ë¡œ ë„˜ê¸°ëŠ” í˜•ì‹ [ ë””ë²„ê·¸ ëª¨ë“œ ]"
 		);
         if ( $ENV['LANG'] =~ m/utf/i ) {
             Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
