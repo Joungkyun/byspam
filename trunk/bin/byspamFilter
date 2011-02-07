@@ -4,7 +4,7 @@
 # This package code follows BPL License
 # JoungKyun Kim <http://oops.org>
 #
-# $Id: byspamFilter,v 1.28 2011-02-07 19:13:07 oops Exp $
+# $Id: byspamFilter,v 1.29 2011-02-07 19:22:21 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -154,9 +154,9 @@ $header = $ps->getHeader ($mail->{_header});
 
 # If received header is smaller than 2, it's regard as spam bot!
 my $receivedNo = $cm->checkReceived ($header);
-if ( $recievedNo eq 100 ) {
+if ( $receivedNo eq 100 ) {
 	# case that authenicated connection
-	$span = 0;
+	$spam = 0;
 	$nospam = 0;
 	goto CHECKEND;
 }
