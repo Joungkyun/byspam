@@ -1,7 +1,7 @@
 #
 # Byspam Common functions
 #
-# $Id: Common.pm,v 1.5 2004-12-03 10:55:20 oops Exp $
+# $Id: Common.pm,v 1.6 2011-02-07 19:01:44 oops Exp $
 #
 
 package Byspam::Common;
@@ -125,6 +125,26 @@ sub noContentCheck {
 	$content =~ s/<[^>]*>//ig;
 
 	return 1 if ( ! $content );
+
+	return 0;
+}
+
+# check number of Received header. It is smaller than 2,
+# it's regards as spam bot
+sub checkReceived {
+	my $self = shift if ref ($_[0]);
+	my $_headers = $_[0];
+
+	# If header don't exists, it regards parse error, and return no spam.
+	return 0 if ( ! $_headers );
+
+	my @lines = split (/\n/, $_headers);
+	my $rcout = 0;
+	foreach my $_v ( @lines ) {
+		$rcout++ if ( $_v =~ /^Received: / );
+	}
+
+	return 1 if ( $rcout lt 2 );
 
 	return 0;
 }

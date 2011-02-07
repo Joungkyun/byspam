@@ -1,12 +1,16 @@
 Changelog document
 
-$Id: Changelog,v 1.51 2009-12-02 07:30:07 oops Exp $
+$Id: Changelog,v 1.52 2011-02-07 19:01:40 oops Exp $
 
 Warn: date format is Y.m.d
 
 * v1.0.3
+  - 2011.02.08
+	by JoungKyun.Kim :
+	- add check function that checked number of recieved headers.
+
   - 2009.12.02
-  	by JoungKyun Kim :
+	by JoungKyun Kim :
 	- support utf-8 environment shell
 
 * v1.0.2
