@@ -1,6 +1,6 @@
 Changelog document
 
-$Id: Changelog,v 1.52 2011-02-07 19:01:40 oops Exp $
+$Id: Changelog,v 1.53 2011-02-07 19:13:05 oops Exp $
 
 Warn: date format is Y.m.d
 
@@ -8,6 +8,7 @@ Warn: date format is Y.m.d
   - 2011.02.08
 	by JoungKyun.Kim :
 	- add check function that checked number of recieved headers.
+	- add check authenicated connection
 
   - 2009.12.02
 	by JoungKyun Kim :
