@@ -1,9 +1,9 @@
 #
 # Byspam Trash Viewer Library
 #
-# scripted by JoungKyun Kim <http://oops.org>
+# scripted by JoungKyun Kim <http://www.oops.org>
 #
-# $Id: Trash.pm,v 1.13 2009-12-02 10:59:27 oops Exp $
+# $Id: Trash.pm,v 1.11 2004-12-06 18:18:07 oops Exp $
 #
 
 package Byspam::Trash;
@@ -12,7 +12,6 @@ use strict;
 use Byspam::Common;
 use Byspam::Mail;
 use Byspam::Parse;
-use Byspam::Encode;
 use File::Copy;
 
 my $cm = new Byspam::Common;
@@ -271,7 +270,7 @@ sub printTrash {
 		push (@date, $mx->header ('Date'));
 		push (@_byspam, $mx->header ('X-BySpam-Filter'));
 
-		$main::_bdebug && print "### convert subject : " . $tsub ."\n";
+		$main::_bdebug && print "### " . $mx->header("Subject") ."\n";
 		push (@body, $ps->getBody ($mx));
 		$permail =~ s/!byspamsplit!//g;
 	}
@@ -298,7 +297,7 @@ INIT:
 	while (1) {
 		system ("clear");
 		print "=============================================================================\n" .
-			  "[1;37mby SPAM Trash Viewer[7;0m $main::version by JoungKyun Kim <http://oops.org>\n" .
+			  "[1;37mby SPAM Trash Viewer[7;0m $main::version by JoungKyun Kim <http://www.oops.org>\n" .
 			  "Command [ [1;37mq[7;0muit | [1;37mn[7;0mum | [1;37md[7;0mel | " .
 			  "[1;37mr[7;0mecovery | enter - next | b - back | p - jump ]\n" .
 			  "=============================================================================\n";
@@ -342,7 +341,7 @@ INIT:
 				my $mailno = $cmd - 1;
 				system("clear");
 				$printBody = "=============================================================================\n" .
-							 "by SPAM Trash Viewer $main::version by JoungKyun Kim <http://oops.org>\n" .
+							 "by SPAM Trash Viewer $main::version by JoungKyun Kim <http://www.oops.org>\n" .
 							 "Command [ q - quit | space - next page | enter - next line | b - prev page ]\n" .
 							 "=============================================================================\n" .
 							 "$p_page page / total $lastpage pages\n\n".

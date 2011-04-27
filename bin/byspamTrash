@@ -1,7 +1,7 @@
 #!@PERLPATH@
 #
 # By SPAM trash viewer front end
-# $Id: byspamTrash,v 1.21 2009-12-02 11:03:45 oops Exp $
+# $Id: byspamTrash,v 1.17 2004-12-06 14:05:08 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -10,10 +10,9 @@ use Byspam::Init;
 use Byspam::Getopt;
 use Byspam::Common;
 use Byspam::Trash;
-use Byspam::Encode;
 
 # declaration global variable on configuration file
-use vars qw ( $charset $charset_mail $version $debug $verbose $inbox);
+use vars qw ( $charset $version $debug $verbose $inbox);
 
 # reference variable
 my $cm;
@@ -25,8 +24,7 @@ my $shm;
 # init configuration and filter variables
 $shm = Byspam::Init->new ();
 
-#$version = $shm->opts ('version');
-$version = '1.0.3';
+$version = $shm->opts ('version');
 $inbox   = $shm->opts('inbox');
 
 # options variable
@@ -75,14 +73,10 @@ $cm = new Byspam::Common;
 
 $charset = $ENV{"LANG"};
 CHARSET: {
-	( $charset =~ m/utf[-]?8/i ) and $charset = "UTF-8", last CHARSET;
 	( $charset =~ m/^ko/i ) and $charset = "EUC-KR", last CHARSET;
+	( $charset =~ m/^utf/i ) and $charset = "UTF-8", last CHARSET;
 	$charset = "";
 }
-
-# default charset when charset is not exists.
-$charset_mail = $shm->opts ('charset_mail');
-$charset_mail = 'EUC-KR' if ( ! $charset_mail );
 
 # create reference Getopt
 $o = new Byspam::Getopt;
@@ -154,7 +148,7 @@ $_until = 0;
 while ( 1 ) {
 	system ("clear");
 	print "=============================================================================\n";
-	print "[1;37mby SPAM Trash Viewer[7;0m $version by JoungKyun Kim <http://oops.org>\n";
+	print "[1;37mby SPAM Trash Viewer[7;0m $version by JoungKyun Kim <http://www.oops.org>\n";
 	print "Command [ q - quit | no - view no | d no - del no | enter - next | b - back ]\n";
 	print "=============================================================================\n";
 	print "Total $_tpage page / Current $_page page\n";
@@ -213,7 +207,7 @@ sub Help {
 	my $OPTN;
 	my $ARGUMENT;
 
-	if ( $ENV{'LANG'} =~ m/^ko/i ) {
+	if ( $main::charset eq "EUC-KR" ) {
 		$USAGES = "»ç¿ë¹ý";
 		$OPTN = "¿É¼Ç";
 		$ARGUMENT = "ÆÄÀÏÀÌ¸§ | °èÁ¤";
@@ -223,16 +217,6 @@ sub Help {
 					"Ãâ·ÂÇÒ ¸ÞÀÏ Á¦¸ñ ±æÀÌ [±âº» 60ÀÚ]",
 					"ÇöÀç ¸Þ¼¼Áö¸¦ Ãâ·Â"
 		);
-		if ( $ENV['LANG'] =~ m/utf/i ) {
-			Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
-			Encode::from_to ($OPTN, 'euc-kr', 'utf-8');
-			Encode::from_to ($ARGUMENT, 'euc-kr', 'utf-8');
-			my $i = 0;
-			my $size = @helps;
-			for ( ; $i<$size; $i++ ) {
-				Encode::from_to ($helps[$i], 'euc-kr', 'utf-8');
-			}
-		}
 	} else {
 		$USAGES = "USAGE";
 		$OPTN = "OPTION";

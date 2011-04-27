@@ -1,9 +1,9 @@
 #
 # Perl - C style getopt library include long option functon
 #
-# scripted by JoungKyun Kim <http://oops.org>
+# scripted by JoungKyun Kim <http://www.oops.org>
 #
-# $Id: Getopt.pm,v 1.3 2009-12-02 07:34:53 oops Exp $
+# $Id: Getopt.pm,v 1.2 2004-11-30 19:24:38 oops Exp $
 #
 
 package Byspam::Getopt;
