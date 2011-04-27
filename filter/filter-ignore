@@ -1,20 +1,3 @@
 # This file is used to ignore filter-allow,
 # and use regular expression with perl type.
 # See also regex of perl.
-#
-# $Id: filter-ignore,v 1.12 2004-12-28 07:22:39 oops Exp $
-
-(&#44305|광|廣|관|괌)[^\xB0-\xFEa-z]*(고|go|告)
-홍[^\xB0-\xFEa-z]*보
-선[^\xB0-\xFEa-z]*전
-투[^\xB0-\xFEa-z]*자
-대[^\xB0-\xFEa-z]*출
-수[^\xB0-\xFEa-z]*수[^\xB0-\xFEa-z]*료
-비[^\xB0-\xFEa-z]*아[^\xB0-\xFEa-z]*그[^\xB0-\xFEa-z]*라
-v[^\xB0-\xFEa-z]*i[^\xB0-\xFEa-z]*a[^\xB0-\xFEa-z]*g[^\xB0-\xFEa-z]*r[^\xB0-\xFEa-z]*a
-과앙고오|ㄱㅗㅏㅇㄱㅗ
-yescounter\.com
-성인|포르노|캠동|섹스|빠구리|누나방
-금융|연체|대납|유통|직거래
-
-# user define
