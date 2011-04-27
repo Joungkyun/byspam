@@ -1,6 +1,6 @@
 By SPAM 설치 및 사용 설명서
 
-$Id: INSTALL,v 1.19 2009-12-02 11:03:42 oops Exp $
+$Id: INSTALL,v 1.17 2005-10-23 16:40:15 oops Exp $
 
 목차
 ----
@@ -328,7 +328,7 @@ Environment 문서를 참고 하라.
   byspamTrash 를 실행을 하면 
 
   =============================================================================
-  by SPAM Trash Viewer 1.0.3 by JoungKyun Kim <http://oops.org>
+  by SPAM Trash Viewer 1.0.2 by JoungKyun Kim <http://www.oops.org>
   Command [ q - quit | no - view no | d no - del no | enter - next | b - back ]
   =============================================================================
   Total 4 page / Current 1 page
@@ -354,7 +354,7 @@ Environment 문서를 참고 하라.
 
 
   =============================================================================
-  by SPAM Trash Viewer 1.0.3 by JoungKyun Kim <http://oops.org>
+  by SPAM Trash Viewer 1.0.2 by JoungKyun Kim <http://www.oops.org>
   Command [ quit | number | delete | recovery | enter - next | b - back ]
   =============================================================================
   Current Date: 20041125
@@ -392,7 +392,7 @@ Environment 문서를 참고 하라.
 
 
   =============================================================================
-  by SPAM Trash Viewer 1.0.3 by JoungKyun Kim <http://oops.org>
+  by SPAM Trash Viewer 1.0.2 by JoungKyun Kim <http://www.oops.org>
   Command [ q - quit | space - next page | enter - next line | b - prev page ]
   =============================================================================
   1 page / total 36 pages
