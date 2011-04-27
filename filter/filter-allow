@@ -2,20 +2,8 @@
 # For example mailing lists.
 # And use regular expression with perl type.
 # See also regex of perl.
-#
-# $Id: filter-allow,v 1.11 2004-12-01 08:57:42 oops Exp $
-
-# general configuration
 CERTCC-KR|LogWatch|byspam
+avatarfile.hanmail.net
 Postmaster notify
 Returned mail
-certcc|fedora|red[ ]?hat
-
-# famous mail server
-From:.*@(kldp|kr\.freebsd|xmailserver|oops)\.org
-
-# for webmail
-avatarfile\.hanmail\.net
-X-DreamWiz-SpamCenter:
-
-# user define
+certcc|fedora|red[ ]hat

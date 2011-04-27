@@ -1,7 +1,0 @@
-# byspamTrash cron job configuration
-#
-# field type
-# Minutes Hour Date Month Week User Command
-
-# delete trash mail per $trashPeroid on @confdir@/byspam.conf
-01 00 * * * root @bindir@/byspamTrashMgr &> /dev/null

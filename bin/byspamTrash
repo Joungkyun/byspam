@@ -1,268 +1,171 @@
-#!@PERLPATH@
-#
-# By SPAM trash viewer front end
-# $Id: byspamTrash,v 1.21 2009-12-02 11:03:45 oops Exp $
-#
-use lib '@includedir@';
-use strict;
+#!/bin/sh
+VERSION="1.0.1"
 
-use Byspam::Init;
-use Byspam::Getopt;
-use Byspam::Common;
-use Byspam::Trash;
-use Byspam::Encode;
+USERPRIV=$(whoami)
 
-# declaration global variable on configuration file
-use vars qw ( $charset $charset_mail $version $debug $verbose $inbox);
+if [ "${USERPRIV}" = "root" ]; then
+  if [ -z "${1}" ]; then
+    USERPRIV=root
+  else
+    USERPRIV=$1
+  fi
+  USEROPT="-u $1"
+fi
+USERPATH=$(cat /etc/passwd | grep "^${USERPRIV}:" | awk -F ":" '{print $6}')
+USERPATH=$(echo ${USERPATH} | sed 's/\/$//g')
+TRASHPATH="${USERPATH}/byspam"
 
-# reference variable
-my $cm;
-my $o;
-my $ov;
-my $ts;
-my $shm;
+nextfunc() {
+  case "${next}" in
+    x)
+       exit 0
+       ;;
+    b)
+       if [ -z "${nullchk}" ]; then
+         start=$[${start}-${limit}*2] 
+         until=$[${until}-${limit}*2]
+         page=$[${page}-1]
+       else
+         start=$[${startl}-${limit}*2] 
+         until=$[${untill}-${limit}*2]
+         page=$[${page}-1]
+       fi
 
-# init configuration and filter variables
-$shm = Byspam::Init->new ();
+       # ½ÃÀÛÀÌ 1 º¸´Ù ÀÛÀ» °æ¿ì
+       if [ ${start} -lt 1 ]; then
+         start=1
+         until=1
+         page=1
+       fi
+       ;;
+    d* )
+       for i in ${next}
+       do
+         if [ "${i}" != "d" ]; then
+           eval "checkfile=\$TRASHFILE${i}"
+           checkfile=$(echo $checkfile | sed 's/^[^\-]*-//g')
+           if [ -f "${USERPATH}/byspam/spam-${checkfile}" ]; then
+             @bindir@/byspamTrashFile ${USEROPT} -x ${checkfile}
+           fi
+           checkfile=
+         fi
+       done
 
-#$version = $shm->opts ('version');
-$version = '1.0.3';
-$inbox   = $shm->opts('inbox');
+       # ¸®½ºÆ® ÀçÁ¤·Ä
+       TRASHBOX=$(ls "${TRASHPATH}" | grep "spam-" | grep -v grep | sort -r 2> /dev/null)
+       j=1
+       no=1
+       for i in ${TRASHBOX}
+       do
+         eval "TRASHFILE${j}=${i}"
+         j=$[${j}+1]
+       done
+       eval "TRASHFILE${j}="
 
-# options variable
-use vars qw ( $_hdebug $_bdebug $_path $_user $_root $_direct );
-my $opt;
-my %_opt;
-my $_file  = "";
-my $_upath = "";
-my $_arg   = "";
+       totalart=$[${j}-1]
+       n=$[${totalart}/${limit}]
+       p=$[${totalart}%${limit}]
 
-$_path     = "";
-$_user     = "";
-$_root     = 1;
-$_direct   = 0;
+       if [ ${p} -gt 0 ]; then
+         totalpage=$[${n}+1]
+       else
+         totalpage=${n}
+       fi
 
-# body & header parsing debug mode
-$_hdebug   = 0;
-$_bdebug   = 0;
+       start=${startl}
+       until=${untill}
+       ;;
+    *[!0-9]* | "")
+       page=$[${page}+1]
 
-# get argument on shell
-my $_argc  = $#ARGV;
-my @_argv  = @ARGV;
+       if [ ${page} -gt ${totalpage} ]; then
+         page=${totalpage}
+       fi
+       ;;
+    *)
+       eval "checkfile=\$TRASHFILE${next}"
+       checkfile=$(echo $checkfile | sed 's/^[^\-]*-//g')
+       if [ -f "${USERPATH}/byspam/spam-${checkfile}" ]; then
+         @bindir@/byspamTrashFile ${USEROPT} -d ${checkfile}
+       fi
 
-
-# usage option
-use vars qw ( @spamlist $spamno $_page $_tpage $_start $_startl );
-use vars qw ( $_limit $_until $_untill $_nullchk $_read );
-use vars qw ( $_from $_sublen );
-
-@spamlist = ();
-$spamno   = 0;
-$_page    = 1;
-$_tpage   = 0;
-$_start   = 0;
-$_limit   = 10;
-$_until   = 1;
-$_startl  = 0;
-$_untill  = 0;
-$_nullchk = 0;
-$_read    = "";
-$_from    = 0;
-$_sublen  = 60;
-
-# create reference Common
-$cm = new Byspam::Common;
-
-$charset = $ENV{"LANG"};
-CHARSET: {
-	( $charset =~ m/utf[-]?8/i ) and $charset = "UTF-8", last CHARSET;
-	( $charset =~ m/^ko/i ) and $charset = "EUC-KR", last CHARSET;
-	$charset = "";
+       start=${startl}
+       until=${untill}
+  esac
 }
 
-# default charset when charset is not exists.
-$charset_mail = $shm->opts ('charset_mail');
-$charset_mail = 'EUC-KR' if ( ! $charset_mail );
+TRASHBOX=$(ls "${TRASHPATH}" | grep "spam-" | grep -v grep | sort -r 2> /dev/null)
 
-# create reference Getopt
-$o = new Byspam::Getopt;
-$ov = $o->{_var};
+j=1
+no=1
+start=1
+limit=10
+page=1
 
-# create reference Trash
-$ts = new Byspam::Trash;
+for i in ${TRASHBOX}
+do
+  eval "TRASHFILE${j}=${i}"
+  j=$[${j}+1] 
+done
 
-# match long option whit short option
-$ov->{longopt} = {
-	'isfrom'      => 'f',
-	'sublen'      => 's',
-	'pageview'    => 'p',
-	'help'        => 'h'
-};
+totalart=$[${j}-1]
+n=$[${totalart}/${limit}]
+p=$[${totalart}%${limit}]
 
-while ( 1 ) {
-	$opt = $o->getopt ("fs:p:h", $_argc + 1, @_argv);
-	last if ( ! $opt );
+if [ ${p} -gt 0 ]; then
+  totalpage=$[${n}+1]
+else
+  totalpage=${n}
+fi
 
-	SWITCH: {
-		( $opt eq "f" ) and do {
-			$_from = 1;
-			last SWITCH;
-		};
-		( $opt eq "s" ) and do {
-			Help () if ( ! $ov->{optarg} );
-			$_sublen = $ov->{optarg};
-			last SWITCH;
-		};
-		( $opt eq "p" ) and do {
-			Help () if ( ! $ov->{optarg} );
-			$_limit = $ov->{optarg};
-			last SWITCH;
-		};
-		Help ();
-	}
-}
+until=1
+while [ true ]
+do
+  clear
+  echo "============================================================================="
+  echo "by SPAM Trash VIEWER $VERSION by JoungKyun Kim <http://www.oops.org>"
+  echo "Command [ x - exit | no - mail no | d no - del no | enter - next | b - back ]"
+  echo "============================================================================="
+  echo "Total ${totalpage} page / Current ${page} page"
+  echo
 
-Help () if ( $ov->{getopt_err} );
-$_arg = $ov->{optcmd}->[0];
+  startl=${start}
+  untill=${until}
+  until=$[${until}+${limit}]
 
-if ( -f "$_arg" && ! -d "$_arg" ) {
-	$_file = $_arg;
-	$_path = "";
+  if [ ${totalart} = 0 ]; then
+    echo "WORN : No exist trash file"
+  else
+    while [ true ]
+    do
+      eval "FILENAME=\$TRASHFILE${start}"
 
-	$_root = 0 if ( $ENV{"USER"} ne "root" );
-	$_direct = 1;
-} else {
-	$_user = $ENV{"USER"};
+      if [ ${start} -lt ${until} ] && [ -n "${FILENAME}" ]; then
+        printf "%4s. %s\n" "${start}" "${FILENAME}"
+        start=$[${start}+1]
+      else
+        if [ -z "${FILENAME}" ]; then
+          start=${startl}
+          until=${untill}
+          nullchk=1
+        else
+          nullchk=
+        fi
+        break
+      fi
+    done
+  fi
 
-	if ( $_user eq "root" ) {
-		$_user = ( ! $_arg ) ? "root" : $_arg;
-	} else {
-		$_root = 0;
-	}
+  echo
+  echo "-----------------------------------------------------------------------------"
+  echo -n "Command: "
 
-	$_upath = $ts->getHomePath ($_user);
-	$_path = "$_upath/byspam";
-}
+  if [ ${totalart} = 0 ]; then
+    exit 0
+  else
+    read next
+  fi
+  nextfunc
+done
 
-PAGERESET:
-
-@spamlist = $ts->getTrashList ($_path);
-$spamno   = @spamlist;
-$_tpage = $ts->totalPage ($spamno, $_limit);
-
-$_until = 0;
-while ( 1 ) {
-	system ("clear");
-	print "=============================================================================\n";
-	print "[1;37mby SPAM Trash Viewer[7;0m $version by JoungKyun Kim <http://oops.org>\n";
-	print "Command [ q - quit | no - view no | d no - del no | enter - next | b - back ]\n";
-	print "=============================================================================\n";
-	print "Total $_tpage page / Current $_page page\n";
-	print "Total $spamno files\n\n";
-
-	$_startl = $_start;
-	$_untill = $_until;
-	$_until  = $_untill + $_limit;
-	if ( $_until > $spamno ) {
-		$_until  = $_limit * $_tpage;
-		$_untill = $_until - $_limit;
-	}
-
-	if ( ! $spamno && ! -f $_file ) {
-		$cm->printError ("ERROR: No exists trash file\n");
-		exit 0;
-	} else {
-		# direct view specify file
-		if ( ! $_path && -f $_file && ! -d $_file ) {
-			$ts->printTrash ($_path, $_file, $_user, $_sublen, $_from);
-			print "\n";
-			exit 0;
-		}
-
-		while ( 1 ) {
-			my $_filename = $spamlist[$_start];
-
-			if ( $_start < $_until && $_filename ) {
-				printf "%4s. %s\n", $_start + 1, $_filename;
-				$_start++;
-			} else {
-				if ( ! $_filename ) {
-					$_start = $_startl;
-					$_nullchk = 1;
-				} else {
-					$_nullchk = 0;
-				}
-				last;
-			}
-		}
-	}
-
-	print "\n" .
-		  "-----------------------------------------------------------------------------\n" .
-		  "[1;37mCommand:[7;0m ";
-
-	exit 0 if ( $spamno == 0 );
-	$_read = <STDIN>;
-
-	$ts->nextFunc ();
-}
-
-sub Help {
-	my @helps = ();
-	my $USAGES;
-	my $OPTN;
-	my $ARGUMENT;
-
-	if ( $ENV{'LANG'} =~ m/^ko/i ) {
-		$USAGES = "»ç¿ë¹ý";
-		$OPTN = "¿É¼Ç";
-		$ARGUMENT = "ÆÄÀÏÀÌ¸§ | °èÁ¤";
-		@helps = (
-					"º¸³½ÀÌ ÁÖ¼Ò¸¦ Ãâ·Â",
-					"ÆäÀÌÁö´ç ¸®½ºÆ® ¼ö [±âº» 10°³]",
-					"Ãâ·ÂÇÒ ¸ÞÀÏ Á¦¸ñ ±æÀÌ [±âº» 60ÀÚ]",
-					"ÇöÀç ¸Þ¼¼Áö¸¦ Ãâ·Â"
-		);
-		if ( $ENV['LANG'] =~ m/utf/i ) {
-			Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
-			Encode::from_to ($OPTN, 'euc-kr', 'utf-8');
-			Encode::from_to ($ARGUMENT, 'euc-kr', 'utf-8');
-			my $i = 0;
-			my $size = @helps;
-			for ( ; $i<$size; $i++ ) {
-				Encode::from_to ($helps[$i], 'euc-kr', 'utf-8');
-			}
-		}
-	} else {
-		$USAGES = "USAGE";
-		$OPTN = "OPTION";
-		$ARGUMENT = "FileName | AccountName";
-		@helps = (
-					"print sender address",
-					"number of list per page [default 10]",
-					"length of subject [default 60]",
-					"print this message"
-		);
-	}
-
-    $cm->printError (
-			"$USAGES : $0 -[$OPTN] <$ARGUMENT>\n" .
-			"$OPTN :\n" .
-			"          -f --isfrom   => $helps[0]\n" .
-			"          -p --pageview => $helps[1]\n" .
-			"          -s --sublen   => $helps[2]\n" .
-			"          -h --help     => $helps[3]\n"
-	);
-    exit 1;
-}
-
-exit 0;
-
-#
-# Local variables:
-# tab-width: 4
-# c-basic-offset: 4
-# End:
-# vim600: noet sw=4 ts=4 fdm=marker
-# vim<600: noet sw=4 ts=4
-#
+exit 0

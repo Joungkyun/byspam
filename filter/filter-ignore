@@ -1,20 +1,9 @@
 # This file is used to ignore filter-allow,
 # and use regular expression with perl type.
 # See also regex of perl.
-#
-# $Id: filter-ignore,v 1.12 2004-12-28 07:22:39 oops Exp $
-
-(&#44305|±¤|ÎÆ|°ü|±¡)[^\xB0-\xFEa-z]*(°í|go|Í±)
-È«[^\xB0-\xFEa-z]*º¸
-¼±[^\xB0-\xFEa-z]*Àü
-Åõ[^\xB0-\xFEa-z]*ÀÚ
-´ë[^\xB0-\xFEa-z]*Ãâ
-¼ö[^\xB0-\xFEa-z]*¼ö[^\xB0-\xFEa-z]*·á
-ºñ[^\xB0-\xFEa-z]*¾Æ[^\xB0-\xFEa-z]*±×[^\xB0-\xFEa-z]*¶ó
-v[^\xB0-\xFEa-z]*i[^\xB0-\xFEa-z]*a[^\xB0-\xFEa-z]*g[^\xB0-\xFEa-z]*r[^\xB0-\xFEa-z]*a
-°ú¾Ó°í¿À|¤¡¤Ç¤¿¤·¤¡¤Ç
+±¤°í|°ú¾Ó°í¿À|±¡°í|¤¡¤Ç¤¿¤·¤¡¤Ç
+(\(|\[|<)[ \t]*([^a-z0-9]?±¤[^a-z0-9]*°í|[^a-z0-9]?ÎÆ[^a-z0-9]*go|[^a-z0-9]?ÎÆ[^a-z0-9]*Í±)[ \t]*(>|\]|\))
+(\(|\[|<)[ \t]*([^a-z0-9]?È«[^a-z0-9]*º¸|[^a-z0-9]?¼±[^a-z0-9]*Àü|[^a-z0-9]?Åõ[^a-z0-9]*ÀÚ)[ \t]*(>|\]|\))
+(\(|\[|<)[ \t]*([^a-z0-9]?Á¤[^a-z0-9]*º¸|[^a-z0-9]?¾È[^a-z0-9]*³»|[^a-z0-9]?Á¦[^a-z0-9]*¾È)[ \t]*(>|\]|\))
+<\/html>\n?.+
 yescounter\.com
-¼ºÀÎ|Æ÷¸£³ë|Ä·µ¿|¼½½º|ºü±¸¸®|´©³ª¹æ
-±ÝÀ¶|¿¬Ã¼|´ë³³|À¯Åë|Á÷°Å·¡
-
-# user define
