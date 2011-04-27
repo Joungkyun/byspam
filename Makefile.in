@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.6 2004-12-30 08:23:42 oops Exp $
+# $Id: Makefile.in,v 1.5 2004-12-06 17:58:15 oops Exp $
 
 PROG            = @PACKAGE_NAME@
 VERSION         = @PACKAGE_VERSION@
@@ -38,9 +38,7 @@ filterplist     = `$(LS) filter/filter-* | $(SED) 's!filter/!!g'`
 
 
 all:
-	$(MKDIR) -p $(WORKDIR)/bin
-	$(MKDIR) -p $(WORKDIR)/etc
-	$(MKDIR) -p $(WORKDIR)/include
+	$(MKDIR) -p $(WORKDIR)/{bin,etc,include}
 
 	echo "# Never touch or remove this file!!!" > $(installlog)
 	echo "" >> $(installlog)

@@ -2,9 +2,9 @@
 #
 # By SPAM main code.
 # This package code follows BPL License
-# JoungKyun Kim <http://oops.org>
+# JoungKyun Kim <http://www.oops.org>
 #
-# $Id: byspamFilter,v 1.29 2011-02-07 19:22:21 oops Exp $
+# $Id: byspamFilter,v 1.20 2004-12-03 10:55:20 oops Exp $
 #
 use lib '@includedir@';
 use strict;
@@ -14,10 +14,9 @@ use Byspam::Getopt;
 use Byspam::Common;
 use Byspam::Parse;
 use Byspam::Mail;
-use Byspam::Encode;
 
 # declaration global variable on configuration file
-use vars qw ($version $charset $charset_mail $_filtered $debug $verbose);
+use vars qw ($version $charset $_filtered $debug $verbose);
 
 # common variables
 my $cm;
@@ -30,8 +29,7 @@ my $shm;
 $shm = Byspam::Init->new ();
 
 # init global variables
-#$version      = $shm->opts('version');
-$version      = '1.0.3';
+$version      = $shm->opts('version');
 
 # option variable;
 my $opt      = "";
@@ -68,11 +66,15 @@ $cm = new Byspam::Common;
 
 # charactor init
 $charset = $shm->opts ("charset");
-$charset = 'EUC-KR' if ( ! $charset );
 
-# default charset when charset is not exists.
-$charset_mail = $shm->opts ('charset_mail');
-$charset_mail = 'EUC-KR' if ( ! $charset_mail );
+if ( ! $charset ) {
+	$charset = $ENV{"LANG"};
+	CHARSET: { 
+	    ( $charset =~ m/^ko/i ) and $charset = "EUC-KR", last CHARSET;
+	    ( $charset =~ m/^utf/i ) and $charset = "UTF-8", last CHARSET;
+	    $charset = "";
+	}
+}
 
 # create reference Getopt
 $o = new Byspam::Getopt;
@@ -152,23 +154,6 @@ $spam = 1, $fil = "No Body", goto CHECKEND if ( $shm->opts('nobody') && ! $mail-
 # header parsing
 $header = $ps->getHeader ($mail->{_header});
 
-# If received header is smaller than 2, it's regard as spam bot!
-my $receivedNo = $cm->checkReceived ($header);
-if ( $receivedNo eq 100 ) {
-	# case that authenicated connection
-	$spam = 0;
-	$nospam = 0;
-	goto CHECKEND;
-}
-
-if ( $receivedNo eq 1 ) {
-	$spam = 1;
-	$nospam = 0;
-	$fil = "Recieved header";
-	printMessage ($fil, "1 lines");
-	goto CHECKEND;
-}
-
 # body parsing
 $body = $ps->getBody ($mail);
 
@@ -213,7 +198,7 @@ for ( $i=0; $i<$checkNo; $i++ ) {
 			}
 
 			$_ftarget = $body;
-			$_regs = "|<iframe" if ( $shm->opts('filterIframe') );
+			$_regs = "|<ifrmae" if ( $shm->opts('filterIframe') );
 			last PART;
 		};
 
@@ -227,7 +212,6 @@ for ( $i=0; $i<$checkNo; $i++ ) {
 
 	if ( $spam ) {
 		printMessage ($fil, $_filtered);
-		$_ftarget = $header . "\n\n" . $body;
 		goto CHECKALLOW;
 	}
 }
@@ -308,15 +292,7 @@ sub printMessage {
 		} else {
 			printf "Checked By %s", $fil;
 		}
-
-		if ( $main::verbose ) {
-			if ( $main::charset = 'EUC-KR' && $ENV{'LANG'} =~ m/utf/i ) {
-				my $buf = $_f;
-				Encode::from_to ($buf, 'euc-kr', 'utf-8');
-				$_f = $buf if ( $buf );
-			}
-			printf " => \"$_f\"";
-		}
+		printf " => \"$_f\"" if ( $main::verbose );
 		printf "\n";
 	}
 }
@@ -329,22 +305,14 @@ sub printHelp {
 
 	$lc = $main::charset;
 	my @helps = ();
-	if ( $ENV{'LANG'} =~ m/^ko/i ) {
-		$USAGES = "ì‚¬ìš©ë²•";
+	if( $lc eq "EUC-KR" ) {
+		$USAGES = "»ç¿ë¹ı";
 		@helps = (
-				  "í˜„ì¬ ë©”ì„¸ì§€ë¥¼ ì¶œë ¥",
-				  "ì¸ìë¡œ ë„˜ê¸´ ë©”ì¼í˜•ì‹ì˜ ì ˆëŒ€ê²½ë¡œ íŒŒì¼ì„ ì²´í¬ [ ë””ë²„ê·¸ ëª¨ë“œ ]",
-				  "ë©”ì¼ í˜•ì‹ì„ íŒŒì´í”„ë¡œ ë„˜ê¸°ëŠ” í˜•ì‹",
-				  "ë©”ì¼ í˜•ì‹ì„ íŒŒì´í”„ë¡œ ë„˜ê¸°ëŠ” í˜•ì‹ [ ë””ë²„ê·¸ ëª¨ë“œ ]"
+				  "ÇöÀç ¸Ş¼¼Áö¸¦ Ãâ·Â",
+				  "ÀÎÀÚ·Î ³Ñ±ä ¸ŞÀÏÇü½ÄÀÇ Àı´ë°æ·Î ÆÄÀÏÀ» Ã¼Å© [ µğ¹ö±× ¸ğµå ]",
+				  "¸ŞÀÏ Çü½ÄÀ» ÆÄÀÌÇÁ·Î ³Ñ±â´Â Çü½Ä",
+				  "¸ŞÀÏ Çü½ÄÀ» ÆÄÀÌÇÁ·Î ³Ñ±â´Â Çü½Ä [ µğ¹ö±× ¸ğµå ]"
 		);
-        if ( $ENV['LANG'] =~ m/utf/i ) {
-            Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
-            my $i = 0;
-            my $size = @helps;
-            for ( ; $i<$size; $i++ ) {
-                Encode::from_to ($helps[$i], 'euc-kr', 'utf-8');
-            }
-        }
 	} else {
 		$USAGES = "USAGE";
 		@helps = (

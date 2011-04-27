@@ -1,6 +1,6 @@
 By SPAM 설치 및 사용 설명서
 
-$Id: INSTALL,v 1.19 2009-12-02 11:03:42 oops Exp $
+$Id: INSTALL,v 1.13 2004-12-06 14:11:26 oops Exp $
 
 목차
 ----
@@ -28,9 +28,6 @@ BySPAM 은 smtp dameon 과 procmail 에 연동되어 작동을 합니다. 설치 후에 따로 구동
 
 
 RPM 설치자들은 smtp 를 재시작 한 후, 4번, 5번, 6번 항목만 보도록 한다.
-
-또한, byspam 을 사용하기 위한 perl module 들이 설치되어 있는지 확인해야 한다. 이는
-Environment 문서를 참고 하라.
 
 
 1. By SPAM 의 설치 옵션
@@ -137,8 +134,7 @@ Environment 문서를 참고 하라.
 
   1024 * 1024 * 1024
 
-  의 값을 지정해 주시면 됩니다. 단 BASE64 나 Qouted Printable 로 인코딩 된 문서의
-  경우에는 대략 30% 정도의 용량이 늘어남을 감안해서 지정을 해 주서야 합니다.
+  의 값을 지정해 주시면 됩니다.
 
 
   2) byspam.conf
@@ -180,8 +176,6 @@ Environment 문서를 참고 하라.
   설정입니다. 이 설정을 해 놓았을 경우에는 필터링이 되지 않아야 할 메일에도 iframe
   이 존재하는 경우에는 무조건 스팸 처리를 하기 때문에 주의해서 결정을 해야 합니다.
   1 은 iframe 체크를 한다는 설정이며, 0 은 체크를 하지 않겠다는 설정값 입니다.
-
-  Iframe 설정은 filter-allow 와 filter-ignore 의 영향을 받습니다.
 
 
 
@@ -328,7 +322,7 @@ Environment 문서를 참고 하라.
   byspamTrash 를 실행을 하면 
 
   =============================================================================
-  by SPAM Trash Viewer 1.0.3 by JoungKyun Kim <http://oops.org>
+  by SPAM Trash Viewer 1.0.0-devel by JoungKyun Kim <http://www.oops.org>
   Command [ q - quit | no - view no | d no - del no | enter - next | b - back ]
   =============================================================================
   Total 4 page / Current 1 page
@@ -354,7 +348,7 @@ Environment 문서를 참고 하라.
 
 
   =============================================================================
-  by SPAM Trash Viewer 1.0.3 by JoungKyun Kim <http://oops.org>
+  by SPAM Trash Viewer 1.0.0-devel by JoungKyun Kim <http://www.oops.org>
   Command [ quit | number | delete | recovery | enter - next | b - back ]
   =============================================================================
   Current Date: 20041125
@@ -392,7 +386,7 @@ Environment 문서를 참고 하라.
 
 
   =============================================================================
-  by SPAM Trash Viewer 1.0.3 by JoungKyun Kim <http://oops.org>
+  by SPAM Trash Viewer 1.0.0-devel by JoungKyun Kim <http://www.oops.org>
   Command [ q - quit | space - next page | enter - next line | b - prev page ]
   =============================================================================
   1 page / total 36 pages
