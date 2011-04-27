@@ -1,10 +1,9 @@
 Summary: The By SPAM is filtering tool for Anti Spam
 Summary(ko): 스팸방지를 위한 필터링 툴
 Name: byspam
-Version: 1.0.3
+Version: 0.2.4
 Release: 1
-Epoch: 3
-License: BPL
+Copyright: GPL
 Group: System Environment/Daemons
 URL: http://cvs.oops.org/cgi-bin/oopsdev.cgi/byspam/
 Source0: ftp://ftp.oops.org/pub/Linux/OOPS/Source/byspam/%{name}-%{version}.tar.bz2
@@ -12,7 +11,7 @@ BuildRoot: /var/tmp/%{name}-root
 Requires: procmail, perl
 BuildArchitectures: noarch
 
-Packager: JoungKyun. Kim <http://oops.org>
+Packager: JoungKyun. Kim <http://www.oops.org>
 Vendor:   OOPS Development ORG
 
 %description
@@ -29,15 +28,16 @@ By SPAM 은 smtp 데몬과 procmail 과 연동하여 스팸메일을 필터링 하기위한 도구
 %prep
 %setup -q
 
-./configure --prefix=/usr \
+./configure --level=root \
+	--prefix=/usr \
 	--bindir=/usr/bin \
-	--sysconfdir=/etc/byspam \
+	--confdir=/etc/byspam \
+	--filterdir=/etc/byspam/Filter \
 	--includedir=/usr/include/byspam \
-	--with-filter=/etc/byspam/Filter \
-	--with-perl=/usr/bin/perl \
-	--with-procrc=/etc/procmailrc
+	--perlpath=/usr/bin/perl \
+	--procpath=/etc/procmailrc \
+	--package=1
 
-make
 
 %install
 if [ -d $RPM_BUILD_ROOT ]; then
@@ -45,11 +45,7 @@ if [ -d $RPM_BUILD_ROOT ]; then
 fi
 mkdir -p $RPM_BUILD_ROOT
 
-make DESTDIR=$RPM_BUILD_ROOT install
-
-pushd $RPM_BUILD_ROOT/etc/byspam &> /dev/null
-mv -f byspam.conf.ko byspam.conf
-popd &> /dev/null
+DESTDIR=$RPM_BUILD_ROOT ./install
 
 %post
 if [ $1 = 0 ]; then
@@ -83,6 +79,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root)
 %dir /etc/byspam
+#/etc/byspam/Filter
 %config(noreplace) /etc/byspam/Filter/filter-allow
 %config(noreplace) /etc/byspam/Filter/filter-body
 %config(noreplace) /etc/byspam/Filter/filter-date            
@@ -93,65 +90,48 @@ rm -rf $RPM_BUILD_ROOT
 %config(noreplace) /etc/byspam/Filter/filter-to              
 %config(noreplace) /etc/byspam/byspam.conf 
 %config(noreplace) /etc/byspam/filter.rc   
-%attr(755,root,root) /etc/cron.d/byspam  
+%attr(755,root,root) /etc/cron.daily/byspam  
 %attr(755,root,root) /usr/bin/byspamFilter   
-%attr(755,root,root) /usr/bin/byspamClear
-%attr(755,root,root) /usr/bin/byspamReload
 %attr(755,root,root) /usr/bin/byspamTrash    
-%attr(755,root,root) /usr/bin/byspamTrashMgr
-%attr(755,root,root) /usr/bin/byspamPlain
-%attr(755,root,root) /usr/bin/byspamRegexChk
+%attr(755,root,root) /usr/bin/byspamTrashFile
+%attr(755,root,root) /usr/bin/plain.pl
+%attr(755,root,root) /usr/bin/regexChk.pl    
 %dir /usr/include/byspam
-/usr/include/byspam/Byspam/Common.pm
-/usr/include/byspam/Byspam/Encode.pm
-/usr/include/byspam/Byspam/Getopt.pm
-/usr/include/byspam/Byspam/Init.pm
-/usr/include/byspam/Byspam/Mail.pm
-/usr/include/byspam/Byspam/Parse.pm
-/usr/include/byspam/Byspam/Trash.pm
+/usr/include/byspam/byspamFunction.pl    
 
-%doc Changelog ENVIRONMENT LICENSE README INSTALL REGEX
+%doc Changelog ENVIRONMENT LICENSE README
 
 %changelog
-* Mon OCt 24 2005 JoungKyun Kim <http://oops.org> 3:1.0.2-1
-- update 1.0.1
-
-* Tue Feb  1 2005 JoungKyun Kim <http://oops.org> 2:1.0.1-1
-- update 1.0.1
-
-* Tue Dec 07 2004 JoungKyun Kim <http://oops.org> 1:1.0.0-1
-- update 1.0.0
-
-* Tue Apr 06 2004 JoungKyun Kim <http://oops.org> 0.2.3-1
+* Tue Apr 06 2004 JoungKyun Kim <http://www.oops.org> 0.2.3-1
 - update 0.2.4
 
-* Wed Jun 11 2003 JoungKyun Kim <http://oops.org> 0.2.3-1
+* Wed Jun 11 2003 JoungKyun Kim <http://www.oops.org> 0.2.3-1
 - update 0.2.3
 
-* Mon Oct 14 2002 2002 JoungKyun Kim <http://oops.org> 0.2.2-2
+* Mon Oct 14 2002 2002 JoungKyun Kim <http://www.oops.org> 0.2.2-2
 - fixed byspamTrash if exists similar account name
 
-* Tue Jul 16 2002 JoungKyun Kim <http://oops.org>
+* Tue Jul 16 2002 JoungKyun Kim <http://www.oops.org>
 - update 0.2.2
 
-* Thu Jun 27 2002 JoungKyun Kim <http://oops.org>
+* Thu Jun 27 2002 JoungKyun Kim <http://www.oops.org>
 - update 0.2.1
 
-* Thu Jun 27 2002 JoungKyun Kim <http://oops.org>
+* Thu Jun 27 2002 JoungKyun Kim <http://www.oops.org>
 - update 0.2.0
 
-* Wed Apr 10 2002 JoungKyun Kim <http://oops.org>
+* Wed Apr 10 2002 JoungKyun Kim <http://www.oops.org>
 - minor updated 0.1.4
 
-* Mon Apr 08 2002 JoungKyun Kim <http://oops.org>
+* Mon Apr 08 2002 JoungKyun Kim <http://www.oops.org>
 - updated 0.1.4
 
-* Thu Apr 04 2002 JoungKyun Kim <http://oops.org>
+* Thu Apr 04 2002 JoungKyun Kim <http://www.oops.org>
 - updated 0.1.3
 
-* Tue Apr 02 2002 JoungKyun Kim <http://oops.org>
+* Tue Apr 02 2002 JoungKyun Kim <http://www.oops.org>
 - updated 0.1.2
 
-* Mon Mar 25 2002 JoungKyun Kim <http://oops.org>
+* Mon Mar 25 2002 JoungKyun Kim <http://www.oops.org>
 - packaged by spam in RH 6.2
 

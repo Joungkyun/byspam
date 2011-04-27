@@ -1,20 +1,10 @@
 # This file is used to ignore filter-allow,
 # and use regular expression with perl type.
 # See also regex of perl.
-#
-# $Id: filter-ignore,v 1.12 2004-12-28 07:22:39 oops Exp $
-
-(&#44305|광|廣|관|괌)[^\xB0-\xFEa-z]*(고|go|告)
-홍[^\xB0-\xFEa-z]*보
-선[^\xB0-\xFEa-z]*전
-투[^\xB0-\xFEa-z]*자
-대[^\xB0-\xFEa-z]*출
-수[^\xB0-\xFEa-z]*수[^\xB0-\xFEa-z]*료
-비[^\xB0-\xFEa-z]*아[^\xB0-\xFEa-z]*그[^\xB0-\xFEa-z]*라
-v[^\xB0-\xFEa-z]*i[^\xB0-\xFEa-z]*a[^\xB0-\xFEa-z]*g[^\xB0-\xFEa-z]*r[^\xB0-\xFEa-z]*a
-과앙고오|ㄱㅗㅏㅇㄱㅗ
+광고|과앙고오|괌고|ㄱㅗㅏㅇㄱㅗ
+(\(|\[|<)[ \t]*([^a-z0-9]?광[^a-z0-9]*고|[^a-z0-9]?廣[^a-z0-9]*go|[^a-z0-9]?廣[^a-z0-9]*告)[ \t]*(>|\]|\))
+(\(|\[|<)[ \t]*([^a-z0-9]?홍[^a-z0-9]*보|[^a-z0-9]?선[^a-z0-9]*전|[^a-z0-9]?투[^a-z0-9]*자)[ \t]*(>|\]|\))
+(\(|\[|<)[ \t]*([^a-z0-9]?정[^a-z0-9]*보|[^a-z0-9]?안[^a-z0-9]*내|[^a-z0-9]?제[^a-z0-9]*안)[ \t]*(>|\]|\))
 yescounter\.com
 성인|포르노|캠동|섹스|빠구리|누나방
-금융|연체|대납|유통|직거래
-
-# user define
+대출|금융|직장인|연체|대납|유통|직거래

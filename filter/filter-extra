@@ -1,9 +1,6 @@
 # This file is used to filter Any words of mail header.
 # and use regular expression with perl type.
 # See also regex of perl.
-#
-# $Id: filter-extra,v 1.14 2004-12-01 08:57:42 oops Exp $
-
 AD_?2000
 RED[\s_]?SPIDER
 Produced By Microsoft MimeOLE V\(null\)
@@ -24,7 +21,7 @@ truehongbo
 X-EM-Registration
 adsl|vdsl|hdsl
 JBHsender|SNOOP Bpsh
-=_NextPart_[^=\s]+=_NextPart_
+=_NextPart_[^=\n]+=_NextPart_
 X-Keywords: Junk
 
 # virus attach file  filter
@@ -39,6 +36,4 @@ name[\s]*=[\s]*"?www\..*\.com"?
 
 # Win32/Netsky.worm.22016.D
 name[\s]*=[\s]*"?(Important|Details|Notice|Bill|Textfile|Data|Document)\.zip"?
-
-# user define
 
