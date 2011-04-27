@@ -1,268 +1,241 @@
 #!@PERLPATH@
-#
-# By SPAM trash viewer front end
-# $Id: byspamTrash,v 1.21 2009-12-02 11:03:45 oops Exp $
-#
-use lib '@includedir@';
-use strict;
+use Mail::Internet;
+use Mail::Header;
+use MIME::Base64;
+use MIME::QuotedPrint;
 
-use Byspam::Init;
-use Byspam::Getopt;
-use Byspam::Common;
-use Byspam::Trash;
-use Byspam::Encode;
+local $includeDir;
 
-# declaration global variable on configuration file
-use vars qw ( $charset $charset_mail $version $debug $verbose $inbox);
+my $i = 0;
+my $enc;
+my $exm;
+my $text;
+my $less;
+my $copy;
+my $trash;
+my $start;
+my $until;
+my $mailno;
+my $getMail;
+my $subjectTmp;
+my @subject = ();
+my @bodyis = ();
+my @devide = ();
+my @tmpMail = ();
+my $homedir = $ENV{"HOME"};
+my $myuser = $ENV{"USER"};
 
-# reference variable
-my $cm;
-my $o;
-my $ov;
-my $ts;
-my $shm;
+# Local ENV
+my $users = "";
+my $dfile = "";
+my $filedates = "";
 
-# init configuration and filter variables
-$shm = Byspam::Init->new ();
+do "@confdir@/byspam.conf";
+do "$includeDir/byspamFunction.pl";
 
-#$version = $shm->opts ('version');
-$version = '1.0.3';
-$inbox   = $shm->opts('inbox');
+$copy = "By SAPM TRASH VIEW v0.4\n".
+        "Script by JoungKyun <http://www.oops.org> in BPL License\n\n";
 
-# options variable
-use vars qw ( $_hdebug $_bdebug $_path $_user $_root $_direct );
-my $opt;
-my %_opt;
-my $_file  = "";
-my $_upath = "";
-my $_arg   = "";
+$homedir =~ s/\/$//g;
 
-$_path     = "";
-$_user     = "";
-$_root     = 1;
-$_direct   = 0;
+use Time::gmtime;
+my $byspamYear = gmtime->year() + 1900;
+my $byspamMon  = gmtime->mon() + 1;
+my $byspamDay  = gmtime->mday();
+if($byspamMon < 10) { $byspamMon = "0$byspamMon"; }
+if($byspamDay < 10) { $byspamDay = "0$byspamDay"; }
 
-# body & header parsing debug mode
-$_hdebug   = 0;
-$_bdebug   = 0;
-
-# get argument on shell
-my $_argc  = $#ARGV;
-my @_argv  = @ARGV;
-
-
-# usage option
-use vars qw ( @spamlist $spamno $_page $_tpage $_start $_startl );
-use vars qw ( $_limit $_until $_untill $_nullchk $_read );
-use vars qw ( $_from $_sublen );
-
-@spamlist = ();
-$spamno   = 0;
-$_page    = 1;
-$_tpage   = 0;
-$_start   = 0;
-$_limit   = 10;
-$_until   = 1;
-$_startl  = 0;
-$_untill  = 0;
-$_nullchk = 0;
-$_read    = "";
-$_from    = 0;
-$_sublen  = 60;
-
-# create reference Common
-$cm = new Byspam::Common;
-
-$charset = $ENV{"LANG"};
-CHARSET: {
-	( $charset =~ m/utf[-]?8/i ) and $charset = "UTF-8", last CHARSET;
-	( $charset =~ m/^ko/i ) and $charset = "EUC-KR", last CHARSET;
-	$charset = "";
-}
-
-# default charset when charset is not exists.
-$charset_mail = $shm->opts ('charset_mail');
-$charset_mail = 'EUC-KR' if ( ! $charset_mail );
-
-# create reference Getopt
-$o = new Byspam::Getopt;
-$ov = $o->{_var};
-
-# create reference Trash
-$ts = new Byspam::Trash;
-
-# match long option whit short option
-$ov->{longopt} = {
-	'isfrom'      => 'f',
-	'sublen'      => 's',
-	'pageview'    => 'p',
-	'help'        => 'h'
-};
-
-while ( 1 ) {
-	$opt = $o->getopt ("fs:p:h", $_argc + 1, @_argv);
-	last if ( ! $opt );
-
-	SWITCH: {
-		( $opt eq "f" ) and do {
-			$_from = 1;
-			last SWITCH;
-		};
-		( $opt eq "s" ) and do {
-			Help () if ( ! $ov->{optarg} );
-			$_sublen = $ov->{optarg};
-			last SWITCH;
-		};
-		( $opt eq "p" ) and do {
-			Help () if ( ! $ov->{optarg} );
-			$_limit = $ov->{optarg};
-			last SWITCH;
-		};
-		Help ();
-	}
-}
-
-Help () if ( $ov->{getopt_err} );
-$_arg = $ov->{optcmd}->[0];
-
-if ( -f "$_arg" && ! -d "$_arg" ) {
-	$_file = $_arg;
-	$_path = "";
-
-	$_root = 0 if ( $ENV{"USER"} ne "root" );
-	$_direct = 1;
+if ( $#ARGV < 0 ) {
+  $trash = "$homedir/byspam/spam-$byspamYear$byspamMon$byspamDay";
 } else {
-	$_user = $ENV{"USER"};
+  for ($i=0; $i <= $#ARGV; $i++) {
+    if ($ARGV[$i] eq "-u") {
+      if ($myuser eq "root") {
+        $users = $ARGV[$i+1];
+        $users = `cat /etc/passwd | grep \"^$users:\" | awk -F : '{print \$6}'`;
+        $users =~ s/\n|\/$//g;
+      } else {
+        print $copy;
+        print "Error: Only root user excute wiht -u option\n";
+        exit;
+      }
+    } elsif ($ARGV[$i] eq "-d") {
+      $filedates = $ARGV[$i+1];
+    } elsif ($ARGV[$i] eq "-x") {
+      $dfile = $ARGV[$i+1];
+    }
+    $i++;
+  }
 
-	if ( $_user eq "root" ) {
-		$_user = ( ! $_arg ) ? "root" : $_arg;
-	} else {
-		$_root = 0;
-	}
+  if ($users eq "") { $users = $homedir; }
+  if ($filedates eq "") { $filedates = "$byspamYear$byspamMon$byspamDay"; }
 
-	$_upath = $ts->getHomePath ($_user);
-	$_path = "$_upath/byspam";
+  $trash = "$users/byspam/spam-$filedates";
 }
 
-PAGERESET:
+# delete mode
+if ($dfile ne "") {
+  $dfile = "$users/byspam/spam-$dfile";
 
-@spamlist = $ts->getTrashList ($_path);
-$spamno   = @spamlist;
-$_tpage = $ts->totalPage ($spamno, $_limit);
-
-$_until = 0;
-while ( 1 ) {
-	system ("clear");
-	print "=============================================================================\n";
-	print "[1;37mby SPAM Trash Viewer[7;0m $version by JoungKyun Kim <http://oops.org>\n";
-	print "Command [ q - quit | no - view no | d no - del no | enter - next | b - back ]\n";
-	print "=============================================================================\n";
-	print "Total $_tpage page / Current $_page page\n";
-	print "Total $spamno files\n\n";
-
-	$_startl = $_start;
-	$_untill = $_until;
-	$_until  = $_untill + $_limit;
-	if ( $_until > $spamno ) {
-		$_until  = $_limit * $_tpage;
-		$_untill = $_until - $_limit;
-	}
-
-	if ( ! $spamno && ! -f $_file ) {
-		$cm->printError ("ERROR: No exists trash file\n");
-		exit 0;
-	} else {
-		# direct view specify file
-		if ( ! $_path && -f $_file && ! -d $_file ) {
-			$ts->printTrash ($_path, $_file, $_user, $_sublen, $_from);
-			print "\n";
-			exit 0;
-		}
-
-		while ( 1 ) {
-			my $_filename = $spamlist[$_start];
-
-			if ( $_start < $_until && $_filename ) {
-				printf "%4s. %s\n", $_start + 1, $_filename;
-				$_start++;
-			} else {
-				if ( ! $_filename ) {
-					$_start = $_startl;
-					$_nullchk = 1;
-				} else {
-					$_nullchk = 0;
-				}
-				last;
-			}
-		}
-	}
-
-	print "\n" .
-		  "-----------------------------------------------------------------------------\n" .
-		  "[1;37mCommand:[7;0m ";
-
-	exit 0 if ( $spamno == 0 );
-	$_read = <STDIN>;
-
-	$ts->nextFunc ();
+  if ( -f "$dfile" ) {
+    unlink $dfile;
+  }
+  exit 0;
 }
 
-sub Help {
-	my @helps = ();
-	my $USAGES;
-	my $OPTN;
-	my $ARGUMENT;
-
-	if ( $ENV{'LANG'} =~ m/^ko/i ) {
-		$USAGES = "»ç¿ë¹ý";
-		$OPTN = "¿É¼Ç";
-		$ARGUMENT = "ÆÄÀÏÀÌ¸§ | °èÁ¤";
-		@helps = (
-					"º¸³½ÀÌ ÁÖ¼Ò¸¦ Ãâ·Â",
-					"ÆäÀÌÁö´ç ¸®½ºÆ® ¼ö [±âº» 10°³]",
-					"Ãâ·ÂÇÒ ¸ÞÀÏ Á¦¸ñ ±æÀÌ [±âº» 60ÀÚ]",
-					"ÇöÀç ¸Þ¼¼Áö¸¦ Ãâ·Â"
-		);
-		if ( $ENV['LANG'] =~ m/utf/i ) {
-			Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
-			Encode::from_to ($OPTN, 'euc-kr', 'utf-8');
-			Encode::from_to ($ARGUMENT, 'euc-kr', 'utf-8');
-			my $i = 0;
-			my $size = @helps;
-			for ( ; $i<$size; $i++ ) {
-				Encode::from_to ($helps[$i], 'euc-kr', 'utf-8');
-			}
-		}
-	} else {
-		$USAGES = "USAGE";
-		$OPTN = "OPTION";
-		$ARGUMENT = "FileName | AccountName";
-		@helps = (
-					"print sender address",
-					"number of list per page [default 10]",
-					"length of subject [default 60]",
-					"print this message"
-		);
-	}
-
-    $cm->printError (
-			"$USAGES : $0 -[$OPTN] <$ARGUMENT>\n" .
-			"$OPTN :\n" .
-			"          -f --isfrom   => $helps[0]\n" .
-			"          -p --pageview => $helps[1]\n" .
-			"          -s --sublen   => $helps[2]\n" .
-			"          -h --help     => $helps[3]\n"
-	);
-    exit 1;
+if( ! -f "$trash" ) {
+  print $copy;
+  print "Error: Trash file not found\n";
+  print "Usage: byspamTrash [ -u/-d/-x ]\n\n";
+  print "       -u USERNAME (only root)\n";
+  print "       -d DATE_FORMAT (Ymd, default value is today)\n";
+  print "       -x DATE_FORMAT (delete DATE_FORMAT trash file)\n\n";
+  if($myuser eq "root") {
+    print "       View Mode   : byspamTrash -u oops -d 20020627\n";
+    print "       Delete Mode : byspamTrash -u oops -x 20020627\n";
+  } else {
+    print "       View Mode   : byspamTrash -d 20020627\n";
+    print "       Delete Mode : byspamTrash -x 20020627\n";
+  }
+  exit 0;
 }
 
-exit 0;
+$less = `less --help`;
 
-#
-# Local variables:
-# tab-width: 4
-# c-basic-offset: 4
-# End:
-# vim600: noet sw=4 ts=4 fdm=marker
-# vim<600: noet sw=4 ts=4
-#
+sub splitMail {
+  my $st = 0;
+  my $i = 0;
+  my $mailTmp;
+  my @mailx = ();
+
+  if( -f $_[0] ) {
+    open(fileHandle,$_[0]);
+    foreach(<fileHandle>) {
+      if(/^From[ ]+[^@]+@[^ ]+[ ]+[A-Z][a-z]{2}[ ]+[A-Z][a-z]{2}[ ]+/) {
+        if($st ne 0) {
+          $mailx[$i] = $mailTmp;
+          $i++;
+        } else { $st = 1; }
+        $mailTmp=$_;
+      } else {
+        $mailTmp .= $_;
+      }
+    }
+    $mailx[$i] = $mailTmp;
+    close(fileHandle);
+  } else {
+    print "Error: Can't not find $trash\n";
+    exit 0
+  }
+
+  return @mailx;
+}
+
+my @mails = splitMail("$trash");
+chomp(@mails);
+$mailSize = @mails;
+
+for($i=0;$i<$mailSize;$i++) {
+  $mails[$i] =~ s/\n/!byspamEnter!\n/g;
+  @tmpMail = split(/\n/,$mails[$i]);
+  $getMail = Mail::Internet->new(\@tmpMail);
+  $subject[$i] = $getMail->get("Subject:");
+  $subject[$i] =~ s/\s*Subject: .+|!byspamEnter!//g;
+  $subject[$i] =~ s/\s+/ /ig;
+  chomp($subject[$i]);
+
+  if($subject[$i] =~ /^\s*$/i) { $subject[$i] = "No Subject"; }
+
+  my $resSubj;
+  if($subject[$i] =~ /=\?[^?]+\?([BQ])\?/i) {
+    my @chkSubj = ();
+    my $chkSubjSize;
+    @chkSubj = split(/\s+/,$subject[$i]);
+    $chkSubjSize = @chkSubj;
+    for($ci=0;$ci<$chkSubjSize;$ci++) {
+      if($chkSubj[$ci] =~ /=\?[^?]+\?([BQ])\?/i) {
+        $enc = $chkSubj[$ci];
+        $enc =~ s/(=\?[^?]+\?([BQ])\?[^?]+\?=)+/$2/ig;
+        $chkSubj[$ci] =~ s/=\?[^?]+\?[BQ]\?([^?]+)\?=/$1/ig;
+
+        if ($enc =~ /^q/i) { $chkSubj[$ci] = decode_qp($chkSubj[$ci]); }
+        else { $chkSubj[$ci] = decode_base64($chkSubj[$ci]); }
+      }
+
+      $resSubj = $resSubj ? "$resSubj $chkSubj[$ci]" : $chkSubj[$ci];
+      chomp($resSubj);
+    }
+  }
+
+  $subject[$i] = $resSubj ? $resSubj : $subject[$i];
+  $bodyis[$i] = getBody($getMail);
+}
+
+my $lastpage = $mailSize/10;
+my $lastchk  = int $lastpage;
+if($lastchk < $lastpage) { $lastpage = $lastchk+1; }
+
+my $page = 1;
+LINE: while (1) {
+  system("clear");
+  print "$copy";
+  print "$page page / total $lastpage pages\n\n";
+
+  $start = ($page > 1) ? $mailSize - ($page * 10 - 10) - 1 : $mailSize - 1;
+  $until = ($start - 10 < -1) ? -1 : $start - 10;
+
+  my $j;
+  for($i=$start;$i>$until;$i--) {
+    $j = $i+1;
+    if($j < 10) { $sp = "    "; }
+    elsif($j < 100) { $sp = "   "; }
+    elsif($j < 1000) { $sp = "  "; }
+    elsif($j < 10000) { $sp = " "; }
+    $j = "$sp$j";
+    print "$j. $subject[$i]\n";
+  }
+
+  $exm = ($page > 1) ? "[ y / n / b=back / No. ]" : "[ y / n / No. ]";
+  print "\nDo you want to continue? $exm : ";
+  my $cmd = <STDIN>;
+  chomp $cmd;
+
+
+  # view mail context
+  if ($cmd =~ /^[0-9]+$/) {
+    if ($cmd <= $start+1 && $cmd > $until+1) {
+      $mailno = $cmd - 1;      
+      system("clear");
+      $printBody = "$copy".
+                   "$page page / total $lastpage pages\n\n".
+                   "Mail No. $cmd\n".
+                   "Subject. $subject[$mailno]\n\n".
+                   "$bodyis[$mailno]\n";
+
+      if ($less) {
+        $printBody =~ s/'/`/g;
+        system("echo '$printBody' | less -e");
+        redo;
+      } else {
+        print "$printBody"; 
+        print "\nDo you want to continue? [y/n] : ";
+        $cmd = <STDIN>;
+        chomp $cmd;
+
+        if($cmd !~ /^(y|$)/i) { last LINE; }
+        else { redo; }
+      }
+    } else {
+      print "Out of a scope of mail list\n";
+      redo;
+    }
+  }
+
+  if ($until == -1 && $cmd !~ /^b/i) { last LINE; }
+  elsif($cmd !~ /^(y|b|\s*$)/i) { last LINE; }
+  elsif($cmd =~ /^b/i && $page eq 1) {}
+  elsif($cmd =~ /^b/i && $page > 1) { $page--;  }
+  else { $page++; }
+}
+
+exit 1;
