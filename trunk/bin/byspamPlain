@@ -2,7 +2,7 @@
 #
 # Mail Parse Utility supported by BySPAM
 # JoungKyun Kim <http://oops.org>
-# $Id: byspamPlain,v 1.4 2009-12-02 10:59:24 oops Exp $
+# $Id$
 #
 use lib '@includedir@';
 use strict;

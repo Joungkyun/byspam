@@ -2,7 +2,7 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-subject,v 1.19 2005-10-23 16:46:55 oops Exp $
+# $Id$
 
 (&#44305|±¤|ÎÆ|°ü|±¡)[^\xB0-\xFEa-z]*(°í|go|Í±)
 È«[^\xB0-\xFEa-z]*º¸

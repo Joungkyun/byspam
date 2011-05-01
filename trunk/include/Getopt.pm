@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://oops.org>
 #
-# $Id: Getopt.pm,v 1.3 2009-12-02 07:34:53 oops Exp $
+# $Id$
 #
 
 package Byspam::Getopt;

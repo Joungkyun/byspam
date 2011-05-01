@@ -4,7 +4,7 @@
 # This package code follows BPL License
 # JoungKyun Kim <http://oops.org>
 #
-# $Id: byspamClear,v 1.2 2009-12-02 07:34:50 oops Exp $
+# $Id$
 #
 use lib '@includedir@';
 use strict;

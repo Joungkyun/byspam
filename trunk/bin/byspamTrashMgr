@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# $Id: byspamTrashMgr,v 1.2 2004-12-06 08:57:54 oops Exp $
+# $Id$
 
 CONFNAME="@confdir@/byspam.conf";
 REGs="^[[:space:]]*trashPeriod[[:space:]]*=[[:space:]]*[\"']*[0-9]\+[\"']*"

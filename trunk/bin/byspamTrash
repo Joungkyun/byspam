@@ -1,7 +1,7 @@
 #!@PERLPATH@
 #
 # By SPAM trash viewer front end
-# $Id: byspamTrash,v 1.21 2009-12-02 11:03:45 oops Exp $
+# $Id$
 #
 use lib '@includedir@';
 use strict;

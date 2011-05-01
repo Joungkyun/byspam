@@ -23,7 +23,7 @@
 # from scratch.  It can only install one file at a time, a restriction
 # shared with many OS's install programs.
 #
-# $Id: install-sh,v 1.2 2004-12-30 08:18:00 oops Exp $
+# $Id$
 
 
 # set DOITPROG to echo to test this script

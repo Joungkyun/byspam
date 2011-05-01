@@ -1,7 +1,7 @@
 #
 # Byspam Common functions
 #
-# $Id: Common.pm,v 1.7 2011-02-07 19:13:08 oops Exp $
+# $Id$
 #
 
 package Byspam::Common;

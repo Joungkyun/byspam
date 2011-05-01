@@ -2,7 +2,7 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-ignore,v 1.12 2004-12-28 07:22:39 oops Exp $
+# $Id$
 
 (&#44305|±¤|ÎÆ|°ü|±¡)[^\xB0-\xFEa-z]*(°í|go|Í±)
 È«[^\xB0-\xFEa-z]*º¸

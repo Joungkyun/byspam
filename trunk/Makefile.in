@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 1.6 2004-12-30 08:23:42 oops Exp $
+# $Id$
 
 PROG            = @PACKAGE_NAME@
 VERSION         = @PACKAGE_VERSION@

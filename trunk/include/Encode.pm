@@ -1,7 +1,7 @@
 #
 # Byspam EUC-KR UTF-8 convert module
 #
-# $Id: Encode.pm,v 1.4 2009-12-02 15:45:57 oops Exp $
+# $Id$
 #
 
 package Byspam::Encode;
