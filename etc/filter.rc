@@ -1,4 +1,4 @@
-# $Id: filter.rc,v 1.6 2004-12-28 07:25:12 oops Exp $
+# $Id$
 
 SHELL=/bin/sh
 VERBOSE=no

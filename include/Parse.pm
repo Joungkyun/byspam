@@ -1,7 +1,7 @@
 #
 # Byspam Mail parsing library
 #
-# $Id: Parse.pm,v 1.7 2009-12-02 10:59:27 oops Exp $
+# $Id$
 #
 
 package Byspam::Parse;

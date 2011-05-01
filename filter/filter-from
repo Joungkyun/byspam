@@ -2,7 +2,7 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-from,v 1.7 2005-10-23 16:46:55 oops Exp $
+# $Id$
 
 test(er)*|테스(트|터)|성인
 popmailer.org|<>

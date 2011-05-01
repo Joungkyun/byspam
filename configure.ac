@@ -1,7 +1,7 @@
 # Process this file with autoconf to produce a configure script.
 # Configure template for pkgserv
 #
-# $Id: configure.ac,v 1.5 2009-12-02 11:03:42 oops Exp $
+# $Id$
 
 #
 AC_PREREQ(2.53)

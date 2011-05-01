@@ -2,7 +2,7 @@
 # and use regular expression with perl type.
 # See also regex of perl.
 #
-# $Id: filter-extra,v 1.14 2004-12-01 08:57:42 oops Exp $
+# $Id$
 
 AD_?2000
 RED[\s_]?SPIDER

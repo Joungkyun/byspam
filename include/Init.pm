@@ -1,7 +1,7 @@
 #
 # Byspam Initial functions
 #
-# $Id: Init.pm,v 1.4 2005-09-23 09:47:23 oops Exp $
+# $Id$
 #
 
 package Byspam::Init;

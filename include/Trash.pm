@@ -3,7 +3,7 @@
 #
 # scripted by JoungKyun Kim <http://oops.org>
 #
-# $Id: Trash.pm,v 1.13 2009-12-02 10:59:27 oops Exp $
+# $Id$
 #
 
 package Byspam::Trash;

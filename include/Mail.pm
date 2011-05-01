@@ -1,7 +1,7 @@
 #
 # Byspam Mail library modules - parsing header and body
 #
-# $Id: Mail.pm,v 1.1 2004-11-27 18:50:32 oops Exp $
+# $Id$
 #
 
 package Byspam::Mail;
