@@ -145,7 +145,7 @@ sub checkReceived {
 		$rcout++ if ( $_v =~ /^Received: / );
 	}
 
-	return 1 if ( $rcout lt 2 );
+	return 1 if ( $rcout < 2 );
 
 	return 0;
 }
