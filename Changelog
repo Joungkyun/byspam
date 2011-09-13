@@ -5,6 +5,10 @@ $Id$
 Warn: date format is Y.m.d
 
 * v1.0.3
+  - 2011.09.13
+	by JoungKyun.Kim :
+	- fixed wrong caculate received header
+
   - 2011.02.08
 	by JoungKyun.Kim :
 	- add check function that checked number of recieved headers.
