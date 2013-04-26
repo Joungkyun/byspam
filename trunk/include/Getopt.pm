@@ -167,16 +167,16 @@ Byspam::Getopt - perl getopt module with long option as C sytle
 
 =head1 DESCRIPTION
 
-  Byspam::Getopt ÆÐÅ°Áö´Â ÆÞ¿¡¼­ C sytel ÀÇ getopt ¸¦ »ç¿ë °¡´É ÇÏ°Ô ÇÑ´Ù.
-  °£´ÜÇÏ°Ô ¿¹Á¦·Î ¼³¸íÀ» ÇÏµµ·Ï ÇÑ´Ù. ¾Æ·¡ÀÇ ¿¹Á¦´Â
+  Byspam::Getopt íŒ¨í‚¤ì§€ëŠ” íŽ„ì—ì„œ C sytel ì˜ getopt ë¥¼ ì‚¬ìš© ê°€ëŠ¥ í•˜ê²Œ í•œë‹¤.
+  ê°„ë‹¨í•˜ê²Œ ì˜ˆì œë¡œ ì„¤ëª…ì„ í•˜ë„ë¡ í•œë‹¤. ì•„ëž˜ì˜ ì˜ˆì œëŠ”
 
   C<./script.pl -c -d asdf -x argument1 argument2>
 
-  ÀÇ ±¸Á¶¸¦ °¡Áöµµ·Ï ÄÚµùÀ» ÇÒ °ÍÀÌ´Ù. ¶ÇÇÑ, -c ¿É¼ÇÀº --cmd ·Î, -d ¿É¼ÇÀº
-  --dir ·Î, -x ¿É¼ÇÀº --exec ·Î »ç¿ëÇÒ ¼ö ÀÖ°Ô ÇÒ °ÍÀÌ´Ù.
+  ì˜ êµ¬ì¡°ë¥¼ ê°€ì§€ë„ë¡ ì½”ë”©ì„ í•  ê²ƒì´ë‹¤. ë˜í•œ, -c ì˜µì…˜ì€ --cmd ë¡œ, -d ì˜µì…˜ì€
+  --dir ë¡œ, -x ì˜µì…˜ì€ --exec ë¡œ ì‚¬ìš©í•  ìˆ˜ ìžˆê²Œ í•  ê²ƒì´ë‹¤.
 
-  -d ¿É¼Ç°ú °°ÀÌ ¿É¼ÇÀÇ °ªÀÌ ÀÖ¾î¾ß ÇÏ´Â °æ¿ìÀÇ Ç¥ÇöÀº, ´ÙÀ½°ú °°ÀÌ »ç¿ëÀÌ
-  °¡´ÉÇÏ´Ù.
+  -d ì˜µì…˜ê³¼ ê°™ì´ ì˜µì…˜ì˜ ê°’ì´ ìžˆì–´ì•¼ í•˜ëŠ” ê²½ìš°ì˜ í‘œí˜„ì€, ë‹¤ìŒê³¼ ê°™ì´ ì‚¬ìš©ì´
+  ê°€ëŠ¥í•˜ë‹¤.
 
   C<-d value>
   C<-dvalue>
@@ -187,27 +187,27 @@ Byspam::Getopt - perl getopt module with long option as C sytle
 
 
 
-  # ÆÐÅ°Áö¸¦ ¼±¾ðÇÑ´Ù.
+  # íŒ¨í‚¤ì§€ë¥¼ ì„ ì–¸í•œë‹¤.
   use Byspam::Getopt;
 
   my $opt = "";
-  my $help = "µµ¿ò¸»\n";
+  my $help = "ë„ì›€ë§\n";
 
-  # Getopt ÆÐÅ°Áö¿¡¼­ »ç¿ëµÉ °ÍµéÀ» $o º¯¼ö¿¡ ÂüÁ¶ÇÑ´Ù.
+  # Getopt íŒ¨í‚¤ì§€ì—ì„œ ì‚¬ìš©ë  ê²ƒë“¤ì„ $o ë³€ìˆ˜ì— ì°¸ì¡°í•œë‹¤.
   #
   my $o = new Byspam::Getopt;
 
-  # Getopt ÆÐÅ°Áö¿¡¼­ »ç¿ëµÉ º¯¼öµéÀ» $ov ¿¡ ÂüÁ¶ÇÑ´Ù.
+  # Getopt íŒ¨í‚¤ì§€ì—ì„œ ì‚¬ìš©ë  ë³€ìˆ˜ë“¤ì„ $ov ì— ì°¸ì¡°í•œë‹¤.
   #
   my $ov = $o->{_var};
 
-  # ±âº» º¯¼ö¸¦ ÃÊ±âÈ­ ÇÑ´Ù.
+  # ê¸°ë³¸ ë³€ìˆ˜ë¥¼ ì´ˆê¸°í™” í•œë‹¤.
   #
-  $ov->{gno} = 0;       # @ARGV ÀÇ ¼ø¼­¸¦ ÀúÀå
-  $ov->{optcno} = 0;    # ¿É¼Ç ºÐ¼® ÈÄ, ¿É¼Ç ¿ÜÀÇ ³ª¸ÓÁö argument ¼ö
+  $ov->{gno} = 0;       # @ARGV ì˜ ìˆœì„œë¥¼ ì €ìž¥
+  $ov->{optcno} = 0;    # ì˜µì…˜ ë¶„ì„ í›„, ì˜µì…˜ ì™¸ì˜ ë‚˜ë¨¸ì§€ argument ìˆ˜
 
-  # long option À» short option ¿¡ ¸ÅÄ¡¸¦ ½ÃÅ´. long option À» »ç¿ëÇÏÁö ¾Ê
-  # À» °ÍÀÌ¶ó¸é ¼±¾ðÇÏÁö ¾Ê¾Æµµ »ó°ü ¾øÀ½.
+  # long option ì„ short option ì— ë§¤ì¹˜ë¥¼ ì‹œí‚´. long option ì„ ì‚¬ìš©í•˜ì§€ ì•Š
+  # ì„ ê²ƒì´ë¼ë©´ ì„ ì–¸í•˜ì§€ ì•Šì•„ë„ ìƒê´€ ì—†ìŒ.
   #
   $ov->{longopt} = {
     'cmd'  => 'c',
@@ -216,19 +216,19 @@ Byspam::Getopt - perl getopt module with long option as C sytle
   };
 
   while ( 1 ) {
-    # getopt ¸¦ È£ÃâÇÑ´Ù. Ã¹¹øÂ° argument ´Â short option ÀÇ ¸®½ºÆ®¸¦ ÁöÁ¤
-    # ÇÑ´Ù. C ÀÇ getopt ¿Í µ¿ÀÏÇÑ ÇüÅÂ·Î ÁöÁ¤À» ÇÏ¸ç, ¿É¼Ç µÚ¿¡ ':' ¹®ÀÚ°¡
-    # ÁöÁ¤ µÇ¸é ¿É¼Ç °ªÀÌ ÀÖ¾î¾ß ÇÑ´Ù´Â ÀÇ¹ÌÀÌ´Ù.  µÎ¹øÂ° argument ´Â ARGV
-    # ¹è¿­ÀÇ ¼ýÀÚ¸¦ ³Ö´Â´Ù.
+    # getopt ë¥¼ í˜¸ì¶œí•œë‹¤. ì²«ë²ˆì§¸ argument ëŠ” short option ì˜ ë¦¬ìŠ¤íŠ¸ë¥¼ ì§€ì •
+    # í•œë‹¤. C ì˜ getopt ì™€ ë™ì¼í•œ í˜•íƒœë¡œ ì§€ì •ì„ í•˜ë©°, ì˜µì…˜ ë’¤ì— ':' ë¬¸ìžê°€
+    # ì§€ì • ë˜ë©´ ì˜µì…˜ ê°’ì´ ìžˆì–´ì•¼ í•œë‹¤ëŠ” ì˜ë¯¸ì´ë‹¤.  ë‘ë²ˆì§¸ argument ëŠ” ARGV
+    # ë°°ì—´ì˜ ìˆ«ìžë¥¼ ë„£ëŠ”ë‹¤.
     #
     $opt = $o->getopt ("cd:xh", $#ARGV + 1, @ARGV);
 
-    # $opt ÀÇ °ªÀÌ ¾øÀ¸¸é roop ¸¦ Á¾·áÇÑ´Ù.
-    # getopt ´Â ¿É¼ÇÀÇ ºÐ¼® ¿Ï·á ÈÄ³ª, ¿¡·¯°¡ ¹ß»ýÇÒ °æ¿ì ºó °ªÀ» ¸®ÅÏÇÑ´Ù.
+    # $opt ì˜ ê°’ì´ ì—†ìœ¼ë©´ roop ë¥¼ ì¢…ë£Œí•œë‹¤.
+    # getopt ëŠ” ì˜µì…˜ì˜ ë¶„ì„ ì™„ë£Œ í›„ë‚˜, ì—ëŸ¬ê°€ ë°œìƒí•  ê²½ìš° ë¹ˆ ê°’ì„ ë¦¬í„´í•œë‹¤.
     #
     last if ( ! $opt );
 
-    #°¢ ¿É¼Ç¿¡ ¸ÅÄªµÇ´Â Á¤º¸¸¦ ÁöÁ¤ÇÑ´Ù.
+    #ê° ì˜µì…˜ì— ë§¤ì¹­ë˜ëŠ” ì •ë³´ë¥¼ ì§€ì •í•œë‹¤.
     #
     my $cmd = 0;
     my $dir = "";
@@ -240,7 +240,7 @@ Byspam::Getopt - perl getopt module with long option as C sytle
             last SWITCH;
         };  
         ( $opt eq "d" ) and do {
-            # º¯¼öÀÇ °ªÀº $ov->{optarg} ·Î °¡Áö°í ¿Â´Ù
+            # ë³€ìˆ˜ì˜ ê°’ì€ $ov->{optarg} ë¡œ ê°€ì§€ê³  ì˜¨ë‹¤
             #
             if ( ! $ov->{optarg} ) {
                 print "$help\n"; 
@@ -258,12 +258,12 @@ Byspam::Getopt - perl getopt module with long option as C sytle
     }
   }
 
-  # getopt_err Àº getopt °¡ ºñÁ¤»ó Á¾·á¸¦ ÇßÀ» °æ¿ì 1 ÀÇ °ªÀ» °¡Áø´Ù.
+  # getopt_err ì€ getopt ê°€ ë¹„ì •ìƒ ì¢…ë£Œë¥¼ í–ˆì„ ê²½ìš° 1 ì˜ ê°’ì„ ê°€ì§„ë‹¤.
   #
   print $help if ( $ov->{getopt_err} );
 
-  # ¿É¼Ç ¿Ü¿¡ 2°³ÀÇ ÀÎÀÚ¸¦ °¡Á®¾ß ÇÏ¹Ç·Î ´ÙÀ½ÀÇ °Ë»ç¸¦ ÇÑ´Ù.
-  # ÀÎÀÚÀÇ °ªÀº optcno ·Î Ã¼Å©ÇÑ´Ù.
+  # ì˜µì…˜ ì™¸ì— 2ê°œì˜ ì¸ìžë¥¼ ê°€ì ¸ì•¼ í•˜ë¯€ë¡œ ë‹¤ìŒì˜ ê²€ì‚¬ë¥¼ í•œë‹¤.
+  # ì¸ìžì˜ ê°’ì€ optcno ë¡œ ì²´í¬í•œë‹¤.
   #
   print $help if ( $ov->{optcno} != 2 );
 
@@ -271,7 +271,7 @@ Byspam::Getopt - perl getopt module with long option as C sytle
   printf "%-10s : %s\n", "dir", $dir;
   printf "%-10s : %s\n", "exec", $exec;
 
-  # ³Ñ°ÜÁø ÀÎÀÚ´Â ¼ø¼­´ë·Î optcmd ¹è¿­¿¡ µé¾î°£´Ù.
+  # ë„˜ê²¨ì§„ ì¸ìžëŠ” ìˆœì„œëŒ€ë¡œ optcmd ë°°ì—´ì— ë“¤ì–´ê°„ë‹¤.
   #
   print  "%-10s : %s\n", "argument 1", $ov->{optcmd}->[0];
   print  "%-10s : %s\n", "argument 2", $ov->{optcmd}->[1];

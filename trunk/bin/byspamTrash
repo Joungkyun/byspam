@@ -214,14 +214,14 @@ sub Help {
 	my $ARGUMENT;
 
 	if ( $ENV{'LANG'} =~ m/^ko/i ) {
-		$USAGES = "»ç¿ë¹ý";
-		$OPTN = "¿É¼Ç";
-		$ARGUMENT = "ÆÄÀÏÀÌ¸§ | °èÁ¤";
+		$USAGES = "ì‚¬ìš©ë²•";
+		$OPTN = "ì˜µì…˜";
+		$ARGUMENT = "íŒŒì¼ì´ë¦„ | ê³„ì •";
 		@helps = (
-					"º¸³½ÀÌ ÁÖ¼Ò¸¦ Ãâ·Â",
-					"ÆäÀÌÁö´ç ¸®½ºÆ® ¼ö [±âº» 10°³]",
-					"Ãâ·ÂÇÒ ¸ÞÀÏ Á¦¸ñ ±æÀÌ [±âº» 60ÀÚ]",
-					"ÇöÀç ¸Þ¼¼Áö¸¦ Ãâ·Â"
+					"ë³´ë‚¸ì´ ì£¼ì†Œë¥¼ ì¶œë ¥",
+					"íŽ˜ì´ì§€ë‹¹ ë¦¬ìŠ¤íŠ¸ ìˆ˜ [ê¸°ë³¸ 10ê°œ]",
+					"ì¶œë ¥í•  ë©”ì¼ ì œëª© ê¸¸ì´ [ê¸°ë³¸ 60ìž]",
+					"í˜„ìž¬ ë©”ì„¸ì§€ë¥¼ ì¶œë ¥"
 		);
 		if ( $ENV['LANG'] =~ m/utf/i ) {
 			Encode::from_to ($USAGES, 'euc-kr', 'utf-8');

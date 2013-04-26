@@ -22,10 +22,10 @@ CHARSET: {
 
 if ( $#ARGV != 1 ) {
   if( $charset eq "EUC-KR" ) {
-    $USAGES  = "»ç¿ë¹ı";
-    $targetA = "Ã¼Å© ÇÒ ¹®ÀÚ¿­";
-    $targetB = "Ã¼Å© ÇÒ Á¤±ÔÇ¥Çö½Ä ÆĞÅÏ";
-    $WN      = "A ¿Í B ´Â ²À ÀÛÀ½ µû¿ÈÇ¥·Î °¨½Î¾ß ÇÑ´Ù."
+    $USAGES  = "ì‚¬ìš©ë²•";
+    $targetA = "ì²´í¬ í•  ë¬¸ìì—´";
+    $targetB = "ì²´í¬ í•  ì •ê·œí‘œí˜„ì‹ íŒ¨í„´";
+    $WN      = "A ì™€ B ëŠ” ê¼­ ì‘ìŒ ë”°ì˜´í‘œë¡œ ê°ì‹¸ì•¼ í•œë‹¤."
   } else {
     $USAGES  = "USAGE";
     $targetA = "Check string";
@@ -47,10 +47,10 @@ $string = "$ARGV[0]";
 $pattern = "$ARGV[1]";
 
 if( $string =~ /$pattern/ig ) {
-  if ($charset eq "EUC-KR" ) { print "»ç¿ëÇÒ ¼ö ÀÖ´Â Ç¥Çö½Ä ÀÔ´Ï´Ù.\n"; }
+  if ($charset eq "EUC-KR" ) { print "ì‚¬ìš©í•  ìˆ˜ ìˆëŠ” í‘œí˜„ì‹ ì…ë‹ˆë‹¤.\n"; }
   else { print "This pattern is right\n" }
 } else {
-  if ( $charset eq "EUC-KR" ) { print "Ç¥Çö½ÄÀÌ ÁÖ¾îÁø ¹®ÀÚ¿­°ú ¸ÅÄ¡°¡ µÇÁö ¾Ê½À´Ï´Ù.\n"; }
+  if ( $charset eq "EUC-KR" ) { print "í‘œí˜„ì‹ì´ ì£¼ì–´ì§„ ë¬¸ìì—´ê³¼ ë§¤ì¹˜ê°€ ë˜ì§€ ì•ŠìŠµë‹ˆë‹¤.\n"; }
   else { print "This expression is not match given string\n"; }
 }
 

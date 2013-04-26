@@ -4,33 +4,33 @@
 #
 # $Id$
 
-(&#44305|±¤|ÎÆ|°ü|±¡)[^\xB0-\xFEa-z]*(°í|go|Í±)
-È«[^\xB0-\xFEa-z]*º¸
-¼±[^\xB0-\xFEa-z]*Àü
-Åõ[^\xB0-\xFEa-z]*ÀÚ
-Á¤[^\xB0-\xFEa-z]*º¸
-¾È[^\xB0-\xFEa-z]*³»
-Á¦[^\xB0-\xFEa-z]*¾È
-´ë[^\xB0-\xFEa-z]*Ãâ
-Á÷[^\xB0-\xFEa-z]*Àå[^\xB0-\xFEa-z]*ÀÎ
-¼ö[^\xB0-\xFEa-z]*¼ö[^\xB0-\xFEa-z]*·á
-ºñ[^\xB0-\xFEa-z]*¾Æ[^\xB0-\xFEa-z]*±×[^\xB0-\xFEa-z]*¶ó
-°ú[^\xB0-\xFEa-z]*(¤·|¾Ó|¾Æ¾Ó)[^\xB0-\xFEa-z]*°í
-¤¡[^\xB0-\xFEa-z]*¤Ç[^\xB0-\xFEa-z]*¤¿[^\xB0-\xFEa-z]*¤·[^\xB0-\xFEa-z]*¤¡[^\xB0-\xFEa-z]*¤Ç
+(&#44305|ê´‘|å»£|ê´€|ê´Œ)[^\xB0-\xFEa-z]*(ê³ |go|å‘Š)
+í™[^\xB0-\xFEa-z]*ë³´
+ì„ [^\xB0-\xFEa-z]*ì „
+íˆ¬[^\xB0-\xFEa-z]*ìž
+ì •[^\xB0-\xFEa-z]*ë³´
+ì•ˆ[^\xB0-\xFEa-z]*ë‚´
+ì œ[^\xB0-\xFEa-z]*ì•ˆ
+ëŒ€[^\xB0-\xFEa-z]*ì¶œ
+ì§[^\xB0-\xFEa-z]*ìž¥[^\xB0-\xFEa-z]*ì¸
+ìˆ˜[^\xB0-\xFEa-z]*ìˆ˜[^\xB0-\xFEa-z]*ë£Œ
+ë¹„[^\xB0-\xFEa-z]*ì•„[^\xB0-\xFEa-z]*ê·¸[^\xB0-\xFEa-z]*ë¼
+ê³¼[^\xB0-\xFEa-z]*(ã…‡|ì•™|ì•„ì•™)[^\xB0-\xFEa-z]*ê³ 
+ã„±[^\xB0-\xFEa-z]*ã…—[^\xB0-\xFEa-z]*ã…[^\xB0-\xFEa-z]*ã…‡[^\xB0-\xFEa-z]*ã„±[^\xB0-\xFEa-z]*ã…—
 v[^\xB0-\xFEa-z]*i[^\xB0-\xFEa-z]*a[^\xB0-\xFEa-z]*g[^\xB0-\xFEa-z]*r[^\xB0-\xFEa-z]*a
-±¸ÀÔ[\s]*(¹®ÀÇ|¹æ¹ý|½ÅÃ»|µ¿ÀÇ)
-Ä«µå[\s]*´ë±Ý|ÀÜ¿©ÇÑµµ|Ã¢¾÷|Æ÷Ä¿|°í½ºÅé
-¼ö½ÅÀ»[\s]*¿øÇÏÁö
-ºÎÀÚ|¹Ù½ºÆ®¸ÞÀÏ|¼öÀÍ|¼ºÀÎ|Å×½ºÆ®|SEX|PORN|YOUNG|STAR|STRIP|ADV|ADULT
-Æ÷.?¸£.?³ë|¼½.?Ä·|»Ç.?¸£.?³ë|°­°£|¸ôÄ«|¼ºÆøÇà
-ÃÊ\.?Àú\.?°¡|¸ð\.?¹Ù\.?ÀÏ|PDA([^a-z]|$)|Ç×\.?¹®
-»ç±î½Ã|´©³ª|Ã¤ÆÃ|´ÙÀÌ¾îÆ®|½Å¿ë|¾ÆÄí¾Æ|Á¤¼ö±â|ÃÖ½ÅÇü
-ÅäÀÍ|ÅäÇÃ|º¸Áõ|´ãº¸|¿¬Ã¼|»ó´ã[\s]*½ÅÃ»
-NAMED|NUDE|CELEBRIT|casino|¸¶ÄÉÆÃ|test|DVD|winner|lucky
+êµ¬ìž…[\s]*(ë¬¸ì˜|ë°©ë²•|ì‹ ì²­|ë™ì˜)
+ì¹´ë“œ[\s]*ëŒ€ê¸ˆ|ìž”ì—¬í•œë„|ì°½ì—…|í¬ì»¤|ê³ ìŠ¤í†±
+ìˆ˜ì‹ ì„[\s]*ì›í•˜ì§€
+ë¶€ìž|ë°”ìŠ¤íŠ¸ë©”ì¼|ìˆ˜ìµ|ì„±ì¸|í…ŒìŠ¤íŠ¸|SEX|PORN|YOUNG|STAR|STRIP|ADV|ADULT
+í¬.?ë¥´.?ë…¸|ì„¹.?ìº |ë½€.?ë¥´.?ë…¸|ê°•ê°„|ëª°ì¹´|ì„±í­í–‰
+ì´ˆ\.?ì €\.?ê°€|ëª¨\.?ë°”\.?ì¼|PDA([^a-z]|$)|í•­\.?ë¬¸
+ì‚¬ê¹Œì‹œ|ëˆ„ë‚˜|ì±„íŒ…|ë‹¤ì´ì–´íŠ¸|ì‹ ìš©|ì•„ì¿ ì•„|ì •ìˆ˜ê¸°|ìµœì‹ í˜•
+í† ìµ|í† í”Œ|ë³´ì¦|ë‹´ë³´|ì—°ì²´|ìƒë‹´[\s]*ì‹ ì²­
+NAMED|NUDE|CELEBRIT|casino|ë§ˆì¼€íŒ…|test|DVD|winner|lucky
 Important Message From
 C:\\CoolProgs\\Pretty Park\.exe
-¿µ»óÀ¸·Î º¸³»´Â ÆíÁö|Çö\.?±Ý|¼Ó\.?º¸
-¸í¶û¼Ò³à ºü±¼±â|¹ß¼Û±â|¸íÇ°|¹«·á|¸¶ÀÏ¸®Áö|°ñÇÁ|¿©Çà
+ì˜ìƒìœ¼ë¡œ ë³´ë‚´ëŠ” íŽ¸ì§€|í˜„\.?ê¸ˆ|ì†\.?ë³´
+ëª…ëž‘ì†Œë…€ ë¹ êµ´ê¸°|ë°œì†¡ê¸°|ëª…í’ˆ|ë¬´ë£Œ|ë§ˆì¼ë¦¬ì§€|ê³¨í”„|ì—¬í–‰
 Trojaner-Info|pussy
 ILOVEYOU|stock|poker|money|buyer|Unsubscribe|shopping
 Look at the pretty
@@ -45,10 +45,10 @@ photos from my
 Screen Saver
 Loose up|well-being
 Click Here for more Information
-ÇÏµå[ \t]*ÄÚ¾î|¾ßµ¿
-¹éÈ­Á¡|Á÷°Å·¡|¾Ç¼º|È¸»ý
-³³Ç°|¸íÇ°|¼¼ÀÏ|ÇÇ¿¡¸£
-re:[\s]*(¹®ÀÇ|¿äÃ»)ÇÏ½Å
+í•˜ë“œ[ \t]*ì½”ì–´|ì•¼ë™
+ë°±í™”ì |ì§ê±°ëž˜|ì•…ì„±|íšŒìƒ
+ë‚©í’ˆ|ëª…í’ˆ|ì„¸ì¼|í”¼ì—ë¥´
+re:[\s]*(ë¬¸ì˜|ìš”ì²­)í•˜ì‹ 
 (Re\|Fw): FYI
 
 # SOBIG.F configuration

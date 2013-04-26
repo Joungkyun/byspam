@@ -4,17 +4,17 @@
 #
 # $Id$
 
-(&#44305|±¤|ÎÆ|°ü|±¡)[^\xB0-\xFEa-z]*(°í|go|Í±)
-È«[^\xB0-\xFEa-z]*º¸
-¼±[^\xB0-\xFEa-z]*Àü
-Åõ[^\xB0-\xFEa-z]*ÀÚ
-´ë[^\xB0-\xFEa-z]*Ãâ
-¼ö[^\xB0-\xFEa-z]*¼ö[^\xB0-\xFEa-z]*·á
-ºñ[^\xB0-\xFEa-z]*¾Æ[^\xB0-\xFEa-z]*±×[^\xB0-\xFEa-z]*¶ó
+(&#44305|ê´‘|å»£|ê´€|ê´Œ)[^\xB0-\xFEa-z]*(ê³ |go|å‘Š)
+í™[^\xB0-\xFEa-z]*ë³´
+ì„ [^\xB0-\xFEa-z]*ì „
+íˆ¬[^\xB0-\xFEa-z]*ìž
+ëŒ€[^\xB0-\xFEa-z]*ì¶œ
+ìˆ˜[^\xB0-\xFEa-z]*ìˆ˜[^\xB0-\xFEa-z]*ë£Œ
+ë¹„[^\xB0-\xFEa-z]*ì•„[^\xB0-\xFEa-z]*ê·¸[^\xB0-\xFEa-z]*ë¼
 v[^\xB0-\xFEa-z]*i[^\xB0-\xFEa-z]*a[^\xB0-\xFEa-z]*g[^\xB0-\xFEa-z]*r[^\xB0-\xFEa-z]*a
-°ú¾Ó°í¿À|¤¡¤Ç¤¿¤·¤¡¤Ç
+ê³¼ì•™ê³ ì˜¤|ã„±ã…—ã…ã…‡ã„±ã…—
 yescounter\.com
-¼ºÀÎ|Æ÷¸£³ë|Ä·µ¿|¼½½º|ºü±¸¸®|´©³ª¹æ
-±ÝÀ¶|¿¬Ã¼|´ë³³|À¯Åë|Á÷°Å·¡
+ì„±ì¸|í¬ë¥´ë…¸|ìº ë™|ì„¹ìŠ¤|ë¹ êµ¬ë¦¬|ëˆ„ë‚˜ë°©
+ê¸ˆìœµ|ì—°ì²´|ëŒ€ë‚©|ìœ í†µ|ì§ê±°ëž˜
 
 # user define

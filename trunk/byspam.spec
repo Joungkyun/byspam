@@ -1,5 +1,5 @@
 Summary: The By SPAM is filtering tool for Anti Spam
-Summary(ko): ½ºÆÔ¹æÁö¸¦ À§ÇÑ ÇÊÅÍ¸µ Åø
+Summary(ko): ìŠ¤íŒ¸ë°©ì§€ë¥¼ ìœ„í•œ í•„í„°ë§ íˆ´
 Name: byspam
 Version: 1.0.3
 Release: 1
@@ -21,10 +21,10 @@ This program is built in perl and filtering wiht regular expression of perl.
 And supproted BASE64, QUOTED-PRINTABLE encoding
 
 %description -l ko
-By SPAM Àº smtp µ¥¸ó°ú procmail °ú ¿¬µ¿ÇÏ¿© ½ºÆÔ¸ÞÀÏÀ» ÇÊÅÍ¸µ ÇÏ±âÀ§ÇÑ µµ±¸
-ÀÌ´Ù. ÀÌ ÇÁ·Î±×·¥Àº ÆÞ·Î ÀÛ¼ºÀÌ µÇ¾îÁ³À¸¸ç, ÆÞÀÇ Á¤±ÔÇ¥Çö½ÄÀ» ÀÌ¿ëÇÏ¿© °­·Â
-ÇÑ ÇÊÅÍ¸µÀ» Á¦°øÇÑ´Ù. ¶ÇÇÑ, BASE64, QUOTED-PRINTABLE ÀÎÄÚµùÀ» µðÄÚµùÇÏ¿© ÇÊ
-ÅÍ¸µÀ» ÇÑ´Ù.
+By SPAM ì€ smtp ë°ëª¬ê³¼ procmail ê³¼ ì—°ë™í•˜ì—¬ ìŠ¤íŒ¸ë©”ì¼ì„ í•„í„°ë§ í•˜ê¸°ìœ„í•œ ë„êµ¬
+ì´ë‹¤. ì´ í”„ë¡œê·¸ëž¨ì€ íŽ„ë¡œ ìž‘ì„±ì´ ë˜ì–´ì¡Œìœ¼ë©°, íŽ„ì˜ ì •ê·œí‘œí˜„ì‹ì„ ì´ìš©í•˜ì—¬ ê°•ë ¥
+í•œ í•„í„°ë§ì„ ì œê³µí•œë‹¤. ë˜í•œ, BASE64, QUOTED-PRINTABLE ì¸ì½”ë”©ì„ ë””ì½”ë”©í•˜ì—¬ í•„
+í„°ë§ì„ í•œë‹¤.
 
 %prep
 %setup -q
@@ -63,11 +63,11 @@ fi
 if [ $1 = 0 ]; then
   LCHK=$(echo ${LANG} | egrep ko)
   if [ -n "${LCHK}" ]; then
-    echo "-Uhv ¿É¼ÇÀ» ÀÌ¿ëÇÏ¿© byspam rpm ÆÐÅ°Áö¸¦ ¾÷µ¥ÀÌÆ® ÇÏ´Â"
-    echo "ÁßÀÌ¶ó¸é ¾Æ·¡ÀÇ ¸Þ¼¼Áö¸¦ ¹«½ÃÇÏ°í smtp µ¥¸óÀ» Àç½ÃÀÛ ÇÏ½Ê½Ã¿À."
+    echo "-Uhv ì˜µì…˜ì„ ì´ìš©í•˜ì—¬ byspam rpm íŒ¨í‚¤ì§€ë¥¼ ì—…ë°ì´íŠ¸ í•˜ëŠ”"
+    echo "ì¤‘ì´ë¼ë©´ ì•„ëž˜ì˜ ë©”ì„¸ì§€ë¥¼ ë¬´ì‹œí•˜ê³  smtp ë°ëª¬ì„ ìž¬ì‹œìž‘ í•˜ì‹­ì‹œì˜¤."
     echo
-    echo "/etc/procmailrc ¿¡¼­ \"INCLUDERC=/etc/byspam/filter.rc\""
-    echo "¶óÀÎÀ» »èÁ¦ ÇÏ½Ã°í smtp µ¥¸óÀ» Àç½ÃÀÛ ÇÏ½Ê½Ã¿À"
+    echo "/etc/procmailrc ì—ì„œ \"INCLUDERC=/etc/byspam/filter.rc\""
+    echo "ë¼ì¸ì„ ì‚­ì œ í•˜ì‹œê³  smtp ë°ëª¬ì„ ìž¬ì‹œìž‘ í•˜ì‹­ì‹œì˜¤"
   else
     echo "If you use -Uhv option to upgrade byspam rpm package,"
     echo "ignored follow message and smtp restart"

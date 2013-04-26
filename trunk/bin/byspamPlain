@@ -108,11 +108,11 @@ sub Help {
 	my $USAGES;
 
 	if ( $ENV{'LANG'} =~ m/^ko/i ) {
-		$USAGES = "»ç¿ë¹ý";
+		$USAGES = "ì‚¬ìš©ë²•";
 		@helps = (
-					"ÇöÀç ¸Þ¼¼Áö¸¦ Ãâ·Â",
-					"ÁöÁ¤µÈ ÆÄÀÏÀÇ ¸ÞÀÏ º»¹®¸¸ µðÄÚµù ÇÏ¿© Ãâ·Â",
-					"ÁöÁ¤µÈ ÆÄÀÏÀÇ ¸ÞÀÏ Çì´õ¸¸ µðÄÚµù ÇÏ¿© Ãâ·Â"
+					"í˜„ìž¬ ë©”ì„¸ì§€ë¥¼ ì¶œë ¥",
+					"ì§€ì •ëœ íŒŒì¼ì˜ ë©”ì¼ ë³¸ë¬¸ë§Œ ë””ì½”ë”© í•˜ì—¬ ì¶œë ¥",
+					"ì§€ì •ëœ íŒŒì¼ì˜ ë©”ì¼ í—¤ë”ë§Œ ë””ì½”ë”© í•˜ì—¬ ì¶œë ¥"
 		);
 		if ( $ENV['LANG'] =~ m/utf/i ) {
 			Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
