@@ -10,6 +10,7 @@ Warn: date format is Y.m.d
 	- changed file encoding to utf-8
 	- intergrate path of spam dir and spambox on filter.rc
 	- add /etc/sysconfig/byspamcron
+	- fixed syntax error on Parse.pm
 
   - 2011.09.13
 	by JoungKyun.Kim :
