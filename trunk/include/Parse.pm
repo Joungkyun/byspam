@@ -135,7 +135,7 @@ sub parseHeader {
 			$headReturn .= " ".$line;
 		}
 	} else {
-		%charset = setCharset ($main:charset_mail);
+		%charset = setCharset ($main::charset_mail);
 		$headReturn = $cv->byconv ($head, $charset{"from"}, $charset{"to"});
 	}
 
