@@ -12,7 +12,7 @@ version         = @byversion@
 # 이 옵션을 설정을 하면, 필터 파일과 이 파일의 문자셋이 이 옵션 값과 동
 # 일해야 합니다.
 #
-#$charset        = EUC-KR
+#$charset        = UTF-8
 
 #
 # 메일의 charset이 없을 경우 처리할 default charset
