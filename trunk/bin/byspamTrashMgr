@@ -2,6 +2,17 @@
 #
 # $Id$
 
+CHK_DATE=$(/bin/date -d "${CONF} days ago" +%Y%m%d)
+
+SPAM_PREFIX="byspam"
+SPAM_URI="${SPAM_PREFIX}/spam-${CHKDATE}"
+
+[ -f '/etc/sysconfig/bysapmcron' ] && \
+	source /etc/sysconfig/bysapmcron || \
+	BYEXEC=
+
+[ -z "$BYEXEC" -o "$BYEXEC" = "no" -o "$BYEXEC" = "false" -o "$BYEXEC" = "0" ] && exit 0
+
 CONFNAME="@confdir@/byspam.conf";
 REGs="^[[:space:]]*trashPeriod[[:space:]]*=[[:space:]]*[\"']*[0-9]\+[\"']*"
 
@@ -14,15 +25,13 @@ else
   CONF=$(echo ${CONF} | awk -F "=" '{print $2}' | sed 's/[^0-9]//g')
 fi
 
-CHK_DATE=$(date -d "${CONF} days ago" +%Y%m%d)
-
 DELLIST=$(cat /etc/passwd | awk -F : '{print $6}')
 
 for i in ${DELLIST}
 do
   i=$(echo ${i} | sed 's/\/$//g')
-  if [ -d "${i}/byspam" ] && [ -f "${i}/byspam/spam-${CHK_DATE}" ]; then
-    rm -f ${i}/byspam/spam-${CHK_DATE} > /dev/null 2>&1
+  if [ -d "${i}/${SPAM_PREFIX}" ] && [ -f "${i}/${SPAM_URI}" ]; then
+    rm -f ${i}/${SPAM_URI} > /dev/null 2>&1
   fi
 done
 
