@@ -4,59 +4,59 @@
 #
 # $Id$
 
-(&#44305|±¤|ÎÆ|°ü)[^\xB0-\xFEa-z]*(°í|go|Í±)
-È«[^\xB0-\xFEa-z]*º¸
-¼±[^\xB0-\xFEa-z]*Àü
-Åõ[^\xB0-\xFEa-z]*ÀÚ
-Á¤[^\xB0-\xFEa-z]*º¸
-¾È[^\xB0-\xFEa-z]*³»
-Á¦[^\xB0-\xFEa-z]*¾È
-´ë[^\xB0-\xFEa-z]*Ãâ
-ÅÃ[^\xB0-\xFEa-z]*¹è
-Á÷[^\xB0-\xFEa-z]*Àå[^\xB0-\xFEa-z]*ÀÎ
-¼ö[^\xB0-\xFEa-z]*¼ö[^\xB0-\xFEa-z]*·á
-ºñ[^\xB0-\xFEa-z]*¾Æ[^\xB0-\xFEa-z]*±×[^\xB0-\xFEa-z]*¶ó
+(&#44305|ê´‘|å»£|ê´€)[^\xB0-\xFEa-z]*(ê³ |go|å‘Š)
+í™[^\xB0-\xFEa-z]*ë³´
+ì„ [^\xB0-\xFEa-z]*ì „
+íˆ¬[^\xB0-\xFEa-z]*ì
+ì •[^\xB0-\xFEa-z]*ë³´
+ì•ˆ[^\xB0-\xFEa-z]*ë‚´
+ì œ[^\xB0-\xFEa-z]*ì•ˆ
+ëŒ€[^\xB0-\xFEa-z]*ì¶œ
+íƒ[^\xB0-\xFEa-z]*ë°°
+ì§[^\xB0-\xFEa-z]*ì¥[^\xB0-\xFEa-z]*ì¸
+ìˆ˜[^\xB0-\xFEa-z]*ìˆ˜[^\xB0-\xFEa-z]*ë£Œ
+ë¹„[^\xB0-\xFEa-z]*ì•„[^\xB0-\xFEa-z]*ê·¸[^\xB0-\xFEa-z]*ë¼
 v[^\xB0-\xFEa-z]*i[^\xB0-\xFEa-z]*a[^\xB0-\xFEa-z]*g[^\xB0-\xFEa-z]*r[^\xB0-\xFEa-z]*a
-¼ö.?½Å.?°Å.?ºÎ|¼ö½Å[ ]*°ÅºÎ|mailtouch|¹ß½Å[ ]*Àü¿ë
-¼Óº¸|¼ÒÈ£|1È¸¼º|Áõ±Ç|Ã»¾à|¹«ÀÛÀ§
-Çã¶ô[\s]*¾øÀÌ|¸¸[\s]*19[\s]*¼¼
-¹Ì¼º³â|¼ºÀÎ|¿ÀºüÃµ»ç|º¸Áö|ÀÚÁö|Á¿¹°|Æ÷Ä¿|°í½ºÅé
-Á¤º¸[\s]*Åë½Å¸Á[\s]*ÀÌ¿ë[\s]*ÃËÁø
-50Á¶¿¡[\s]*ÀÇ°Å
-¹ß½Å[\s]*Àü¿ë|ÃÖ½Å[\s]*ÇÁ·Î±×·¥|´©³ª|nunaba
-Á¤º¸Åë½ÅºÎ[\s]±Ç°í[\s]*»çÇ×
-°³ÀÎ[\s]*Á¤º¸µµ[\s]*°¡Áö°í[\s]*
+ìˆ˜.?ì‹ .?ê±°.?ë¶€|ìˆ˜ì‹ [ ]*ê±°ë¶€|mailtouch|ë°œì‹ [ ]*ì „ìš©
+ì†ë³´|ì†Œí˜¸|1íšŒì„±|ì¦ê¶Œ|ì²­ì•½|ë¬´ì‘ìœ„
+í—ˆë½[\s]*ì—†ì´|ë§Œ[\s]*19[\s]*ì„¸
+ë¯¸ì„±ë…„|ì„±ì¸|ì˜¤ë¹ ì²œì‚¬|ë³´ì§€|ìì§€|ì¢†ë¬¼|í¬ì»¤|ê³ ìŠ¤í†±
+ì •ë³´[\s]*í†µì‹ ë§[\s]*ì´ìš©[\s]*ì´‰ì§„
+50ì¡°ì—[\s]*ì˜ê±°
+ë°œì‹ [\s]*ì „ìš©|ìµœì‹ [\s]*í”„ë¡œê·¸ë¨|ëˆ„ë‚˜|nunaba
+ì •ë³´í†µì‹ ë¶€[\s]ê¶Œê³ [\s]*ì‚¬í•­
+ê°œì¸[\s]*ì •ë³´ë„[\s]*ê°€ì§€ê³ [\s]*
 If you[\s]*(do not|don't)*[\s]*wish to
-Æ÷.?¸£.?³ë|¼½.?Ä·|¸ôÄ«|»Ç.?¸£.?³ë|¼ºÆøÇà|°­°£|¼½½º
-»çÀÌ¹ö[\s]*¸Ó´Ï
+í¬.?ë¥´.?ë…¸|ì„¹.?ìº |ëª°ì¹´|ë½€.?ë¥´.?ë…¸|ì„±í­í–‰|ê°•ê°„|ì„¹ìŠ¤
+ì‚¬ì´ë²„[\s]*ë¨¸ë‹ˆ
 Discount|marketing|sex|animal|pussy|poker|buyer|credit|finance
 (reject|email|rm|optout|remove|removepg|takeoff)\.(cgi|php|jsp|pl|asp|html)
 <HTML><HEAD><\/HEAD><BODY>
 mini10928@dreamwiz\.com
-(¿î¼¼|»çÁÖ)[\s]*Á¤º¸|½Å³â[\s]*¿î¼¼
-unregist|ÀÎÅ×¸®¾î|½Å±Ô[\s]*Ã¢¾÷
-È¸¿ø´Ô|kavmodel|¿¬¿¹ÀÎ|H¾ç|¼ºÇö¾Æ|·°¼Å¸®|ÀÏÈ¸¼º
+(ìš´ì„¸|ì‚¬ì£¼)[\s]*ì •ë³´|ì‹ ë…„[\s]*ìš´ì„¸
+unregist|ì¸í…Œë¦¬ì–´|ì‹ ê·œ[\s]*ì°½ì—…
+íšŒì›ë‹˜|kavmodel|ì—°ì˜ˆì¸|Hì–‘|ì„±í˜„ì•„|ëŸ­ì…”ë¦¬|ì¼íšŒì„±
 get start now
 window\.open|<embed|codebase=|<object
 <map name=|refuse
-www\.lux-sa\.com|¹ß¼Û±â|wow3go
+www\.lux-sa\.com|ë°œì†¡ê¸°|wow3go
 src=http|hoop-bid|helpu-web
 Microsoft DHTML Editing
 <\/html>\n?.+
 (yescounter|ezherbalbuy)\.com
 you can remove
 remove here
-19[ ]*¼¼[ ]*¹Ì¸¸
+19[ ]*ì„¸[ ]*ë¯¸ë§Œ
 for more info
 and lots more
 bodyting|rolex|well-being
-»ù\.?ÇÃ
-(Å¬¸¯|click)[\s]*(ÇÏ|ÇØ[\s]*ÁÖ)(¼¼¿ä|½Ê½Ã¿À)
-Ç®[ ]*»çÀÌÁî|µğºò½º|Divx
-°ø.ÀÎ.Áß.°³.»ç|¹«.·á.ÀÚ.·á
+ìƒ˜\.?í”Œ
+(í´ë¦­|click)[\s]*(í•˜|í•´[\s]*ì£¼)(ì„¸ìš”|ì‹­ì‹œì˜¤)
+í’€[ ]*ì‚¬ì´ì¦ˆ|ë””ë¹…ìŠ¤|Divx
+ê³µ.ì¸.ì¤‘.ê°œ.ì‚¬|ë¬´.ë£Œ.ì.ë£Œ
 (auto|view)\.html
 \.thml
-casino|Ä«Áö³ë|money
+casino|ì¹´ì§€ë…¸|money
 erqewqwrq\.vv\.st
 Namo WebEditor
 ---- system information ----
