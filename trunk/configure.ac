@@ -10,7 +10,7 @@ AC_SUBST(filterdir)
 AC_SUBST(perlpath)
 AC_SUBST(procpath)
 
-AC_INIT([byspam], [1.0.3], [http://devel.oops.org])
+AC_INIT([byspam], [1.0.4], [http://oops.org])
 AC_CONFIG_SRCDIR([README])
 AC_CONFIG_HEADERS(config.h)
 AC_PREFIX_DEFAULT([/usr/local/byspam])

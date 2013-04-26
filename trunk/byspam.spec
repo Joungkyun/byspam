@@ -1,7 +1,7 @@
 Summary: The By SPAM is filtering tool for Anti Spam
 Summary(ko): 스팸방지를 위한 필터링 툴
 Name: byspam
-Version: 1.0.3
+Version: 1.0.4
 Release: 1
 Epoch: 3
 License: BPL
@@ -149,8 +149,11 @@ rm -rf %{buildroot}
 %doc Changelog ENVIRONMENT LICENSE README INSTALL REGEX
 
 %changelog
-* Mon OCt 24 2005 JoungKyun Kim <http://oops.org> 3:1.0.2-1
-- update 1.0.1
+* Sun Apr 27 2013 JoungKyun.Kim <http://oops.org> 3:1.0.3-1
+- update 1.0.3
+
+* Mon Oct 24 2005 JoungKyun Kim <http://oops.org> 3:1.0.2-1
+- update 1.0.2
 
 * Tue Feb  1 2005 JoungKyun Kim <http://oops.org> 2:1.0.1-1
 - update 1.0.1
