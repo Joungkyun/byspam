@@ -1,0 +1,47 @@
+# $Id$
+
+SHELL=/bin/sh
+VERBOSE=no
+
+# check evn
+HOMES=`echo $HOME | sed 's!/$!!g'`
+DATES=`date +%Y%m%d`
+
+# 사용자 로그파일 (계정 유저만 사용)
+#LOGFILE=${HOMES}/byspam/filter.log
+
+# 스팸 저장 파일
+SPAMDIR="${HOMES}/byspam"
+SPAMBOX="${SPAMDIR}/spam-${DATES}"
+
+###################
+# start Filtering #
+###################
+:0 ic
+  * ? test ! -d "${SPAMDIR}"
+  | mkdir -p ${SPAMDIR}; \
+    chown $LOGNAME ${SPAMDIR};
+
+# size 가 5500000 byte 미만일 경우만 체크
+:0
+  * < 5500000
+  {
+    # 필터링 체크
+    FilterValue=`@bindir@/byspamFilter`
+
+    :0
+      * ? test -n "${FilterValue}"
+      {
+        :0 ic
+          * ? test ! -f "${SPAMBOX}"
+          | touch ${SPAMBOX}; \
+            chown $LOGNAME ${SPAMBOX};
+
+          # spam filtering part header 추가
+          :0 fhw
+          | formail -A "X-BySpam-Filter: ${FilterValue}"
+
+          :0: fbw
+            ${SPAMBOX}
+      }
+  }

@@ -1,0 +1,101 @@
+# Byspam - PROCMAIL 을 이용한 메일 필터 설정 파일
+# 필터파일: @confdir@/Filter
+# 김정균 <http://oops.org>
+# $Id$
+#
+version         = @byversion@
+
+# 시스템 기본 문자셋
+# 이 옵션이 설정되지 않으면, $ENV{"LANG"} 이 기본으로 사용 됩니다.
+#
+# 주의!! :
+# 이 옵션을 설정을 하면, 필터 파일과 이 파일의 문자셋이 이 옵션 값과 동
+# 일해야 합니다.
+#
+#$charset        = UTF-8
+
+#
+# 메일의 charset이 없을 경우 처리할 default charset
+#
+#$charset_mail  = EUC-KR
+
+# 유저 설정 경로 (변경하지 마십시오)
+#
+binDir          = @bindir@
+confdir         = @confdir@
+filterDir       = @filterdir@
+includeDir      = @includedir@
+perlpath        = @PERLPATH@
+
+# INBOX 가 있는 경로
+# 이 옵션은 byspamTrash 에서 메일을 복구할 때 사용이 되어진다. 보통 메일
+# 의 inbox 는 /var/spool/mail/$USER 로 되어있다 (sendmail 의 경우)
+#
+inbox           = /var/spool/mail
+
+# 메일 본문에 iframe 태그가 존재할 경우 스팸으로 처리 합니다.
+# 1 => 필터링을 함
+# 0 => 필터링을 하지 않음
+#
+filterIframe   = 0
+
+# 메일 본문에 html 태그만 존재하고 내용이 없을 경우 스팸 처리를 합니다.
+# 대부분 바이러스 메일의 형태입니다.
+#
+# 1 => 필터링 함
+# 0 => 필터링 하지 않음
+#
+filterTag      = 0
+
+# 메일 본문이 존재하지 않을 경우 스팸 처리를 합니다. 메일 본문이라 함은
+# 파싱이 되지 않은 메일 원형 그대로의 본문을 의미하며, 첨부파일 역시 포
+# 함이 됩니다. 즉, 메일 본문과 첨부 파일 둘 다 없을 경우가 해당 됩니다.
+#
+# 1 => 필터링 함
+# 0 => 필터링 하지 않음
+#
+nobody         = 1
+
+# 메일 헤더가 존재하지 않으면 스팸 처리 합니다.
+noheader       = 1
+
+# 헤더 이름과 설정 파일 설정 (변겅/수정 하지 마시기를 권장합니다.)
+# 스팸 필터링을 위한 필터 파일에 대한 설정입니다.
+#
+# 지정방식은 "헤더이름:필터이름" 의 형식을 가집니다. 헤더 이름은 실제메
+# 일 헤더에 존재하는 헤더 이름을 사용하며 필터 이름은 filter- 로 시작하
+# 며 소문자로 지정해야 합니다. 또한, 경로는 적지 않습니다.
+#
+basics[0]       = Extra:filter-extra:0x11001001:65536
+basics[1]       = Subject:filter-subject:0x11001002:65536
+basics[2]       = Date:filter-date:0x11001003:65536
+basics[3]       = From:filter-from:0x11001004:65536
+basics[4]       = To:filter-to:0x11001005:65536
+basics[5]       = Body:filter-body:0x11001006:65536
+
+# 스팸에 걸린 메일 중, 통과를 시키기 위한 룰을 지정하는 파일 입니다. 이
+# 설정 파일의 규칙에 매치되는 메일은 스팸으로 판단이 되었더라도, 무시가
+# 되어 집니다.
+#
+allows          = filter-allow:0x11001020:65536
+
+# 스팸에 걸린 후, 위의 $allows 설정에 의해 스팸 분류가 취소된 메일에 대
+# 하여 이를 다시 스팸으로 처리할 수 있는 룰을 설정하는 파일을 위한 이름
+# 입니다. 
+#
+ignore          = filter-ignore:0x11001021:65536
+
+# 스팸 파일 보존 기간
+#
+# 이 옵션은 /etc/cron.d/byspam 에서만 사용하는 값입니다.
+#
+# By SPAM 은 필터링된 메일을 $HOME/byspam 에 날자별로 저장을 합니다. 이
+# 설정은 보관된 메일의 보존 기간을 설정합니다. 값은 일 단위로 지정을 하
+# 며, 지정을 하지 않았을 경우 기본값으로 30일을 보존하게 됩니다.
+#
+# 이 옵션의 값은 Redhat 배포본 처럼 /etc/cron.daily 가 지원이 되는 시스
+# 템에서 cron 으로 작동 시킬 수 있을 경우만 적용이 가능합니다.  cron 에
+# 대하여 잘 이해를 하시는 분들은 src/bin/Byspam.cron 파일을 적절히 수정
+# 하셔서 사용하시면 됩니다.
+#
+trashPeriod     = 30

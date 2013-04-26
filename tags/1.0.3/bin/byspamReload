@@ -1,0 +1,95 @@
+#!@PERLPATH@
+#
+# By SPAM Shared Momery Reload code.
+# This package code follows BPL License
+# JoungKyun Kim <http://oops.org>
+#
+# $Id$
+#
+
+use lib '@includedir@';
+use strict;
+
+use Byspam::Init;
+use Byspam::Common;
+
+my $shm;
+my $cm;
+my $_line;
+my @_line_r;
+my $verbose = 0;
+
+my $_name;
+my $_file;
+my $_shmkey;
+my $_shmsize;
+my $_conf;
+
+$verbose = 1 if ( $ARGV[0] eq "-v" );
+
+$shm = Byspam::Init->new ();
+$cm  = Byspam::Common->new ();
+
+if ( $shm->{_shmout} ) {
+	printf STDOUT "\n    Don't support IPC::ShareLite module.\n" .
+				  "    You don't need byspamReload until install IPC::ShareLite module\n\n";
+
+	exit (0);
+}
+
+# reload configurations
+$_conf = $cm->formatConfig ($shm->{'_conffile'});
+if ( $_conf ) {
+	$verbose && printf "%-13s %-40s reload\n", "configuration", $shm->{'_conffile'};
+	$shm->{conf}->store ($_conf);
+}
+
+# reload filter data
+#
+foreach $_line ( @{$shm->opts('basics')} ) {
+	@_line_r = split (/:/, $_line);
+	$_name    = $_line_r[0];
+	$_file    = $shm->opts('filterDir') . "/$_line_r[1]";
+	$_shmkey  = $_line_r[2];
+	$_shmsize = $_line_r[3];
+
+	if ( -f "$_file" ) {
+		$verbose && printf "%-13s %-40s reload\n", $_name, $_file;
+		$_conf = $cm->filterText ($_file);
+		$_name = lc ($_name);
+		$shm->{$_name}->store ($_conf);
+	}
+}
+
+# reload allows data
+@_line_r = split (/:/, $shm->opts ('allows'));
+$_file   = $shm->opts('filterDir') . "/$_line_r[0]";
+$_shmkey = $_line_r[1];
+
+if ( -f "$_file" ) {
+	$verbose && printf "%-13s %-40s reload\n", 'Allows', $_file;
+	$_conf = $cm->filterText ($_file);
+	$shm->{'allows'}->store ($_conf);
+}
+
+# reload ignore data
+@_line_r = split (/:/, $shm->opts ('ignore'));
+$_file   = $shm->opts('filterDir') . "/$_line_r[0]";
+$_shmkey = $_line_r[1];
+
+if ( -f "$_file" ) {
+    $verbose && printf "%-13s %-40s reload\n", 'Ignore', $_file;
+    $_conf = $cm->filterText ($_file);
+    $shm->{'ignore'}->store ($_conf);
+}
+
+exit 0;
+
+#
+# Local variables:
+# tab-width: 4
+# c-basic-offset: 4
+# End:
+# vim600: noet sw=4 ts=4 fdm=marker
+# vim<600: noet sw=4 ts=4
+#

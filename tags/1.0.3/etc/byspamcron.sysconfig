@@ -1,0 +1,24 @@
+#
+# BySAPM cronjob configuration
+#
+
+#
+# Whether execute Byspam Transh manager
+#
+# execute : true | 1 | on
+# no      : false | 0 | empty
+#
+BYEXEC=false
+
+#
+# Location of spambox
+#
+# ~account/{SPAM_PREFIX}
+#
+SPAM_PREFIX="byspam"
+
+#
+# Full path of spambox
+#
+SPAM_URI="${SPAM_PREFIX}/spam-${CHKDATE}"
+

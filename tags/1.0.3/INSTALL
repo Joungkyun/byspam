@@ -1,0 +1,452 @@
+By SPAM 설치 및 사용 설명서
+
+$Id$
+
+목차
+----
+1. By SPAM 의 설치 옵션
+2. By SPAM 설치 옵션 예제
+3. By SPAM 설정 파일
+4. By SPAM 필터 설정
+5. Trash 관리
+
+
+* 설치하기 전에
+
+BySPAM 은 smtp dameon 과 procmail 에 연동되어 작동을 합니다. 설치 후에 따로 구동을
+하는 것이 아니라 smtp 에 연동이 되어 알아서 작동이 되게 됩니다. 일단 설치를 마친다
+음에 제대로 설치가 되었는지는 일단, procmailrc 에 INCLUDERC 행에서 filter.rc 를 인
+클루드 하고 있는지 여부를 확인한 다음 smtp daemon 을 재 시작한 후에 /var/log 에 있
+는 procmail 파일을 살펴 보면 됩니다. 간단하게 제대로 작동하는지 테스트 하는 방법은
+
+1. 설치 후 procmailrc 에 fliter.rc 를 등록한 후 smtp 재시작
+2. tail -f /var/log/procmail 명령을 실행하여 실시간 모니터링
+3. 제목에 광고 라는 문자를 넣어 메일을 발송
+4. byspamTrash 를 실행하여 이 메일이 Trash 에 있는지 확인
+
+의 과정을 거치면 된다.
+
+
+RPM 설치자들은 smtp 를 재시작 한 후, 4번, 5번, 6번 항목만 보도록 한다.
+
+또한, byspam 을 사용하기 위한 perl module 들이 설치되어 있는지 확인해야 한다. 이는
+Environment 문서를 참고 하라.
+
+
+1. By SPAM 의 설치 옵션
+
+  By SPAM 1.0 은 이전 버전과 달리 autoconf system 을 도입하였습니다. 그러므로 1.0
+  부터는 upgrade 와 uninstall 스크립트를 제공하지 않습니다.
+
+  By SPAM 을 설치 방법은 ./configure --help 로 알 수 있습니다.
+
+  byspam-version# ./configure --help
+
+  By SAPM 설치 옵션
+
+  사용법: configure [옵션]=[경로]
+  옵션  :
+    --prefix=PREFIX    나머지 옵션들이 지정되지 않았을 경우 기본값
+                       [default: /usr/local/byspam]
+    --bindir=DIR       실행 스크립트가 위치할 디렉토리
+                       [default: ${prefix}/bin]
+    --confdir=DIR      간단한 옵션 설정 파일이 위치할 디렉토리
+                       [default: ${prefix}/conf]
+    --includedir=DIR   필터링 스크립트에서 사용하는 함수가 들어갈 디렉토리
+                       [default: ${prefix}/include]
+    --with-filter=DIR  필터링 설정 파일이 위치할 디렉토리
+                       [default: ${confdir}/Filter]
+    --with-perl=PATH   펄이 설치되어 있는 경로를 지정한다.
+                       [default: system required]
+    --whth-procrc=PATH procmailrc 가 설치되어 있는 경로를 지정한다.
+                       [default: /etc/procmailrc]
+
+
+  byspam-version#
+
+
+  --prefix 는 나머지 디렉토리 경로를 지정하지 않았을 경우 이 prefix 를 기준으로 디
+  렉토리들이 위치합니다. 보통
+
+  ${prefix}/bin
+  ${prefix}/conf
+  ${prefix}/conf/Filter
+  ${prefix}/include/Byspam
+
+  로 설치가 됩니다.
+
+  --bindir, --confdir, --filterdir, --includedir
+
+  각각의 디렉토리를 따로 설정을 할 수 있습니다. 이 지시지들을 지정해주면 prefix 에
+  영향을 받지 않습니다.
+
+
+2. By SPAM 설치 옵션 예제
+
+  일반 autotools 를 이용한 패키지와 마찬가지로
+
+  ./configure
+  make
+  make install
+
+  의 과정으로 설치가 가능합니다. 패키징 시에는 make instal 에서 DESTDIR 환경변수를
+  지원하니
+
+  make DESTDIR=SOMEPATH install
+
+  과 같이 사용하실 수 있습니다.
+
+  설치 후, 이전 버전에서는 자동으로 procmailrc 에 filter.rc 를 등록해 주었으나, 현
+  재는 제공하지 않습니다. 수동으로 procmailrc 의 가장 하단에
+
+  INCLUDERC=@confdir@/filter.rc
+
+  를 등록해 주셔야 합니다.
+
+
+3. By SPAM 설정 파일
+
+  설치를 완료 했다면, 간단한 설정을 알아 보도록 하겠습니다. 일단 By SPAM 의 설정파
+  일은 byspam.conf 와 filter.rc 가 존재합니다.  이 파일은 설치시에 @confdir@ 로 지
+  정한 디렉토리에 위치합니다.
+
+  1) filter.rc
+
+  filter.rc 는 실제로 procmail 과 By SPAM 을 연결하는 고리 역할을 합니다.  By SPAM
+  이 설치가 되면 /etc/procmailrc (Redhat 배포본의 경우이며 거의 다른 UNIX 시스템도
+  procmail 을 사용한다면 거의 동일 하리라 생각이 됩니다.) 에
+
+  INCLUDERC=@confdir@/filter.rc
+
+  라는 라인이 등록이 되어 연결이 되는 것입니다.  만약 procmail 에 대한 이해가 있고
+  쉘 스크립트를 할 줄 아신다면 원하시는데로 수정을 할 수도 있겠지만, 일단은 기본으
+  로 사용을 하는 것을 권장합니다.  filter.rc 에서는 다음의 한가지만 설정을 합니다.
+
+  By SPAM 은 기본적으로 총 용량 약 (첨부파일을 포함한) 5Mb 의 메일만을 체크를 합니
+  다.  이는 By SPAM 이 메일 전체를 사람이 판독할 수 있는 형태로 파싱을 하여 필터링
+  을 하므로 용량이 큰 메일이 오면 서버에 부하를 주기 때문입니다. 실제로 5Mb 정도의
+  설정이면 거의 99% 는 필터링이 되어 진다고 봅니다만, 이것도 클 수 있습니다.  만약
+  메일 서버의 부하가 높거나 또는 전송되는 메일의 크기가 얼마되지 않는다고 생각한다
+  면 1 Mb 정도로 수정을 해 주는 것이 좋습니다.  널널한 서버에서는 별로 신경을 쓰지
+  않아도 상관이 없겠지만 말이죠. 각설하고, 이 부분을 수정하는 방법을 보도록 하겠습
+  니다.
+
+  일단 filter.conf 에서 "* < 5500000" 라는 라인을 찾도록 합니다. 바로 이 부분이 By
+  SPAM 에서 체크 할 용량을 정의합니다.  여기서 5500000 는 5500000 byte 를 의미합니
+  다. 이 부분을 적절하게 수정을 해 주시면 됩니다. 1 M 의 경우에는
+
+  1024 * 1024 * 1024
+
+  의 값을 지정해 주시면 됩니다. 단 BASE64 나 Qouted Printable 로 인코딩 된 문서의
+  경우에는 대략 30% 정도의 용량이 늘어남을 감안해서 지정을 해 주서야 합니다.
+
+
+  2) byspam.conf
+
+  byspam.conf 는 By SPAM 의 운영에 필요한 정보를 가지고 있습니다.  그러므로 절대로
+  이 곳에서 언급하는 설정 외에는 손을 대면 안됩니다. 만약 By SPAM 의 구조를 완벽하
+  게 이해를 하고 Perl 에 대한 이해가 있다면 건드려도 무방하겠지만 수정을 할 경우에
+  는 지원 요청을 기대하지 마셔야 합니다.  변경된 사항이 어떻게 작용할지, 또 어떻게
+  적용이 되었는지 알 수가 없기 때문입니다. 그럼 수정 가능한 부분을 언급하겠습니다.
+
+
+
+  $charset         = "EUC-KR"
+
+  charset 설정은 메일의 charset 이 UTF8 로 올 경우를 대비한 옵션입니다.  이 옵션을
+  지정하지 않으면, byspam 이 구동 하면서 시스템의 LANG 환경 변수를 가져와서 처리를
+  합니다. 굳이 설정할 필요는 없습니다.
+
+  하지만, 시스템 charset 이 UTF8 일 경우에는, 이 환경 변수를 EUC-KR 로 지정하기 바
+  랍니다. 아직까지는 UTF8 로 보내는 메일 보다 EUC-KR 로 발송하는 메일이 대부분이기
+  때문에 EUC-KR 로 지정을 하면 그만큼 변환을 안해도 되기 때문입니다. 단, system 의
+  LANG 변수값과 $charset 의 값이 다를 경우에는 반드시 filter 파일과 이 설정 파일의
+  charset 이 $charset 과 동일해야 합니다. 이 의미가 무슨 말인지 모르겠으면,   그냥
+  이 옵션을 주석 처리 하십시오.
+
+
+
+  $inbox           = "/var/spool/mail"
+
+  계정의 mail INBOX 가 위치하는 경로를 지정합니다. byspam 은 반드시 INBOX 가 계정
+  이름 이어야만 합니다.
+
+
+
+  $filterIframe    = 1;
+
+  이 설정은 메일 본문에 iframe 태그가 사용이 되었는지를 체크합니다.  요즘 필터링을
+  피하기 위해서 iframe 태그를 이용하는 경향이 많이 있습니다. 이 것을 체크하기 위한
+  설정입니다. 이 설정을 해 놓았을 경우에는 필터링이 되지 않아야 할 메일에도 iframe
+  이 존재하는 경우에는 무조건 스팸 처리를 하기 때문에 주의해서 결정을 해야 합니다.
+  1 은 iframe 체크를 한다는 설정이며, 0 은 체크를 하지 않겠다는 설정값 입니다.
+
+  Iframe 설정은 filter-allow 와 filter-ignore 의 영향을 받습니다.
+
+
+
+  $filterTag       = 1;
+
+  이 설정은 꼭 1 의 값으로 두는 것을 권장합니다. 이 설정은 메일 본문이 HTML TAG 로
+  만 이루어진 메일을 체크합니다. 즉 필터링을 피하기 위하여 통 이미지를 이용한 메일
+  본을을 만들어 보내거나 또는 MicroSoft 의 바이러스에 의한 메일들이 이런 형태의 메
+  일로 발송이 되기 때문입니다. 즉 스팸메일과 바이러스 메일을 동시에 방지할 수 있는
+  좋은 기능입니다. 단점은 카드메일 업체의 메일이 스팸으로 판단을하여 걸러지기도 합
+  니다. 역시 알아서 판단을 하여 결정을 하기 바랍니다.
+
+
+
+  $nobody          = 1;
+
+  메일 본문에 존재하지 않을 경우 스팸 처리를 합니다. 여기서 메일 본문이라 함은, 파
+  싱이 되지 않은 메일 원문의 본문 파트를 말합니다. 첨부 파일이 포함 되어 있는 메일
+  이라면 실제 본문에 내용이 없더라도, 첨부 파일이 있으면 본문이 있는 것으로 판단됩
+  니다.
+
+
+
+  $noheader        = 1;
+
+
+  메일 헤더가 존재하지 않을 경우 스팸 처리를 합니다.
+
+
+
+  $trashPeriod     = "30";
+
+  By SPAM 에 의해 필터링이 된 메일들은 각 계정홈의 ~/byspam 디렉토리에 년월일 형식
+  의 파일에 저장이 되게 됩니다.  이 필터링된 메일들을 관리하기 위한 툴로서 By SAPM
+  은 byspamTrash 라는 툴을 지원합니다. 이 byspamTrash 는 나중에 언급을 하도록하고,
+  이 옵션은 필터링이 저장된 파일의 보관기간을 지정을 합니다. 값은 일을 기준으로 설
+  정합니다.
+
+  이 옵션은 Redhat 의 /etc/cron.d 에 의해 운영이 되며, /etc/cron.d/byspam 이 byspamTrashMgr
+  을 호출 하여 작동을 하게 됩니다. 만약, crond 가 /etc/cron.d 를 지원하는 OS 는 모
+  두 사용이 가능합니다.
+
+  만약 /etc/cron.d 가 존재하지 않는다면, crontab 에 @bindir@byspamTrashMgr 을 한루
+  에 한번 정도 작동 하도록 설정해 주시면 됩니다.
+
+
+
+4. By SPAM 필터 설정
+
+  필터들은 설치시에 --filterdir 로 지정한 디렉토리에 위치됩니다.  만약 따로 지정을
+  하지 않았다면 byspam.conf 이 설치된 디렉토리에 Filter 디렉토리로 위치하게 됩니다.
+
+  각 필터파일들의 필터들은 PERL 의 정규 표현식으로 설정을 합니다. 그러므로 쉽게 설
+  정을 하였다가는 오작동을 유발할 소지가 있습니다. (이것이 제가 이 프로그램을 배포
+  하는데 주저하게 만든 요인입니다.)
+
+  또한, 각 라인은 필터링 시에 or 결합을 하게 되어 있음을 기억 하시고 설정을 하시기
+  바 랍니다. 예를 들어
+
+    광고
+    관고
+
+  의 2 라인 설정은
+
+    광고|관고
+
+  와 동일한 설정입니다.
+
+  정규 표현식에 대해서는 소스 트리에 있는 REGEX 파일을 참고하여 기본을 닦으신 후에
+  인터넷상의 펄 사이트등에서 펄의 정규 표현식을 참고하시면 되겠습니다. 참고로 정규
+  표현식은 각각의 프로그램마다 조금씩 차이가 존재하므로 주의하셔야 합니다. ( REGEX
+  파일은 한동훈 님의 허락을 받지 못하고 첨부를 하였습니다. 문제가 될 소지가 존재할
+  경우에는 연락을 주시면 바로 조치를 하도록 하겠습니다.)
+
+  정규 표현식이 부담스러운 사람들은 기본으로 들어 있는 필터를 사용해도 거의 90% 이
+  상 필터링이 가능하니 그냥 사용하기를 권장을 합니다. 또한
+
+  http://cvs.oops.org/cgi-bin/oopsdev.cgi/byspam/filter/
+
+  에서 필터 업데이트를 확인할 수 있으니 참고하여 필터내용들을 업데이트 하셔도 무방
+  합니다.
+
+  그럼 각 필터 파일들에 대한 설명을 하겠습니다.
+
+  filter-body
+
+  메일 본문의 내용을 필터링 합니다. 멀티파트로 구성이 되어 있을 경우 text/plain 과
+  text/html 로 구성이 되어 있을 경우에는 text/html 을 필터링 합니다. 멀티파트의 경
+  우에도 text/plain 만 존재할 경우에는 text/plain 파트를 필터링 합니다.
+
+  base64 등의 인코딩이 되어 있을 경우에는 decoding 을 하여 필터링을 하므로 메일 클
+  라이언트에서 보이는 문자로 필터링을 하면 됩니다.
+
+  filter-date
+
+  메일 헤더의 date 헤더를 필터링 합니다.
+
+  filter-from
+
+  메일 헤더의 from 헤더를 필터링 하니다.
+
+  filter-subject
+
+  메일 헤더의 제목 헤더를 필터링 합니다.
+
+  filter-to
+
+  메일 헤더의 to 헤더를 필터링 합니다.
+
+  filter-extra
+
+  이 필터는 파싱된 메일헤더 전체, 즉 헤더 이름까지 필터링이 가능하며, 또 하나의 기
+  능은 파싱되지 않은 메일 본문을 필터링 할 수 있습니다.  이 말은 첨부파일 이름이나
+  메일 본문의 멀티파트 헤더를 필터링 할 수 있다는 얘기 입니다.
+
+  filter-allow
+
+  이 필터는 위의 필터링 룰에서 스팸으로 간주가 되었다고 하더라도, 이를 무시하게 할
+  수 있는 설정을 합니다.  여기서 설정을 하는 것은, 모든 필터의 내용을 모두 설정 할
+  수 있으며, 메일링 리스트 같은 것이 필터링 되지 않도록 설정을 할 수 있습니다.
+
+  filter-ignore
+
+  이 필터는 filter-allow 에 의해 예외 규정을 적용하지 못하도록 합니다. filter-allow
+  에 oops.org 를 등록을 해 놓았을 경우, 메일 본문에
+
+  (광고) 메일 주소는 oops.org/xxxx.txt 에서 획득했습니다.
+
+  와 같은 문장이 걸리지 않게 될 경우를 대비하여, 이 필터에 '광고'를 등록하여, 광고
+  라는 문자로 필터링이 될 경우에는 무조건 filter-allow 의 설정을 무시하도록 합니다.
+
+
+
+5. Trash 관리
+
+  여기에서의 Trash 란 필터링이 된 메일을 의미합니다. By SPAM 은 이 TRASH 들을 관리
+  하는 bysapmTrash 라는 툴을 제공합니다.
+
+  이 툴을 사용하기 위한 선행 조건으로는 쉘 상에서 한글을 볼 수 있어야 합니다. 일단
+  이 툴의 사용은 간단하게 쉘 상에서 byspamTrash 명령어를 실행합니다. 계정 설치자의
+  경우에는 패스가 적용이 되어 있지 않기 때문에, 이 파일의 절대경로를 모두 사용하여
+  실행을 해야 합니다.
+
+  byspamTrash 를 실행을 하면 
+
+  =============================================================================
+  by SPAM Trash Viewer 1.0.3 by JoungKyun Kim <http://oops.org>
+  Command [ q - quit | no - view no | d no - del no | enter - next | b - back ]
+  =============================================================================
+  Total 4 page / Current 1 page
+  Total 31 files
+
+     1. spam-20041201
+     2. spam-20041130
+     3. spam-20041129
+     4. spam-20041128
+     5. spam-20041127
+     6. spam-20041126
+     7. spam-20041125
+     8. spam-20041124
+     9. spam-20041123
+    10. spam-20041122
+
+  -----------------------------------------------------------------------------
+  Command:  7 (ENTER)
+
+  의 형태로 실행이 됩니다.  상단의 Command 에 대한 내용을 참고하여 보시면 되겠습니
+  다. 처음 실행을 하면 필터링된 메일의 날짜를 확인할 수 있으며 이 날짜의 번호를 선
+  택하여 들어가면 그 날의 필터링 된 메일 리스트를 볼 수 있습니다.
+
+
+  =============================================================================
+  by SPAM Trash Viewer 1.0.3 by JoungKyun Kim <http://oops.org>
+  Command [ quit | number | delete | recovery | enter - next | b - back ]
+  =============================================================================
+  Current Date: 20041125
+  1 page / total 36 pages
+
+     356. 직장인,공무원 전용 대 출입니다. 은행권 저금리로 신청하세요. 
+     355. (특급대출)누구나 가장 낮은 이율! 초스피드 대출, 안전한 대출 
+     354. 100배 빠른 영문법
+     353. 카·드대금 걱정은 이제 그만! oiqkeoagqz ozj
+     352. 누구나 가능한 신속한 대출~ 전문업체 4 vhzg agime cwdvvf
+     351. (광고)올 겨울도 럭키앤조이와 함께 따뜻하게 보내세요~~
+     350. (우수고객님) 현금써비스보다 싼 이율로 보답해 드리겠습니다 c 
+     349. " 꼭 갚으세요 ! 대·출은 100% 해드립니다. " ... m zb nwfu
+     348. ☆직장인,공무원,카·드 등 각종 대·출정보입니다★ o etbm wfz
+     347. (광고)본인통장 소유자 누구나 자동신속 대출@
+  -----------------------------------------------------------------------------
+  Command: 356 (엔터)
+
+
+  역시 이 화면에서도 원하는 메일의 번호를 선택하여, 메일의 내용을 확인할 수 있습니
+  다.
+
+  또한, 1.0.0 부터는 개별 메일 삭제와 메일복구 기능이 추가가 되었습니다. 메일 삭제
+  를 원하시면 "d 번호" 와 같이 명령을 실행하면 되며,  복구를 하고 싶으면, "r 번호"
+  로 하실 수 있습니다. 다만, 동시에 여려개의 메일을 처리하지는 못합니다.
+
+  만약 원하는 메일을 다른 파일로 저장을 하고 싶다면 다음의 명령으로 가능합니다.
+
+  r 메일번호 저장할_파일_경로
+
+  유저 권한으로 실행을 할 경우에는 저장할 경로에 쓰기 권한이 있어야 합니다.
+
+  만약 mutt 나 pine 등 쉘에서 사용하시는 메일 메니저가 있다면, byspamTrash 보다는
+  전용 메일 메니저를 사용하시는 것을 권장 합니다.
+
+
+  =============================================================================
+  by SPAM Trash Viewer 1.0.3 by JoungKyun Kim <http://oops.org>
+  Command [ q - quit | space - next page | enter - next line | b - prev page ]
+  =============================================================================
+  1 page / total 36 pages
+
+  Mail No. 356
+  Date   : Thu, 25 Nov 04 18:50:36 GMT
+  From   : "tgtrgtrg" <74dmigfec@yahoo.com>
+  Filter : Body
+  Subject. 직장인,공무원 전용 대 출입니다. 은행권 저금리로 신청하세요. 1 afuqad roy
+
+  <TABLE cellSpacing=0 cellPadding=0 width=600 border=0>
+  <TBODY>
+  <TR>
+  <TD><IMG height=492 src="http://ezloan.netcci.org/images/2_01.gif"
+  width=300></TD>
+  <TD><IMG height=492 src="http://ezloan.netcci.org/images/2_02.gif"
+  width=300></TD></TR>
+  <TR>
+  <TD><A href="http://www.sirraloan.vv.st"><IMG
+  height=68 src="http://ezloan.netcci.org/images/2_03.gif" width=300
+  border=0></A></TD>
+  <TD><A href="http://www.costdown.vv.st"><IMG
+  height=68 src="http://ezloan.netcci.org/images/2_04.gif" width=300
+  border=0></A></TD></TR>
+  <TR>
+  <TD><IMG src="http://ezloan.netcci.org/images/2_05.gif" width=300></TD>
+  <TD><IMG src="http://ezloan.netcci.org/images/2_06.gif" width=300></TD></TR>
+  <TR>
+  <TD align=middle colSpan=2><A
+  href="http://ezloan.netcci.org/reject/subscribe.php"><IMG height=100
+  src="http://ezloan.netcci.org/images/no_spam.gif" width=600
+  border=0></A></TD></TR></TBODY></TABLE>
+  druo wpuxakqrzquz ugqmmbgs k gl s
+  e uhgiaptl  hw pzsgwfvhajq f
+
+  (END) 
+
+  메일의 본문은 less 프로그램을 호출하여 본문을 페이징 합니다. 그러니, 메일 본문을
+  좀더 편하게 보려면 man less 명령을 이용하여 less 명령의 사용법을 숙지하시면 되겠
+  습니다. 참고로 몇가지 사용법을 말씀 드리면
+
+  ENTER 한줄을 넘김
+  space 다음 페이지
+  b     이전 페이지
+  q     종료
+
+  를 이용하시면 무난하게 사용을 할 수 있습니다.
+
+
+  만약 super user 로 로그인을 한 상태에서는 각각의 계정으로 로그인을 하지 않고, 각
+  각의 계정 유저의 필터링 상태를 확인할 수 있습니다. 이는 수퍼유저만이 가능한 기능
+  이며, byspamTrash USERNAME 의 형식으로 실행을 하시면 됩니다. 유저이름을 지정하지
+  않았을 경우에는 자신의 ~/root/byspam 디렉토리를 서치하게 됩니다.
+
+  byspamTrash 에서 메일 본문을 볼 경우 상단의 Filter: 헤더는 byspam 의 어떤 필터에
+  의해서 필터링이 되었는지를 나타냅니다.
+
