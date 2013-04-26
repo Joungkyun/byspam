@@ -337,12 +337,12 @@ sub printHelp {
 				  "메일 형식을 파이프로 넘기는 형식",
 				  "메일 형식을 파이프로 넘기는 형식 [ 디버그 모드 ]"
 		);
-        if ( $ENV['LANG'] =~ m/utf/i ) {
-            Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
+        if ( $ENV{'LANG'} =~ m/euc-kr/i ) {
+            Encode::from_to ($USAGES, 'utf-8', 'euc-kr');
             my $i = 0;
             my $size = @helps;
             for ( ; $i<$size; $i++ ) {
-                Encode::from_to ($helps[$i], 'euc-kr', 'utf-8');
+                Encode::from_to ($helps[$i], 'utf-8', 'euc-kr');
             }
         }
 	} else {

@@ -114,12 +114,12 @@ sub Help {
 					"지정된 파일의 메일 본문만 디코딩 하여 출력",
 					"지정된 파일의 메일 헤더만 디코딩 하여 출력"
 		);
-		if ( $ENV['LANG'] =~ m/utf/i ) {
-			Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
+		if ( $ENV{'LANG'} =~ m/ecu-kr/i ) {
+			Encode::from_to ($USAGES, 'utf-8', 'euc-kr');
 			my $i = 0;
 			my $size = @helps;
 			for ( ; $i<$size; $i++ ) {
-				Encode::from_to ($helps[$i], 'euc-kr', 'utf-8');
+				Encode::from_to ($helps[$i], 'utf-8', 'euc-kr');
 			}
 		}
 	} else {

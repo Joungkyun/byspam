@@ -223,14 +223,14 @@ sub Help {
 					"출력할 메일 제목 길이 [기본 60자]",
 					"현재 메세지를 출력"
 		);
-		if ( $ENV['LANG'] =~ m/utf/i ) {
-			Encode::from_to ($USAGES, 'euc-kr', 'utf-8');
-			Encode::from_to ($OPTN, 'euc-kr', 'utf-8');
-			Encode::from_to ($ARGUMENT, 'euc-kr', 'utf-8');
+		if ( $ENV{'LANG'} =~ m/euc-kr/i ) {
+			Encode::from_to ($USAGES, 'utf-8', 'euc-kr');
+			Encode::from_to ($OPTN, 'utf-8', 'euc-kr');
+			Encode::from_to ($ARGUMENT, 'utf-8', 'euc-kr');
 			my $i = 0;
 			my $size = @helps;
 			for ( ; $i<$size; $i++ ) {
-				Encode::from_to ($helps[$i], 'euc-kr', 'utf-8');
+				Encode::from_to ($helps[$i], 'utf-8', 'euc-kr');
 			}
 		}
 	} else {
