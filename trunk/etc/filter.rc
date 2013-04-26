@@ -10,13 +10,17 @@ DATES=`date +%Y%m%d`
 # 사용자 로그파일 (계정 유저만 사용)
 #LOGFILE=${HOMES}/byspam/filter.log
 
+# 스팸 저장 파일
+SPAMDIR="${HOMES}/byspam"
+SPAMBOX="${SPAMDIR}/spam-${DATES}"
+
 ###################
 # start Filtering #
 ###################
 :0 ic
-  * ? test ! -d "${HOMES}/byspam"
-  | mkdir -p ${HOMES}/byspam; \
-    chown $LOGNAME ${HOMES}/byspam;
+  * ? test ! -d "${SPAMDIR}"
+  | mkdir -p ${SPAMDIR}; \
+    chown $LOGNAME ${SPAMDIR};
 
 # size 가 5500000 byte 미만일 경우만 체크
 :0
@@ -29,15 +33,15 @@ DATES=`date +%Y%m%d`
       * ? test -n "${FilterValue}"
       {
         :0 ic
-          * ? test ! -f "${HOMES}/byspam/spam-${DATES}"
-          | touch ${HOMES}/byspam/spam-${DATES}; \
-            chown $LOGNAME ${HOMES}/byspam/spam-${DATES};
+          * ? test ! -f "${SPAMBOX}"
+          | touch ${SPAMBOX}; \
+            chown $LOGNAME ${SPAMBOX};
 
           # spam filtering part header 추가
           :0 fhw
           | formail -A "X-BySpam-Filter: ${FilterValue}"
 
           :0: fbw
-            ${HOMES}/byspam/spam-${DATES}
+            ${SPAMBOX}
       }
   }

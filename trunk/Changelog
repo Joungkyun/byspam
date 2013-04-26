@@ -8,6 +8,7 @@ Warn: date format is Y.m.d
   - 2013.04.27
 	by JoungKyun.Kim :
 	- changed file encoding to utf-8
+	- intergrate path of spam dir and spambox on filter.rc
 
   - 2011.09.13
 	by JoungKyun.Kim :
