@@ -87,7 +87,7 @@ ignore          = filter-ignore:0x11001021:65536
 
 # 스팸 파일 보존 기간
 #
-# 이 옵션은 /etc/cron.daily/byspam 에서만 사용하는 값입니다.
+# 이 옵션은 /etc/cron.d/byspam 에서만 사용하는 값입니다.
 #
 # By SPAM 은 필터링된 메일을 $HOME/byspam 에 날자별로 저장을 합니다. 이
 # 설정은 보관된 메일의 보존 기간을 설정합니다. 값은 일 단위로 지정을 하

@@ -33,7 +33,7 @@ filterlist      = `$(LS) filter/filter-*`
 
 binplist        = `$(LS) bin/byspam* | $(SED) 's!bin/!!g'`
 includeplist    = `$(LS) include/*.pm | $(SED) 's!include/!!g'`
-confplist       = `$(LS) etc/*.* | $(SED) 's!etc/!!g'`
+confplist       = `$(LS) etc/*.* | $(GREP) -v sysconfig | $(SED) 's!etc/!!g'`
 filterplist     = `$(LS) filter/filter-* | $(SED) 's!filter/!!g'`
 
 
