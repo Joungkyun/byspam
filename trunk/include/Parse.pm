@@ -29,7 +29,7 @@ sub setCharset {
 	my %ret;
 
 	$ret{"to"} = $main::charset;
-	$ret{"to"} = "euc-kr" if ( ! $ret{"to"} );
+	$ret{"to"} = "utf-8" if ( ! $ret{"to"} );
 	$ret{"to"} = lc ($ret{"to"});
 	$ret{"from"} = "";
 

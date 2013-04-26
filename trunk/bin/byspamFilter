@@ -68,7 +68,7 @@ $cm = new Byspam::Common;
 
 # charactor init
 $charset = $shm->opts ("charset");
-$charset = 'EUC-KR' if ( ! $charset );
+$charset = 'UTF-8' if ( ! $charset );
 
 # default charset when charset is not exists.
 $charset_mail = $shm->opts ('charset_mail');
@@ -310,7 +310,7 @@ sub printMessage {
 		}
 
 		if ( $main::verbose ) {
-			if ( $main::charset = 'EUC-KR' && $ENV{'LANG'} =~ m/utf/i ) {
+			if ( $main::charset eq 'EUC-KR' && $ENV{'LANG'} =~ m/utf/i ) {
 				my $buf = $_f;
 				Encode::from_to ($buf, 'euc-kr', 'utf-8');
 				$_f = $buf if ( $buf );
