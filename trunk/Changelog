@@ -4,6 +4,10 @@ $Id$
 
 Warn: date format is Y.m.d
 
+* v1.0.4
+	by JoungKyun.Kim :
+	- add verbose message about filtering process
+
 * v1.0.3
   - 2013.04.27
 	by JoungKyun.Kim :

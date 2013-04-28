@@ -161,6 +161,8 @@ if ( $receivedNo eq 100 ) {
 	goto CHECKEND;
 }
 
+print "** check number of Recieved headers\n" if ( $main::verbose );
+
 if ( $receivedNo eq 1 ) {
 	$spam = 1;
 	$nospam = 0;
@@ -180,6 +182,8 @@ $body = $ps->getBody ($mail);
 #
 # check EXTRA unparsing header and body
 #
+
+print "** check EXTRA unparsing header and body\n" if ( $main::verbose );
 
 $_ftarget = $header . "\n\n" . $mail->{_body};
 if ( checkFilter ($_ftarget, "Extra") ) {
@@ -203,6 +207,8 @@ for ( $i=0; $i<$checkNo; $i++ ) {
 	next if ( ! $shm->filter (lc ($ctype[$i])) );
 	$fil = $ctype[$i];
 	next if ( $fil eq "Extra" );
+
+	print "** check $fil filter\n" if ( $main::verbose );
 
 	PART: {
 		( $fil eq "Body" ) and do {
@@ -236,6 +242,7 @@ goto CHECKEND if ( ! $spam );
 
 CHECKALLOW:
 if ( $spam && $fil ) {
+	print "** check Allow filter\n" if ( $main::verbose );
 	$nospam = checkFilter ($_ftarget, 'Allows');
 
 	if ( $nospam ) {
@@ -248,6 +255,7 @@ if ( $spam && $fil ) {
 
 CHECKIGNORE:
 if ( $spam && $nospam && $fil ) {
+	print "** check Ignore filter\n" if ( $main::verbose );
 	$ispam = checkFilter ($_ftarget, 'ignore');
 
 	if ( $ispam ) {
