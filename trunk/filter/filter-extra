@@ -9,7 +9,7 @@ RED[\s_]?SPIDER
 Produced By Microsoft MimeOLE V\(null\)
 littledisney\.co\.kr
 china\.com
-charset="?(big5|GB2312|Shift_JIS|koi8-r|windows-1250)"?
+charset="?(big5|GB2312|Shift_JIS|koi8-r|windows-125[0-9]|euc-jp)"?
 = Multipart Boundary
 Received: from localhost
 market|event
@@ -26,6 +26,7 @@ adsl|vdsl|hdsl
 JBHsender|SNOOP Bpsh
 =_NextPart_[^=\s]+=_NextPart_
 X-Keywords: Junk
+X-Mailer: PHPMailer
 
 # virus attach file  filter
 name[\s]*=[\s]*"?[^.]+(\.[^.]+)*\.(pif|vbs|exe|scr|com)
