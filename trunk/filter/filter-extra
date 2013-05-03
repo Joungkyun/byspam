@@ -27,6 +27,7 @@ JBHsender|SNOOP Bpsh
 X-Keywords: Junk
 X-Mailer: (PHPMailer|QUALCOMM)
 \(may be forged\)
+List-Unsubscribe:
 
 # virus attach file  filter
 name[\s]*=[\s]*"?[^.]+(\.[^.]+)*\.(pif|vbs|exe|scr|com)
