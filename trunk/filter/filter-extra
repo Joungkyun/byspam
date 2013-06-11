@@ -11,7 +11,7 @@ littledisney\.co\.kr
 china\.com
 charset="?(big5|GB2312|Shift_JIS|koi8-r|windows-125[0-9]|euc-jp)"?
 = Multipart Boundary
-Received: from (localhost|unknown|test|\[[0-9.]{7,15}\])
+Received: from (apache|localhost|unknown|test|\[[0-9.]{7,15}\])
 market|event
 helo=localhost
 CSmtpMsgPart
@@ -25,9 +25,11 @@ adsl|vdsl|hdsl
 JBHsender|SNOOP Bpsh
 =_NextPart_[^=\s]+=_NextPart_
 X-Keywords: Junk
-X-Mailer: (PHPMailer|QUALCOMM)
+X-Mailer: (PHP|QUALCOMM|Smart)
 \(may be forged\)
 List-Unsubscribe:
+X-PHP-Script:
+X-SpamInfo:
 
 # virus attach file  filter
 name[\s]*=[\s]*"?[^.]+(\.[^.]+)*\.(pif|vbs|exe|scr|com)
