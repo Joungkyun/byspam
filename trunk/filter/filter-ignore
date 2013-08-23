@@ -20,6 +20,6 @@ Levitra|Seroquel|Lasix|Prozac|Prednisolone
 charset="?(Windows-125[0-9]|big5|koi8-r|GB2312|shift_jis|euc_jp)"?
 X-Mailer: (The |PHP|QUALCOMM|Smart)
 X-PHP-Script:
-Received: from (apache|localhost|unknown|test|\[[0-9.]{7,15}\])
+Received: from (apache|localhost|unknown|test)
 
 # user define
